@@ -28,9 +28,7 @@ class _SignInState extends State<SignIn> {
         padding: EdgeInsets.symmetric(
           horizontal: horizontalConverter(context, 20),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             SizedBox(
               height: verticalConverter(context, 149),
