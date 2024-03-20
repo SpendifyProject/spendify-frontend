@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:spendify/const/sizing_config.dart';
-import 'package:spendify/screens/auth/sign_up.dart';
+import 'package:spendify/screens/auth/sign_in.dart';
+import 'package:spendify/widgets/custom_auth_text_field.dart';
 
-import '../../widgets/custom_auth_text_field.dart';
+import '../../const/sizing_config.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignUpState extends State<SignUp> {
+  late TextEditingController nameController;
+  late TextEditingController numberController;
   late TextEditingController emailController;
   late TextEditingController passwordController;
+  late TextEditingController occupationController;
+  late TextEditingController dateController;
+  late TextEditingController incomeController;
+  DateTime? _selectedDate;
   bool isHidden = true;
   bool isChecked = false;
 
   @override
   void initState() {
     super.initState();
+    nameController = TextEditingController();
+    numberController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    occupationController = TextEditingController();
+    dateController = TextEditingController();
+    incomeController = TextEditingController();
   }
 
   @override
@@ -35,10 +46,10 @@ class _SignInState extends State<SignIn> {
         child: ListView(
           children: [
             SizedBox(
-              height: verticalConverter(context, 149),
+              height: verticalConverter(context, 50),
             ),
             Text(
-              'Sign In',
+              'Sign Up',
               style: TextStyle(
                 fontSize: 32,
                 color: color.onPrimary,
@@ -46,6 +57,34 @@ class _SignInState extends State<SignIn> {
             ),
             SizedBox(
               height: verticalConverter(context, 30),
+            ),
+            CustomAuthTextField(
+              controller: nameController,
+              obscureText: false,
+              icon: Icon(
+                Icons.person_outline,
+                color: color.secondary,
+                size: 30,
+              ),
+              keyboardType: TextInputType.text,
+              labelText: 'Full Name',
+            ),
+            SizedBox(
+              height: verticalConverter(context, 15),
+            ),
+            CustomAuthTextField(
+              controller: numberController,
+              obscureText: false,
+              icon: Icon(
+                Icons.phone_outlined,
+                color: color.secondary,
+                size: 30,
+              ),
+              keyboardType: TextInputType.number,
+              labelText: 'Number',
+            ),
+            SizedBox(
+              height: verticalConverter(context, 15),
             ),
             CustomAuthTextField(
               controller: emailController,
@@ -89,6 +128,65 @@ class _SignInState extends State<SignIn> {
             SizedBox(
               height: verticalConverter(context, 15),
             ),
+            CustomAuthTextField(
+              controller: incomeController,
+              obscureText: false,
+              icon: Icon(
+                Icons.monetization_on_outlined,
+                color: color.secondary,
+                size: 30,
+              ),
+              keyboardType: TextInputType.number,
+              labelText: 'Monthly Income',
+            ),
+            SizedBox(
+              height: verticalConverter(context, 15),
+            ),
+            CustomAuthTextField(
+              controller: dateController,
+              obscureText: false,
+              icon: Icon(
+                Icons.date_range_outlined,
+                color: color.secondary,
+                size: 30,
+              ),
+              suffix: GestureDetector(
+                onTap: () async {
+                  await showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                    initialDate: DateTime.now(),
+                  ).then((pickedDate) {
+                    if (pickedDate == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please select your date of birth'),
+                        ),
+                      );
+                      return;
+                    } else {
+                      setState(() {
+                        _selectedDate = pickedDate;
+                        dateController.text =
+                            '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
+                      });
+                    }
+                  });
+                },
+                child: Icon(
+                  Icons.edit_outlined,
+                  color: color.secondary,
+                  size: 30,
+                ),
+              ),
+              keyboardType: TextInputType.text,
+              labelText: 'Date of Birth',
+              readOnly: true,
+            ),
+            SizedBox(
+              height: verticalConverter(context, 15),
+            ),
             Center(
               child: SizedBox(
                 width: horizontalConverter(context, 200),
@@ -119,7 +217,7 @@ class _SignInState extends State<SignIn> {
               child: ElevatedButton(
                 onPressed: () {},
                 child: Text(
-                  'Sign In',
+                  'Sign Up',
                   style: TextStyle(
                     color: color.background,
                     fontSize: 16,
@@ -135,7 +233,7 @@ class _SignInState extends State<SignIn> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "I'm a new user.",
+                  "Already have an account",
                   style: TextStyle(
                     color: color.secondary,
                     fontSize: 14,
@@ -147,13 +245,13 @@ class _SignInState extends State<SignIn> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return const SignUp();
+                          return const SignIn();
                         },
                       ),
                     );
                   },
                   child: Text(
-                    'Sign Up',
+                    'Sign In',
                     style: TextStyle(
                       color: color.primary,
                       fontSize: 14,
@@ -162,7 +260,10 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
               ],
-            )
+            ),
+            SizedBox(
+              height: verticalConverter(context, 100),
+            ),
           ],
         ),
       ),

@@ -30,7 +30,7 @@ class Onboarding2 extends StatelessWidget {
             ),
             child: const Center(
               child: Text(
-                'The most Secure Platform for Customer',
+                'The most Secure Platform for Customers',
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
