@@ -30,7 +30,7 @@ class Onboarding2 extends StatelessWidget {
             ),
             child: const Center(
               child: Text(
-                'The most Secure Platform for Customers',
+                'Set Budget and Spending Goals',
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
@@ -45,7 +45,7 @@ class Onboarding2 extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                'Built-in Fingerprint, face recognition and more, keeping you completely safe',
+                'Spendify helps you take control of your finances by setting realistic spending goals',
                 style: TextStyle(
                   fontSize: 14,
                   color: color.onPrimary,

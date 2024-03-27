@@ -31,7 +31,7 @@ class Onboarding3 extends StatelessWidget {
             ),
             child: const Center(
               child: Text(
-                'Paying for Everything is Easy and Convenient',
+                'Personalized Financial Advice and Account Health Tracking',
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
@@ -46,7 +46,7 @@ class Onboarding3 extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                'Built-in Fingerprint, face recognition and more, keeping you completely safe',
+                'Spendify offers users personalized financial and savings advice based on their income and expenses',
                 style: TextStyle(
                   fontSize: 14,
                   color: color.onPrimary,
