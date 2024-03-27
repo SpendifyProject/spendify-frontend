@@ -4,6 +4,7 @@ import 'package:spendify/const/auth.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/animations/done.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
+import 'package:spendify/screens/home.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:uuid/uuid.dart';
 
@@ -193,32 +194,6 @@ class _SignUpState extends State<SignUp> {
               readOnly: true,
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
-            ),
-            Center(
-              child: SizedBox(
-                width: horizontalConverter(context, 200),
-                child: ListTile(
-                  leading: Checkbox(
-                    value: isChecked,
-                    onChanged: (newValue) {
-                      setState(() {
-                        isChecked = newValue ?? false;
-                      });
-                    },
-                  ),
-                  title: Text(
-                    'Keep me signed in',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: color.onPrimary,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-            ),
-            SizedBox(
               height: verticalConverter(context, 30),
             ),
             Center(
@@ -246,7 +221,9 @@ class _SignUpState extends State<SignUp> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const DoneScreen();
+                        return const DoneScreen(
+                          nextPage: Home(),
+                        );
                       },
                     ),
                   );

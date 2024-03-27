@@ -5,6 +5,7 @@ import 'package:spendify/screens/auth/sign_up.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
 import '../animations/done.dart';
+import '../home.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -89,32 +90,6 @@ class _SignInState extends State<SignIn> {
               labelText: 'Password',
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
-            ),
-            Center(
-              child: SizedBox(
-                width: horizontalConverter(context, 200),
-                child: ListTile(
-                  leading: Checkbox(
-                    value: isChecked,
-                    onChanged: (newValue) {
-                      setState(() {
-                        isChecked = newValue ?? false;
-                      });
-                    },
-                  ),
-                  title: Text(
-                    'Keep me signed in',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: color.onPrimary,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-            ),
-            SizedBox(
               height: verticalConverter(context, 30),
             ),
             Center(
@@ -130,7 +105,9 @@ class _SignInState extends State<SignIn> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const DoneScreen();
+                        return const DoneScreen(
+                          nextPage: Home(),
+                        );
                       },
                     ),
                   );
