@@ -31,7 +31,7 @@ class Onboarding1 extends StatelessWidget {
             ),
             child: const Center(
               child: Text(
-                'Fastest Payment in the World',
+                'Fast and Secure Transactions',
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
@@ -46,7 +46,7 @@ class Onboarding1 extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                'Integrate multiple payment methods to help you up the process quickly',
+                'Spendify integrates payment processors that help you make transactions quickly with max security',
                 style: TextStyle(
                   fontSize: 14,
                   color: color.onPrimary,
