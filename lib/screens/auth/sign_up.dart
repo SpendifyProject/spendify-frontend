@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spendify/const/auth.dart';
+import 'package:spendify/provider/user_provider.dart';
+import 'package:spendify/screens/animations/done.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../const/sizing_config.dart';
+import '../../models/user.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -22,6 +28,7 @@ class _SignUpState extends State<SignUp> {
   DateTime? _selectedDate;
   bool isHidden = true;
   bool isChecked = false;
+  late UserProvider userProvider;
 
   @override
   void initState() {
@@ -33,6 +40,7 @@ class _SignUpState extends State<SignUp> {
     occupationController = TextEditingController();
     dateController = TextEditingController();
     incomeController = TextEditingController();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
   }
 
   @override
@@ -215,7 +223,34 @@ class _SignUpState extends State<SignUp> {
             ),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Uuid uid = const Uuid();
+                  User user = User(
+                    fullName: nameController.text,
+                    email: emailController.text,
+                    phoneNumber: numberController.text,
+                    dateOfBirth: _selectedDate ?? DateTime.now(),
+                    monthlyIncome: double.parse(incomeController.text),
+                    uid: uid.v4(),
+                    imagePath:
+                        'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
+                  );
+                  signUp(
+                    context,
+                    user,
+                    passwordController.text,
+                    userProvider,
+                    isChecked,
+                  );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const DoneScreen();
+                      },
+                    ),
+                  );
+                },
                 child: Text(
                   'Sign Up',
                   style: TextStyle(

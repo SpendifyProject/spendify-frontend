@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
+import '../animations/done.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -117,7 +119,22 @@ class _SignInState extends State<SignIn> {
             ),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  signIn(
+                    context,
+                    emailController.text,
+                    passwordController.text,
+                    isChecked,
+                  );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const DoneScreen();
+                      },
+                    ),
+                  );
+                },
                 child: Text(
                   'Sign In',
                   style: TextStyle(

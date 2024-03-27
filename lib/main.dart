@@ -1,13 +1,21 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:provider/provider.dart';
 import 'package:spendify/const/theme.dart';
+import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/onboarding/onboarding_1.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     DevicePreview(
       enabled: true,
@@ -22,11 +30,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Spendify',
-      theme: themeData(context),
-      debugShowCheckedModeBanner: false,
-      home: const Onboarding1(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) => UserProvider(),
+        )
+      ],
+      child: MaterialApp(
+        title: 'Spendify',
+        theme: themeData(context),
+        debugShowCheckedModeBanner: false,
+        home: const Onboarding1(),
+      ),
     );
   }
 }
