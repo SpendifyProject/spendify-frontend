@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
+import 'package:spendify/screens/onboarding/dashboard.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
 import '../animations/done.dart';
-import '../home.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -106,7 +106,7 @@ class _SignInState extends State<SignIn> {
                     MaterialPageRoute(
                       builder: (context) {
                         return const DoneScreen(
-                          nextPage: Home(),
+                          nextPage: Dashboard(),
                         );
                       },
                     ),

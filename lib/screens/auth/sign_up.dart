@@ -4,7 +4,7 @@ import 'package:spendify/const/auth.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/animations/done.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
-import 'package:spendify/screens/home.dart';
+import 'package:spendify/screens/onboarding/dashboard.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:uuid/uuid.dart';
 
@@ -222,7 +222,7 @@ class _SignUpState extends State<SignUp> {
                     MaterialPageRoute(
                       builder: (context) {
                         return const DoneScreen(
-                          nextPage: Home(),
+                          nextPage: Dashboard(),
                         );
                       },
                     ),

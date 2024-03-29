@@ -13,24 +13,28 @@ class UserProvider with ChangeNotifier {
     dateOfBirth: DateTime.now(),
     monthlyIncome: 0.0,
     uid: 'uid',
-    imagePath: 'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
+    imagePath:
+        'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
   );
 
   User get user => _user;
 
   Future<void> getUserData(String email) async {
     try {
-      final userRef = FirebaseFirestore.instance.collection('users').doc(email);
+      final userRef = FirebaseFirestore.instance.collection('users').where(
+            'email',
+            isEqualTo: email,
+          );
       final userSnapshot = await userRef.get();
-      if (userSnapshot.exists) {
+      for (final doc in userSnapshot.docs) {
         User user = User(
-          fullName: userSnapshot['fullName'],
-          email: userSnapshot['email'],
-          phoneNumber: userSnapshot['phoneNumber'],
-          dateOfBirth: userSnapshot['dateOfBirth'],
-          monthlyIncome: userSnapshot['monthlyIncome'],
-          uid: userSnapshot['uid'],
-          imagePath: userSnapshot['imagePath'],
+          fullName: doc['fullName'] as String,
+          email: doc['email'] as String,
+          phoneNumber: doc['phoneNumber'] as String,
+          dateOfBirth: (doc['dateOfBirth'] as Timestamp).toDate(),
+          monthlyIncome: doc['monthlyIncome'] as double,
+          uid: doc['uid'] as String,
+          imagePath: doc['imagePath'] as String,
         );
         _user = user;
         notifyListeners();

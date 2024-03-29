@@ -9,7 +9,7 @@ import 'package:spendify/const/theme.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
-import 'package:spendify/screens/home.dart';
+import 'package:spendify/screens/onboarding/dashboard.dart';
 import 'package:spendify/screens/onboarding/onboarding_1.dart';
 
 import 'firebase_options.dart';
@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
         },
         home: FirebaseAuth.instance.currentUser == null
             ? const Onboarding1()
-            : const Home(),
+            : const Dashboard(),
       ),
     );
   }
