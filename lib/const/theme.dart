@@ -13,6 +13,8 @@ ThemeData themeData(BuildContext context) {
           secondary: const Color.fromRGBO(162, 162, 167, 1),
           tertiary: const Color.fromRGBO(235, 10, 36, 1),
           onPrimary: const Color.fromRGBO(30, 30, 45, 1),
+          onSecondary: const Color.fromRGBO(112, 112, 112, 1),
+          onTertiary: const Color.fromRGBO(31, 170, 71, 1),
         ),
     useMaterial3: true,
     appBarTheme: const AppBarTheme(

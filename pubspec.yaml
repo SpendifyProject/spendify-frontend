@@ -23,6 +23,7 @@ dependencies:
   cloud_firestore: ^4.15.10
   firebase_storage: ^11.6.11
   uuid: ^4.3.3
+  skeletonizer: ^1.1.1
 
 dev_dependencies:
   flutter_test:
