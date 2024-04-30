@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:spendify/const/auth.dart';
@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
                       isThreeLine: true,
                       contentPadding: EdgeInsets.zero,
                       leading: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           signOut(context);
                         },
                         child: ClipOval(
@@ -102,11 +102,14 @@ class _HomeState extends State<Home> {
                     children: [
                       Text(
                         'Transactions',
-                        style: TextStyle(fontSize: 18, color: color.onPrimary),
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          color: color.onPrimary,
+                        ),
                       ),
                       Text(
                         'See All',
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: color.primary,
                         ),
