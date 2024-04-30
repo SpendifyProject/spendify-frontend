@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
+import 'package:spendify/widgets/double_header.dart';
 
 import '../widgets/credit_card_widget.dart';
 import '../widgets/error_dialog.dart';
@@ -21,6 +21,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late UserProvider userProvider;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -31,7 +32,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
-    bool isLoading = false;
     return Scaffold(
       body: FutureBuilder(
         future: userProvider.getUserData(widget.email),
@@ -96,25 +96,9 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     height: verticalConverter(context, 20),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Transactions',
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          color: color.onPrimary,
-                        ),
-                      ),
-                      Text(
-                        'See All',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: color.primary,
-                        ),
-                      )
-                    ],
+                  const DoubleHeader(
+                    leading: 'Transactions',
+                    trailing: 'See All',
                   ),
                   const TransactionWidget(
                     name: 'Spotify',

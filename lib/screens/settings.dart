@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/sizing_config.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -14,14 +15,6 @@ class SettingsScreen extends StatelessWidget {
           style: TextStyle(
             color: color.onPrimary,
             fontSize: 18,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: null,
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: color.onPrimary,
-            size: 20,
           ),
         ),
         actions: [
@@ -69,6 +62,9 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
+              onTap: (){
+                Navigator.of(context).pushNamed(profileRoute);
+              },
               title: Text(
                 'My Profile',
                 style: TextStyle(

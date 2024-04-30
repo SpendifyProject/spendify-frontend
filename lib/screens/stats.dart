@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spendify/const/sizing_config.dart';
+import 'package:spendify/widgets/double_header.dart';
 
 import '../widgets/transaction_widget.dart';
 
@@ -17,14 +18,6 @@ class Statistics extends StatelessWidget {
           style: GoogleFonts.poppins(
             color: color.onPrimary,
             fontSize: 18,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: null,
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: color.onPrimary,
-            size: 20,
           ),
         ),
         actions: [
@@ -46,7 +39,7 @@ class Statistics extends StatelessWidget {
         child: ListView(
           children: [
             Text(
-              'Monthly Spending',
+              'Monthly Expenses',
               style: GoogleFonts.poppins(
                 color: color.secondary,
                 fontSize: 18,
@@ -69,25 +62,9 @@ class Statistics extends StatelessWidget {
             SizedBox(
               height: verticalConverter(context, 20),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Recent Transactions',
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    color: color.onPrimary,
-                  ),
-                ),
-                Text(
-                  'See All',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: color.primary,
-                  ),
-                )
-              ],
+            const DoubleHeader(
+              leading: 'Recent Transactions',
+              trailing: 'See All',
             ),
             const TransactionWidget(
               name: 'Spotify',
