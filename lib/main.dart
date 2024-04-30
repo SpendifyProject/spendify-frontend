@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
         },
         home: FirebaseAuth.instance.currentUser == null
             ? const Onboarding1()
-            : const Dashboard(),
+            : const SignIn(),
       ),
     );
   }

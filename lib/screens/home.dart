@@ -12,7 +12,8 @@ import '../widgets/error_dialog.dart';
 import '../widgets/transaction_widget.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  const Home({super.key, required this.email});
+  final String email;
 
   @override
   State<Home> createState() => _HomeState();
@@ -20,13 +21,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late UserProvider userProvider;
-  late String email;
 
   @override
   void initState() {
     super.initState();
     userProvider = Provider.of<UserProvider>(context, listen: false);
-    email = auth.FirebaseAuth.instance.currentUser!.email.toString();
   }
 
   @override
@@ -35,7 +34,7 @@ class _HomeState extends State<Home> {
     bool isLoading = false;
     return Scaffold(
       body: FutureBuilder(
-        future: userProvider.getUserData(email),
+        future: userProvider.getUserData(widget.email),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             isLoading = true;

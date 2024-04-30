@@ -5,15 +5,10 @@ import 'package:spendify/screens/stats.dart';
 import 'package:spendify/screens/wallet.dart';
 import 'package:spendify/screens/settings.dart';
 
-final List<Widget> _screens = [
-  const Home(),
-  const Wallet(),
-  const Statistics(),
-  const SettingsScreen(),
-];
-
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  const Dashboard({super.key, required this.email});
+
+  final String email;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -25,6 +20,12 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
+    final List<Widget> _screens = [
+      Home(email: widget.email,),
+      const Wallet(),
+      const Statistics(),
+      const SettingsScreen(),
+    ];
     return Scaffold(
       body: _screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(

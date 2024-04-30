@@ -17,7 +17,7 @@ Future<void> signIn(
     //   keepMeSignedIn ? Persistence.LOCAL : Persistence.NONE,
     // );
     await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
+      email: email.toLowerCase(),
       password: password,
     );
   } on FirebaseAuthException catch (e) {
@@ -45,7 +45,7 @@ Future<void> signUp(
     //   keepMeSignedIn ? Persistence.LOCAL : Persistence.NONE,
     // );
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: user.email,
+      email: user.email.toLowerCase(),
       password: password,
     );
     userProvider.addUser(user);

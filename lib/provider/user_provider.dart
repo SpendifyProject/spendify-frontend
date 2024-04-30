@@ -52,7 +52,7 @@ class UserProvider with ChangeNotifier {
           .doc(newUser.uid)
           .set({
         'fullName': newUser.fullName,
-        'email': newUser.email,
+        'email': newUser.email.toLowerCase(),
         'phoneNumber': newUser.phoneNumber,
         'dateOfBirth': newUser.dateOfBirth,
         'monthlyIncome': newUser.monthlyIncome,

@@ -221,8 +221,8 @@ class _SignUpState extends State<SignUp> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const DoneScreen(
-                          nextPage: Dashboard(),
+                        return DoneScreen(
+                          nextPage: Dashboard(email: emailController.text,),
                         );
                       },
                     ),
