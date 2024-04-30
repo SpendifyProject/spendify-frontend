@@ -24,6 +24,7 @@ dependencies:
   firebase_storage: ^11.6.11
   uuid: ^4.3.3
   skeletonizer: ^1.1.1
+  wave_linear_progress_indicator: ^0.1.0
 
 dev_dependencies:
   flutter_test:
