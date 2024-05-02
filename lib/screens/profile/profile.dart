@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
@@ -49,7 +50,9 @@ class _ProfileState extends State<Profile> {
           ),
           actions: [
             IconButton(
-              onPressed: null,
+              onPressed: (){
+                Navigator.pushNamed(context, editProfileRoute);
+              },
               icon: Icon(
                 Icons.edit_outlined,
                 color: color.onPrimary,
