@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/auth.dart';
@@ -10,6 +11,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../const/sizing_config.dart';
 import '../../models/user.dart';
+import '../../widgets/error_dialog.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -30,6 +32,7 @@ class _SignUpState extends State<SignUp> {
   bool isHidden = true;
   bool isChecked = false;
   late UserProvider userProvider;
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -67,16 +70,19 @@ class _SignUpState extends State<SignUp> {
             SizedBox(
               height: verticalConverter(context, 30),
             ),
-            CustomAuthTextField(
-              controller: nameController,
-              obscureText: false,
-              icon: Icon(
-                Icons.person_outline,
-                color: color.secondary,
-                size: 30,
+            Form(
+              key: formKey,
+              child: CustomAuthTextField(
+                controller: nameController,
+                obscureText: false,
+                icon: Icon(
+                  Icons.person_outline,
+                  color: color.secondary,
+                  size: 30,
+                ),
+                keyboardType: TextInputType.text,
+                labelText: 'Full Name',
               ),
-              keyboardType: TextInputType.text,
-              labelText: 'Full Name',
             ),
             SizedBox(
               height: verticalConverter(context, 15),
@@ -199,34 +205,54 @@ class _SignUpState extends State<SignUp> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Uuid uid = const Uuid();
-                  User user = User(
-                    fullName: nameController.text,
-                    email: emailController.text,
-                    phoneNumber: numberController.text,
-                    dateOfBirth: _selectedDate ?? DateTime.now(),
-                    monthlyIncome: double.parse(incomeController.text),
-                    uid: uid.v4(),
-                    imagePath:
-                        'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
-                  );
-                  signUp(
-                    context,
-                    user,
-                    passwordController.text,
-                    userProvider,
-                    isChecked,
-                  );
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return DoneScreen(
-                          nextPage: Dashboard(email: emailController.text,),
-                        );
-                      },
-                    ),
-                  );
+                  try {
+                    final form = formKey.currentState!;
+                    if (form.validate()) {}
+                    Uuid uid = const Uuid();
+                    User user = User(
+                      fullName: nameController.text,
+                      email: emailController.text,
+                      phoneNumber: numberController.text,
+                      dateOfBirth: _selectedDate ?? DateTime.now(),
+                      monthlyIncome: double.parse(incomeController.text),
+                      uid: uid.v4(),
+                      imagePath:
+                          'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
+                    );
+                    signUp(
+                      context,
+                      user,
+                      passwordController.text,
+                      userProvider,
+                      isChecked,
+                    );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return DoneScreen(
+                            nextPage: Dashboard(
+                              email: emailController.text,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  } on auth.FirebaseAuthException catch (e) {
+                    if (e.code == 'weak-password') {
+                      showErrorDialog(context,
+                          "Weak password : Password should be above 6 characters");
+                    } else if (e.code == 'invalid-password') {
+                      showErrorDialog(context, 'Invalid-password');
+                    } else if (e.code == 'email-already-in-use') {
+                      showErrorDialog(context,
+                          'Email belongs to other user: Register with a different email');
+                    } else {
+                      showErrorDialog(context, 'Error: $e');
+                    }
+                  } catch (e) {
+                    showErrorDialog(context, 'Error: $e');
+                  }
                 },
                 child: Text(
                   'Sign Up',

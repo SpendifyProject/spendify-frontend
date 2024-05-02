@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/sizing_config.dart';
@@ -5,6 +6,7 @@ import 'package:spendify/screens/auth/sign_up.dart';
 import 'package:spendify/screens/onboarding/dashboard.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
+import '../../widgets/error_dialog.dart';
 import '../animations/done.dart';
 
 class SignIn extends StatefulWidget {
@@ -15,6 +17,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  final formKey = GlobalKey<FormState>();
   late TextEditingController emailController;
   late TextEditingController passwordController;
   bool isHidden = true;
@@ -50,16 +53,19 @@ class _SignInState extends State<SignIn> {
             SizedBox(
               height: verticalConverter(context, 30),
             ),
-            CustomAuthTextField(
-              controller: emailController,
-              obscureText: false,
-              icon: Icon(
-                Icons.email_outlined,
-                color: color.secondary,
-                size: 30,
+            Form(
+              key: formKey,
+              child: CustomAuthTextField(
+                controller: emailController,
+                obscureText: false,
+                icon: Icon(
+                  Icons.email_outlined,
+                  color: color.secondary,
+                  size: 30,
+                ),
+                keyboardType: TextInputType.emailAddress,
+                labelText: 'Email Address',
               ),
-              keyboardType: TextInputType.emailAddress,
-              labelText: 'Email Address',
             ),
             SizedBox(
               height: verticalConverter(context, 15),
@@ -95,22 +101,38 @@ class _SignInState extends State<SignIn> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  signIn(
-                    context,
-                    emailController.text,
-                    passwordController.text,
-                    isChecked,
-                  );
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return DoneScreen(
-                          nextPage: Dashboard(email: emailController.text,),
-                        );
-                      },
-                    ),
-                  );
+                  try {
+                    final form = formKey.currentState!;
+                    if (form.validate()) {}
+                    signIn(
+                      context,
+                      emailController.text,
+                      passwordController.text,
+                      isChecked,
+                    );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return DoneScreen(
+                            nextPage: Dashboard(
+                              email: emailController.text,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    if (e.code == 'user-not-found') {
+                      showErrorDialog(context, 'User not found');
+                    } else if (e.code == 'wrong-password') {
+                      showErrorDialog(context, 'Wrong password');
+                    } else {
+                      showErrorDialog(context, 'Error: $e');
+                    }
+                  } catch (e) {
+                    showErrorDialog(context, 'Error: $e');
+                  }
                 },
                 child: Text(
                   'Sign In',
