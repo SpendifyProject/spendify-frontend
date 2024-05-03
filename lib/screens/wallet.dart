@@ -143,6 +143,7 @@ class _WalletState extends State<Wallet> {
                   const DoubleHeader(
                     leading: 'Last Card Used',
                     trailing: 'All Cards',
+                    routeName: allCardsRoute,
                   ),
                   SizedBox(
                     height: verticalConverter(context, 10),

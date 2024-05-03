@@ -1,11 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DoubleHeader extends StatelessWidget {
   const DoubleHeader(
-      {super.key, required this.leading, required this.trailing});
+      {super.key,
+      required this.leading,
+      required this.trailing,
+      this.routeName});
 
   final String leading;
   final String trailing;
+  final String? routeName;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +26,23 @@ class DoubleHeader extends StatelessWidget {
             color: color.onPrimary,
           ),
         ),
-        Text(
-          trailing,
-          style: TextStyle(
-            fontSize: 14,
-            color: color.primary,
+        GestureDetector(
+          onTap: () {
+            if (routeName != null) {
+              Navigator.pushNamed(
+                context,
+                routeName!,
+              );
+            } else {
+              null;
+            }
+          },
+          child: Text(
+            trailing,
+            style: TextStyle(
+              fontSize: 14,
+              color: color.primary,
+            ),
           ),
         )
       ],
