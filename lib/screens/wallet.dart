@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
@@ -40,13 +41,31 @@ class _WalletState extends State<Wallet> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: null,
+          PopupMenuButton(
+            onSelected: (String value) {
+              if(value == 'card'){
+                Navigator.pushNamed(context, addCardRoute);
+              }
+              else{
+                null;
+              }
+            },
+            color: color.background,
             icon: Icon(
               Icons.monetization_on_outlined,
               color: color.onPrimary,
               size: 30,
             ),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'card',
+                child: Text('Add new credit card'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'momo',
+                child: Text('Add new mobile money account'),
+              ),
+            ],
           ),
         ],
       ),
