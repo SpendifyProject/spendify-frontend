@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spendify/screens/home.dart';
-import 'package:spendify/screens/stats.dart';
-import 'package:spendify/screens/wallet.dart';
-import 'package:spendify/screens/settings.dart';
+import 'package:spendify/screens/dashboard/home.dart';
+import 'package:spendify/screens/dashboard/stats.dart';
+import 'package:spendify/screens/dashboard/wallet.dart';
+import 'package:spendify/screens/dashboard/settings.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key, required this.email});

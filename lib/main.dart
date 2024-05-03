@@ -9,12 +9,14 @@ import 'package:spendify/const/theme.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
-import 'package:spendify/screens/onboarding/dashboard.dart';
+import 'package:spendify/screens/dashboard/dashboard.dart';
 import 'package:spendify/screens/onboarding/onboarding_1.dart';
 import 'package:spendify/screens/payment_methods/add_credit_card.dart';
 import 'package:spendify/screens/payment_methods/all_credit_cards.dart';
 import 'package:spendify/screens/profile/edit_profile.dart';
 import 'package:spendify/screens/profile/profile.dart';
+import 'package:spendify/screens/transactions/search.dart';
+import 'package:spendify/screens/transactions/transaction_history.dart';
 
 import 'firebase_options.dart';
 
@@ -59,6 +61,8 @@ class _MyAppState extends State<MyApp> {
           editProfileRoute: (context) => const EditProfile(),
           addCardRoute: (context) => const AddCard(),
           allCardsRoute: (context) => const AllCards(),
+          searchRoute: (context) => const Search(),
+          transactionsRoute: (context) => const Transactions(),
         },
         home: FirebaseAuth.instance.currentUser == null
             ? const Onboarding1()

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/widgets/double_header.dart';
 
-import '../widgets/transaction_widget.dart';
+import '../../widgets/transaction_widget.dart';
 
 class Statistics extends StatelessWidget {
   const Statistics({super.key});
@@ -65,6 +66,7 @@ class Statistics extends StatelessWidget {
             const DoubleHeader(
               leading: 'Recent Transactions',
               trailing: 'See All',
+              routeName: transactionsRoute,
             ),
             const TransactionWidget(
               name: 'Spotify',

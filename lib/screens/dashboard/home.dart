@@ -7,9 +7,10 @@ import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/widgets/double_header.dart';
 
-import '../widgets/credit_card_widget.dart';
-import '../widgets/error_dialog.dart';
-import '../widgets/transaction_widget.dart';
+import '../../const/routes.dart';
+import '../../widgets/credit_card_widget.dart';
+import '../../widgets/error_dialog.dart';
+import '../../widgets/transaction_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key, required this.email});
@@ -99,6 +100,7 @@ class _HomeState extends State<Home> {
                   const DoubleHeader(
                     leading: 'Transactions',
                     trailing: 'See All',
+                    routeName: transactionsRoute,
                   ),
                   const TransactionWidget(
                     name: 'Spotify',

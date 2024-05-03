@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
-import 'package:spendify/screens/onboarding/dashboard.dart';
+import 'package:spendify/screens/dashboard/dashboard.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
 import '../../widgets/error_dialog.dart';

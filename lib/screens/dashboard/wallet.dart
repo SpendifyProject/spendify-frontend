@@ -8,7 +8,7 @@ import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/widgets/double_header.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
-import '../widgets/credit_card_widget.dart';
+import '../../widgets/credit_card_widget.dart';
 
 class Wallet extends StatefulWidget {
   const Wallet({super.key});
