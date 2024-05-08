@@ -25,7 +25,7 @@ class Transactions extends StatelessWidget {
           },
           icon: Icon(
             Icons.arrow_back_ios,
-            color: color.secondary,
+            color: color.onPrimary,
             size: 20,
           ),
         ),
@@ -34,7 +34,7 @@ class Transactions extends StatelessWidget {
             onPressed: null,
             icon: Icon(
               CupertinoIcons.search,
-              color: color.secondary,
+              color: color.onPrimary,
               size: 20,
             ),
           ),

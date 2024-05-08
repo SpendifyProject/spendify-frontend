@@ -48,7 +48,7 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(
-                'Language',
+                'Appearance',
                 style: TextStyle(
                   color: color.onPrimary,
                   fontSize: 14,
@@ -152,7 +152,7 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(
-                'Biometric',
+                'Biometrics',
                 style: TextStyle(
                   color: color.onPrimary,
                   fontSize: 14,

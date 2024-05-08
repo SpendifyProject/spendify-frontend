@@ -46,7 +46,7 @@ class _AddCardState extends State<AddCard> {
           },
           icon: Icon(
             Icons.arrow_back_ios,
-            color: color.secondary,
+            color: color.onPrimary,
             size: 20,
           ),
         ),
