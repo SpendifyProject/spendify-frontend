@@ -187,52 +187,6 @@ class _ProfileState extends State<Profile> {
                         label: const Text('2'),
                       ),
                     ),
-                    SizedBox(
-                      height: verticalConverter(context, 10),
-                    ),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: Icon(
-                        Icons.message_outlined,
-                        color: color.secondary,
-                        size: 20,
-                      ),
-                      title: Text(
-                        'Message Center',
-                        style: TextStyle(
-                          color: color.onPrimary,
-                          fontSize: 14,
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: color.secondary,
-                        size: 20,
-                      ),
-                    ),
-                    SizedBox(
-                      height: verticalConverter(context, 10),
-                    ),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: Icon(
-                        Icons.settings_outlined,
-                        color: color.secondary,
-                        size: 20,
-                      ),
-                      title: Text(
-                        'Settings',
-                        style: TextStyle(
-                          color: color.onPrimary,
-                          fontSize: 14,
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: color.secondary,
-                        size: 20,
-                      ),
-                    ),
                   ],
                 ),
               );

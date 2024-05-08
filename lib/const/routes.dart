@@ -6,3 +6,7 @@ const addCardRoute = '/add-card/';
 const allCardsRoute = '/all-cards/';
 const transactionsRoute = '/transactions/';
 const searchRoute = '/search/';
+const contactRoute = '/contact/';
+const changePasswordRoute = '/change-password/';
+const privacyRoute = '/privacy-policy/';
+const conditionsRoute = '/terms-and-conditions/';
