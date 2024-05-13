@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/provider/user_provider.dart';
 
 import '../models/user.dart' as u;
+import '../screens/animations/done.dart';
+import '../screens/dashboard/dashboard.dart';
 
 Future<void> signIn(
   BuildContext context,
@@ -18,6 +20,18 @@ Future<void> signIn(
     await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email.toLowerCase(),
       password: password,
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return DoneScreen(
+            nextPage: Dashboard(
+              email: email,
+            ),
+          );
+        },
+      ),
     );
   } catch (e) {
     rethrow;
@@ -40,6 +54,18 @@ Future<void> signUp(
       password: password,
     );
     userProvider.addUser(user);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return DoneScreen(
+            nextPage: Dashboard(
+              email: user.email,
+            ),
+          );
+        },
+      ),
+    );
   } catch (e) {
     rethrow;
   }

@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
-import 'package:spendify/screens/dashboard/dashboard.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
 import '../../widgets/error_dialog.dart';
-import '../animations/done.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -100,33 +98,24 @@ class _SignInState extends State<SignIn> {
             ),
             Center(
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   try {
                     final form = formKey.currentState!;
                     if (form.validate()) {}
-                    signIn(
+                    await signIn(
                       context,
                       emailController.text,
                       passwordController.text,
                       isChecked,
-                    );
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return DoneScreen(
-                            nextPage: Dashboard(
-                              email: emailController.text,
-                            ),
-                          );
-                        },
-                      ),
                     );
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
                       showErrorDialog(context, 'User not found');
                     } else if (e.code == 'wrong-password') {
                       showErrorDialog(context, 'Wrong password');
+                    } else if (e.code == 'invalid-credential') {
+                      showErrorDialog(context,
+                          'Incorrect credentials. Check your email and password');
                     } else {
                       showErrorDialog(context, 'Error: $e');
                     }

@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/provider/user_provider.dart';
-import 'package:spendify/screens/animations/done.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
-import 'package:spendify/screens/dashboard/dashboard.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:uuid/uuid.dart';
 
@@ -204,7 +202,7 @@ class _SignUpState extends State<SignUp> {
             ),
             Center(
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   try {
                     final form = formKey.currentState!;
                     if (form.validate()) {}
@@ -219,24 +217,12 @@ class _SignUpState extends State<SignUp> {
                       imagePath:
                           'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
                     );
-                    signUp(
+                    await signUp(
                       context,
                       user,
                       passwordController.text,
                       userProvider,
                       isChecked,
-                    );
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return DoneScreen(
-                            nextPage: Dashboard(
-                              email: emailController.text,
-                            ),
-                          );
-                        },
-                      ),
                     );
                   } on auth.FirebaseAuthException catch (e) {
                     if (e.code == 'weak-password') {
@@ -247,6 +233,9 @@ class _SignUpState extends State<SignUp> {
                     } else if (e.code == 'email-already-in-use') {
                       showErrorDialog(context,
                           'Email belongs to other user: Register with a different email');
+                    } else if (e.code == 'invalid-credential') {
+                      showErrorDialog(context,
+                          'Incorrect credentials. Check your email and password');
                     } else {
                       showErrorDialog(context, 'Error: $e');
                     }
