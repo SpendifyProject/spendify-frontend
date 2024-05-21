@@ -63,6 +63,19 @@ class Statistics extends StatelessWidget {
             SizedBox(
               height: verticalConverter(context, 20),
             ),
+            Text(
+              'Category Chart',
+              style: GoogleFonts.poppins(
+                color: color.secondary,
+                fontSize: 18,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Image.asset('assets/images/category.png'),
+            Image.asset('assets/images/legend.png'),
+            SizedBox(
+              height: verticalConverter(context, 20),
+            ),
             const DoubleHeader(
               leading: 'Recent Transactions',
               trailing: 'See All',

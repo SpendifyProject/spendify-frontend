@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
@@ -59,7 +58,7 @@ class _HomeState extends State<Home> {
                       contentPadding: EdgeInsets.zero,
                       leading: GestureDetector(
                         onTap: () {
-                          signOut(context);
+                          Navigator.pushNamed(context, profileRoute);
                         },
                         child: ClipOval(
                           child: Image.network(

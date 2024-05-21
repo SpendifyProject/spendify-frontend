@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/sizing_config.dart';
 
@@ -27,7 +28,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: null,
+            onPressed: (){
+              signOut(context);
+            },
             icon: Icon(
               Icons.logout,
               color: color.onPrimary,

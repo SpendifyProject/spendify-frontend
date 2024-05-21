@@ -7,6 +7,7 @@ import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/widgets/double_header.dart';
 import 'package:spendify/widgets/error_dialog.dart';
+import 'package:spendify/widgets/momo_widget.dart';
 
 import '../../widgets/credit_card_widget.dart';
 
@@ -43,10 +44,9 @@ class _WalletState extends State<Wallet> {
         actions: [
           PopupMenuButton(
             onSelected: (String value) {
-              if(value == 'card'){
+              if (value == 'card') {
                 Navigator.pushNamed(context, addCardRoute);
-              }
-              else{
+              } else {
                 null;
               }
             },
@@ -142,8 +142,8 @@ class _WalletState extends State<Wallet> {
                   ),
                   const DoubleHeader(
                     leading: 'Last Card Used',
-                    trailing: 'All Cards',
-                    routeName: allCardsRoute,
+                    trailing: 'View History',
+                    routeName: transactionsRoute,
                   ),
                   SizedBox(
                     height: verticalConverter(context, 10),
@@ -153,6 +153,14 @@ class _WalletState extends State<Wallet> {
                     fullName: user.fullName,
                     expiryDate: '12/2024',
                     assetName: 'mastercard.png',
+                  ),
+                  SizedBox(
+                    height: verticalConverter(context, 10),
+                  ),
+                  MomoWidget(
+                    phoneNumber: '0263600727',
+                    fullName: user.fullName,
+                    network: 'MTN',
                   ),
                 ],
               ),
