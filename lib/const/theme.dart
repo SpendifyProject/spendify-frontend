@@ -28,7 +28,7 @@ ThemeData themeData(BuildContext context) {
         backgroundColor:
             MaterialStateProperty.all(const Color.fromRGBO(0, 102, 255, 1)),
         foregroundColor:
-            MaterialStateProperty.all(const Color.fromRGBO(244, 244, 244, 1)),
+            MaterialStateProperty.all(Colors.white),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),

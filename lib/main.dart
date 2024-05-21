@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/dark_theme.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/theme.dart';
 import 'package:spendify/provider/user_provider.dart';
@@ -57,6 +58,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Spendify',
         theme: themeData(context),
+        darkTheme: darkThemeData(context),
         debugShowCheckedModeBanner: false,
         routes: {
           signInRoute: (context) => const SignIn(),
