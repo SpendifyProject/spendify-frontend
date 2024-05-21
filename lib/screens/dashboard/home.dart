@@ -115,8 +115,8 @@ class _HomeState extends State<Home> {
                         ),
                         Expanded(
                           child: TransactionButton(
-                            iconData: Icons.arrow_downward,
-                            label: 'Receive',
+                            iconData: Icons.savings_outlined,
+                            label: 'Budget',
                           ),
                         ),
                         Expanded(
