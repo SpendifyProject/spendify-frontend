@@ -49,7 +49,6 @@ class _HomeState extends State<Home> {
                   horizontal: horizontalConverter(context, 20),
                   vertical: verticalConverter(context, 10)),
               child: ListView(
-                physics: const BouncingScrollPhysics(),
                 children: [
                   Skeletonizer(
                     enabled: isLoading,
@@ -85,13 +84,49 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 32),
+                    height: verticalConverter(context, 10),
                   ),
                   CreditCardWidget(
                     cardNumber: '4562   1122   4595   7852',
                     fullName: user.fullName,
                     expiryDate: '12/2024',
                     assetName: 'mastercard.png',
+                  ),
+                  SizedBox(
+                    height: verticalConverter(context, 20),
+                  ),
+                  SizedBox(
+                    height: verticalConverter(context, 80),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: TransactionButton(
+                            iconData: Icons.arrow_upward,
+                            label: 'Send',
+                          ),
+                        ),
+                        Expanded(
+                          child: TransactionButton(
+                            iconData: Icons.schedule_outlined,
+                            label: 'Schedule',
+                          ),
+                        ),
+                        Expanded(
+                          child: TransactionButton(
+                            iconData: Icons.arrow_downward,
+                            label: 'Receive',
+                          ),
+                        ),
+                        Expanded(
+                          child: TransactionButton(
+                            iconData: Icons.add,
+                            label: 'Record',
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: verticalConverter(context, 20),
@@ -143,6 +178,46 @@ class _HomeState extends State<Home> {
           return const SizedBox();
         },
       ),
+    );
+  }
+}
+
+class TransactionButton extends StatelessWidget {
+  const TransactionButton(
+      {super.key, required this.iconData, required this.label, this.onTap});
+
+  final IconData iconData;
+  final String label;
+  final Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: onTap,
+          child: CircleAvatar(
+            backgroundColor: color.onBackground,
+            radius: horizontalConverter(context, 27),
+            child: Icon(
+              iconData,
+              color: color.onPrimary,
+              size: 30,
+            ),
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            color: color.onPrimary,
+            fontSize: 13,
+          ),
+          softWrap: true,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
