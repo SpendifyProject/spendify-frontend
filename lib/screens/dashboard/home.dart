@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
                     height: verticalConverter(context, 20),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 80),
+                    height: verticalConverter(context, 90),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
