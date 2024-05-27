@@ -260,7 +260,7 @@ class _SignUpState extends State<SignUp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Already have an account",
+                  "Already have an account?",
                   style: TextStyle(
                     color: color.secondary,
                     fontSize: 14,
@@ -280,7 +280,7 @@ class _SignUpState extends State<SignUp> {
                   child: Text(
                     'Sign In',
                     style: TextStyle(
-                      color: color.background,
+                      color: color.primary,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
