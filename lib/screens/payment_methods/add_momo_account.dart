@@ -1,40 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/sizing_config.dart';
-import 'package:spendify/models/credit_card.dart';
-import 'package:spendify/provider/credit_card_provider.dart';
-import 'package:spendify/widgets/error_dialog.dart';
+import 'package:spendify/models/momo_accounts.dart';
+import 'package:spendify/provider/momo_accounts_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../const/sizing_config.dart';
 import '../../widgets/custom_auth_text_field.dart';
+import '../../widgets/error_dialog.dart';
 
-class AddCard extends StatefulWidget {
-  const AddCard({super.key, required this.uid});
+class AddMomo extends StatefulWidget {
+  const AddMomo({super.key, required this.uid});
 
   final String uid;
 
   @override
-  State<AddCard> createState() => _AddCardState();
+  State<AddMomo> createState() => _AddMomoState();
 }
 
-class _AddCardState extends State<AddCard> {
+class _AddMomoState extends State<AddMomo> {
   final formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController numberController;
-  late TextEditingController dateController;
-  late TextEditingController issuerController;
-  DateTime? _selectedDate;
-  String _selectedIssuer = '';
-  late CreditCardProvider cardProvider;
+  late TextEditingController networkController;
+  String _selectedNetwork = '';
+  late MomoAccountProvider momoProvider;
 
   @override
   void initState() {
     super.initState();
     nameController = TextEditingController();
     numberController = TextEditingController();
-    dateController = TextEditingController();
-    issuerController = TextEditingController();
-    cardProvider = Provider.of<CreditCardProvider>(context, listen: false);
+    networkController = TextEditingController();
+    momoProvider = Provider.of<MomoAccountProvider>(context, listen: false);
   }
 
   @override
@@ -43,7 +40,7 @@ class _AddCardState extends State<AddCard> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add New Card',
+          'Add New Mobile Money Account',
           style: TextStyle(
             color: color.onPrimary,
             fontSize: 18,
@@ -80,7 +77,7 @@ class _AddCardState extends State<AddCard> {
                       size: 30,
                     ),
                     keyboardType: TextInputType.text,
-                    labelText: 'Cardholder Full Name',
+                    labelText: 'Full Name',
                   ),
                   SizedBox(
                     height: verticalConverter(context, 20),
@@ -94,58 +91,13 @@ class _AddCardState extends State<AddCard> {
                       size: 30,
                     ),
                     keyboardType: TextInputType.number,
-                    labelText: 'Card Number',
+                    labelText: 'Phone Number',
                   ),
                   SizedBox(
                     height: verticalConverter(context, 20),
                   ),
                   CustomAuthTextField(
-                    controller: dateController,
-                    obscureText: false,
-                    icon: Icon(
-                      Icons.date_range_outlined,
-                      color: color.secondary,
-                      size: 30,
-                    ),
-                    suffix: GestureDetector(
-                      onTap: () async {
-                        await showDatePicker(
-                          context: context,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2040),
-                          initialDate: DateTime.now(),
-                        ).then((pickedDate) {
-                          if (pickedDate == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Please select the expiry date'),
-                              ),
-                            );
-                            return;
-                          } else {
-                            setState(() {
-                              _selectedDate = pickedDate;
-                              dateController.text =
-                              '${_selectedDate?.month}/${_selectedDate?.year}';
-                            });
-                          }
-                        });
-                      },
-                      child: Icon(
-                        Icons.edit_outlined,
-                        color: color.secondary,
-                        size: 30,
-                      ),
-                    ),
-                    keyboardType: TextInputType.text,
-                    labelText: 'Expiry Date',
-                    readOnly: true,
-                  ),
-                  SizedBox(
-                    height: verticalConverter(context, 20),
-                  ),
-                  CustomAuthTextField(
-                    controller: issuerController,
+                    controller: networkController,
                     obscureText: false,
                     icon: Icon(
                       Icons.business_center_outlined,
@@ -155,8 +107,8 @@ class _AddCardState extends State<AddCard> {
                     suffix: PopupMenuButton(
                       onSelected: (String value) {
                         setState(() {
-                          _selectedIssuer = value;
-                          issuerController.text = _selectedIssuer;
+                          _selectedNetwork = value;
+                          networkController.text = _selectedNetwork;
                         });
                       },
                       color: color.background,
@@ -165,19 +117,24 @@ class _AddCardState extends State<AddCard> {
                         color: color.secondary,
                         size: 30,
                       ),
-                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<String>>[
                         const PopupMenuItem<String>(
-                          value: 'Mastercard',
-                          child: Text('Mastercard'),
+                          value: 'mtn',
+                          child: Text('MTN'),
                         ),
                         const PopupMenuItem<String>(
-                          value: 'Visa',
-                          child: Text('Visa'),
+                          value: 'telecel',
+                          child: Text('Telecel'),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'airtel',
+                          child: Text('AirtelTigo'),
                         ),
                       ],
                     ),
                     keyboardType: TextInputType.text,
-                    labelText: 'Issuer',
+                    labelText: 'Mobile Network Provider',
                     readOnly: true,
                   ),
                 ],
@@ -193,25 +150,23 @@ class _AddCardState extends State<AddCard> {
                     final form = formKey.currentState!;
                     if (form.validate()) {}
                     String fullName = nameController.text;
-                    String cardNumber = numberController.text;
-                    DateTime expiryDate = _selectedDate!;
-                    String issuer = _selectedIssuer;
+                    String phoneNumber = numberController.text;
+                    String network = networkController.text;
                     Uuid id = const Uuid();
                     String uid = widget.uid;
 
-                    CreditCard newCard = CreditCard(
-                      fullName: fullName,
-                      cardNumber: cardNumber,
-                      expiryDate: expiryDate,
-                      issuer: issuer,
-                      uid: uid,
+                    MomoAccount newAccount = MomoAccount(
                       id: id.v4(),
+                      uid: uid,
+                      fullName: fullName,
+                      network: network,
+                      phoneNumber: phoneNumber,
                     );
 
-                    cardProvider.saveCard(newCard);
+                    momoProvider.saveAccount(newAccount);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Credit card saved successfully'),
+                        content: Text('Mobile money account saved successfully'),
                       ),
                     );
                     Navigator.pop(context);
@@ -220,7 +175,7 @@ class _AddCardState extends State<AddCard> {
                   }
                 },
                 child: Text(
-                  'Add Card',
+                  'Add Account',
                   style: TextStyle(
                     color: color.background,
                     fontSize: 14,
