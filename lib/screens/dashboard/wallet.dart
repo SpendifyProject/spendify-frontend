@@ -5,6 +5,7 @@ import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
+import 'package:spendify/screens/payment_methods/add_credit_card.dart';
 import 'package:spendify/widgets/double_header.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:spendify/widgets/momo_widget.dart';
@@ -45,7 +46,9 @@ class _WalletState extends State<Wallet> {
           PopupMenuButton(
             onSelected: (String value) {
               if (value == 'card') {
-                Navigator.pushNamed(context, addCardRoute);
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return AddCard(uid: userProvider.user.uid);
+                },),);
               } else {
                 null;
               }

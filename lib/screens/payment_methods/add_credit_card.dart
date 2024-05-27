@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spendify/const/sizing_config.dart';
+import 'package:spendify/models/credit_card.dart';
+import 'package:spendify/provider/credit_card_provider.dart';
+import 'package:spendify/widgets/error_dialog.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../provider/user_provider.dart';
 import '../../widgets/custom_auth_text_field.dart';
 
 class AddCard extends StatefulWidget {
-  const AddCard({super.key});
+  const AddCard({super.key, required this.uid});
+
+  final String uid;
 
   @override
   State<AddCard> createState() => _AddCardState();
@@ -18,6 +26,8 @@ class _AddCardState extends State<AddCard> {
   late TextEditingController issuerController;
   DateTime? _selectedDate;
   String _selectedIssuer = '';
+  late UserProvider userProvider;
+  late CreditCardProvider cardProvider;
 
   @override
   void initState() {
@@ -26,6 +36,8 @@ class _AddCardState extends State<AddCard> {
     numberController = TextEditingController();
     dateController = TextEditingController();
     issuerController = TextEditingController();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    cardProvider = Provider.of<CreditCardProvider>(context, listen: false);
   }
 
   @override
@@ -175,7 +187,31 @@ class _AddCardState extends State<AddCard> {
             ),
             Center(
               child: ElevatedButton(
-                onPressed: null,
+                onPressed: () {
+                  try {
+                    final form = formKey.currentState!;
+                    if (form.validate()) {}
+                    String fullName = nameController.text;
+                    String cardNumber = numberController.text;
+                    DateTime expiryDate = _selectedDate!;
+                    String issuer = _selectedIssuer;
+                    Uuid id = const Uuid();
+                    String uid = widget.uid;
+
+                    CreditCard newCard = CreditCard(
+                      fullName: fullName,
+                      cardNumber: cardNumber,
+                      expiryDate: expiryDate,
+                      issuer: issuer,
+                      uid: uid,
+                      id: id.v4(),
+                    );
+
+                    cardProvider.saveCard(newCard);
+                  } catch (error) {
+                    showErrorDialog(context, 'Error: $error');
+                  }
+                },
                 child: Text(
                   'Add Card',
                   style: TextStyle(

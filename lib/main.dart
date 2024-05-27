@@ -4,9 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/dark_theme.dart';
+// import 'package:spendify/const/dark_theme.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/theme.dart';
+import 'package:spendify/provider/credit_card_provider.dart';
+import 'package:spendify/provider/momo_accounts_provider.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
@@ -16,7 +18,6 @@ import 'package:spendify/screens/dashboard/settings/conditions.dart';
 import 'package:spendify/screens/dashboard/settings/contact.dart';
 import 'package:spendify/screens/dashboard/settings/privacy_policy.dart';
 import 'package:spendify/screens/onboarding/onboarding_1.dart';
-import 'package:spendify/screens/payment_methods/add_credit_card.dart';
 import 'package:spendify/screens/payment_methods/all_credit_cards.dart';
 import 'package:spendify/screens/profile/edit_profile.dart';
 import 'package:spendify/screens/profile/profile.dart';
@@ -53,19 +54,24 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CreditCardProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MomoAccountProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Spendify',
         theme: themeData(context),
-        darkTheme: darkThemeData(context),
+        // darkTheme: darkThemeData(context),
         debugShowCheckedModeBanner: false,
         routes: {
           signInRoute: (context) => const SignIn(),
           signUpRoute: (context) => const SignUp(),
           profileRoute: (context) => const Profile(),
           editProfileRoute: (context) => const EditProfile(),
-          addCardRoute: (context) => const AddCard(),
           allCardsRoute: (context) => const AllCards(),
           searchRoute: (context) => const Search(),
           transactionsRoute: (context) => const Transactions(),
