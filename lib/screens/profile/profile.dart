@@ -6,6 +6,7 @@ import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:spendify/screens/payment_methods/all_accounts.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
 class Profile extends StatefulWidget {
@@ -39,7 +40,7 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           leading: IconButton(
-            onPressed: (){
+            onPressed: () {
               Navigator.pop(context);
             },
             icon: Icon(
@@ -50,7 +51,7 @@ class _ProfileState extends State<Profile> {
           ),
           actions: [
             IconButton(
-              onPressed: (){
+              onPressed: () {
                 Navigator.pushNamed(context, editProfileRoute);
               },
               icon: Icon(
@@ -146,6 +147,18 @@ class _ProfileState extends State<Profile> {
                       height: verticalConverter(context, 10),
                     ),
                     ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return AllCards(
+                                user: user,
+                              );
+                            },
+                          ),
+                        );
+                      },
                       contentPadding: EdgeInsets.zero,
                       leading: Icon(
                         Icons.wallet_outlined,

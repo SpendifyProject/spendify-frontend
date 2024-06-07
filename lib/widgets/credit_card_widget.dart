@@ -5,10 +5,10 @@ import '../const/sizing_config.dart';
 class CreditCardWidget extends StatelessWidget {
   const CreditCardWidget(
       {super.key,
-        required this.cardNumber,
-        required this.fullName,
-        required this.expiryDate,
-        required this.assetName});
+      required this.cardNumber,
+      required this.fullName,
+      required this.expiryDate,
+      required this.assetName});
 
   final String cardNumber;
   final String fullName;
@@ -20,7 +20,7 @@ class CreditCardWidget extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
     return Container(
       width: horizontalConverter(context, 335),
-      height: verticalConverter(context, 240),
+      height: verticalConverter(context, 180),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: color.onPrimary,
@@ -29,23 +29,23 @@ class CreditCardWidget extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(verticalConverter(context, 20)),
+        padding: EdgeInsets.symmetric(
+          vertical: verticalConverter(context, 20),
+          horizontal: horizontalConverter(context, 20),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: verticalConverter(context, 30),
-            ),
             Text(
-              cardNumber,
+              cardNumber.replaceAllMapped(
+                RegExp(r".{4}"),
+                (match) => "${match.group(0)}   ",
+              ),
               style: TextStyle(
                 color: color.background,
                 fontSize: 24,
               ),
-            ),
-            SizedBox(
-              height: verticalConverter(context, 10),
             ),
             Text(
               fullName,

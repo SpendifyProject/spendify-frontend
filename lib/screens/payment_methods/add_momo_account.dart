@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/models/momo_accounts.dart';
-import 'package:spendify/provider/momo_accounts_provider.dart';
+import 'package:spendify/provider/wallet_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../const/sizing_config.dart';
@@ -23,7 +23,7 @@ class _AddMomoState extends State<AddMomo> {
   late TextEditingController numberController;
   late TextEditingController networkController;
   String _selectedNetwork = '';
-  late MomoAccountProvider momoProvider;
+  late WalletProvider walletProvider;
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _AddMomoState extends State<AddMomo> {
     nameController = TextEditingController();
     numberController = TextEditingController();
     networkController = TextEditingController();
-    momoProvider = Provider.of<MomoAccountProvider>(context, listen: false);
+    walletProvider = Provider.of<WalletProvider>(context, listen: false);
   }
 
   @override
@@ -163,7 +163,7 @@ class _AddMomoState extends State<AddMomo> {
                       phoneNumber: phoneNumber,
                     );
 
-                    momoProvider.saveAccount(newAccount);
+                    walletProvider.saveAccount(newAccount);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Mobile money account saved successfully'),

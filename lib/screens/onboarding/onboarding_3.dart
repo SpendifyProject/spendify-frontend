@@ -13,15 +13,15 @@ class Onboarding3 extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const Spacer(),
           Padding(
             padding: EdgeInsets.only(
-              top: verticalConverter(context, 145),
               left: horizontalConverter(context, 20),
             ),
             child: Image.asset(
               'assets/images/onboarding_3.png',
               width: horizontalConverter(context, 335),
-              height: verticalConverter(context, 248.53),
+              height: verticalConverter(context, 140.53),
             ),
           ),
           Padding(
@@ -55,6 +55,9 @@ class Onboarding3 extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(
+            height: verticalConverter(context, 20),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: verticalConverter(context, 30),
@@ -79,7 +82,8 @@ class Onboarding3 extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
+          const Spacer(),
         ],
       ),
     );

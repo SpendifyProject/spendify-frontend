@@ -20,14 +20,14 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
-    final List<Widget> _screens = [
+    final List<Widget> screens = [
       Home(email: widget.email,),
       const Wallet(),
       const Statistics(),
       const SettingsScreen(),
     ];
     return Scaffold(
-      body: _screens[currentIndex],
+      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         elevation: 5,

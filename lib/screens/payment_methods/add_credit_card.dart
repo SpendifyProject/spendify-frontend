@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/credit_card.dart';
-import 'package:spendify/provider/credit_card_provider.dart';
+import 'package:spendify/provider/wallet_provider.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
 
@@ -25,7 +25,7 @@ class _AddCardState extends State<AddCard> {
   late TextEditingController issuerController;
   DateTime? _selectedDate;
   String _selectedIssuer = '';
-  late CreditCardProvider cardProvider;
+  late WalletProvider walletProvider;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _AddCardState extends State<AddCard> {
     numberController = TextEditingController();
     dateController = TextEditingController();
     issuerController = TextEditingController();
-    cardProvider = Provider.of<CreditCardProvider>(context, listen: false);
+    walletProvider = Provider.of<WalletProvider>(context, listen: false);
   }
 
   @override
@@ -208,7 +208,7 @@ class _AddCardState extends State<AddCard> {
                       id: id.v4(),
                     );
 
-                    cardProvider.saveCard(newCard);
+                    walletProvider.saveCard(newCard);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Credit card saved successfully'),
