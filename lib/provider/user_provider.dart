@@ -45,6 +45,32 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<void> getUserDataWithId(String uid) async{
+    try {
+      final userRef = FirebaseFirestore.instance.collection('users').where(
+        'uid',
+        isEqualTo: uid,
+      );
+      final userSnapshot = await userRef.get();
+      for (final doc in userSnapshot.docs) {
+        User user = User(
+          fullName: doc['fullName'] as String,
+          email: doc['email'] as String,
+          phoneNumber: doc['phoneNumber'] as String,
+          dateOfBirth: (doc['dateOfBirth'] as Timestamp).toDate(),
+          monthlyIncome: doc['monthlyIncome'] as double,
+          uid: doc['uid'] as String,
+          imagePath: doc['imagePath'] as String,
+        );
+        _user = user;
+        notifyListeners();
+      }
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
+    }
+  }
+
   Future<void> addUser(User newUser) async {
     try {
       await FirebaseFirestore.instance

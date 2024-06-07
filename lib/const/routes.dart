@@ -3,6 +3,7 @@ const signUpRoute = '/sign-out/';
 const profileRoute = '/profile/';
 const editProfileRoute = '/edit-profile/';
 const addCardRoute = '/add-card/';
+const addMomoRoute = '/add-momo/';
 const allCardsRoute = '/all-cards/';
 const transactionsRoute = '/transactions/';
 const searchRoute = '/search/';

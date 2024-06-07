@@ -4,6 +4,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
+import 'package:spendify/screens/transactions/send_money.dart';
 import 'package:spendify/widgets/double_header.dart';
 
 import '../../const/routes.dart';
@@ -87,7 +88,7 @@ class _HomeState extends State<Home> {
                     height: verticalConverter(context, 10),
                   ),
                   CreditCardWidget(
-                    cardNumber: '4562   1122   4595   7852',
+                    cardNumber: '4562112245957852',
                     fullName: user.fullName,
                     expiryDate: '12/2024',
                     assetName: 'mastercard.png',
@@ -97,7 +98,7 @@ class _HomeState extends State<Home> {
                   ),
                   SizedBox(
                     height: verticalConverter(context, 90),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -105,24 +106,37 @@ class _HomeState extends State<Home> {
                           child: TransactionButton(
                             iconData: Icons.arrow_upward,
                             label: 'Send',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return SendMoney(user: user);
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Expanded(
                           child: TransactionButton(
                             iconData: Icons.schedule_outlined,
                             label: 'Schedule',
+                            onTap: (){},
                           ),
                         ),
                         Expanded(
                           child: TransactionButton(
                             iconData: Icons.savings_outlined,
                             label: 'Budget',
+                            onTap: (){},
                           ),
                         ),
                         Expanded(
                           child: TransactionButton(
                             iconData: Icons.add,
                             label: 'Record',
+                            onTap: (){},
                           ),
                         ),
                       ],

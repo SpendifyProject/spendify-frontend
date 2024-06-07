@@ -12,9 +12,9 @@ class Onboarding2 extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const Spacer(),
           Padding(
             padding: EdgeInsets.only(
-              top: verticalConverter(context, 145),
               left: horizontalConverter(context, 20),
             ),
             child: Image.asset(
@@ -54,9 +54,11 @@ class Onboarding2 extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(
+            height: verticalConverter(context, 20),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: verticalConverter(context, 30),
               horizontal: horizontalConverter(context, 20),
             ),
             child: ElevatedButton(
@@ -78,7 +80,8 @@ class Onboarding2 extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
+          const Spacer(),
         ],
       ),
     );

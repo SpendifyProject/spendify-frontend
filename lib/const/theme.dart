@@ -42,5 +42,14 @@ ThemeData themeData(BuildContext context) {
         ),
       ),
     ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: SegmentedButton.styleFrom(
+        selectedBackgroundColor: const Color.fromRGBO(0, 102, 255, 1),
+        selectedForegroundColor: Colors.white,
+        disabledBackgroundColor: Colors.white,
+        disabledForegroundColor: const Color.fromRGBO(30, 30, 45, 1),
+        foregroundColor: const Color.fromRGBO(30, 30, 45, 1),
+      ),
+    )
   );
 }

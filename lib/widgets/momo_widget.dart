@@ -18,38 +18,31 @@ class MomoWidget extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
     return Container(
       width: horizontalConverter(context, 335),
-      height: verticalConverter(context, 240),
+      height: verticalConverter(context, 180),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: color.onPrimary,
-        image: const DecorationImage(
-          image: AssetImage('assets/images/worldmap.png'),
-        ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(verticalConverter(context, 20)),
+        padding: EdgeInsets.all(
+          verticalConverter(context, 20),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: verticalConverter(context, 30),
-            ),
             Text(
               phoneNumber,
               style: TextStyle(
                 color: color.background,
-                fontSize: 24,
+                fontSize: verticalConverter(context, 24),
               ),
-            ),
-            SizedBox(
-              height: verticalConverter(context, 10),
             ),
             Text(
               fullName,
               style: TextStyle(
                 color: color.background,
-                fontSize: 14,
+                fontSize: verticalConverter(context, 14),
               ),
             ),
             const Spacer(),
@@ -59,14 +52,14 @@ class MomoWidget extends StatelessWidget {
                 'Network',
                 style: TextStyle(
                   color: color.secondary,
-                  fontSize: 9,
+                  fontSize: verticalConverter(context, 9),
                 ),
               ),
               subtitle: Text(
-                network,
+                network.toUpperCase(),
                 style: TextStyle(
                   color: color.background,
-                  fontSize: 13,
+                  fontSize: verticalConverter(context, 13),
                 ),
               ),
               trailing: Image.asset(

@@ -165,7 +165,7 @@ class _WalletState extends State<Wallet> {
                     height: verticalConverter(context, 10),
                   ),
                   CreditCardWidget(
-                    cardNumber: '4562   1122   4595   7852',
+                    cardNumber: '4562112245957852',
                     fullName: user.fullName,
                     expiryDate: '12/2024',
                     assetName: 'mastercard.png',
@@ -176,7 +176,7 @@ class _WalletState extends State<Wallet> {
                   MomoWidget(
                     phoneNumber: '0263600727',
                     fullName: user.fullName,
-                    network: 'MTN',
+                    network: 'mtn',
                   ),
                 ],
               ),
