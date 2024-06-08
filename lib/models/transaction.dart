@@ -53,8 +53,8 @@ class Transaction with ChangeNotifier {
 
   Map<String, dynamic> toPaystackJson(String email) {
     return {
-      'amount': amount,
-      'reference': reference,
+      'amount': (amount * 100).toInt(),
+      'reference': '$reference${date.microsecondsSinceEpoch}',
       'currency': currency,
       'email': email,
     };

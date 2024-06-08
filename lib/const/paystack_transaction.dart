@@ -20,7 +20,7 @@ class PaystackService {
       final res = await http.post(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $_secretKey}',
+          'Authorization': 'Bearer $_secretKey',
           'Content-Type': 'application/json'
         },
         body: jsonEncode(data),
@@ -29,7 +29,9 @@ class PaystackService {
         final resData = jsonDecode(res.body);
         return PayStackResponse.fromJson(resData['data']);
       }
-      throw "Payment unsuccessful";
+      print(transaction.reference);
+      print(res.body);
+      throw "Payment unsuccessful. Status code: ${res.statusCode}, ${res.body}";
     } on Exception {
       rethrow;
     } catch (error) {
@@ -43,12 +45,6 @@ class PaystackService {
       final authRes = await createTransaction(transaction);
       return authRes.authorizationUrl;
     } catch (e) {
-      if (context.mounted) {
-        showErrorDialog(
-          context,
-          "It appears you previously used this reference. Enter a new unique Reference",
-        );
-      }
       rethrow;
     }
   }
@@ -56,7 +52,7 @@ class PaystackService {
   Future<dynamic> verifyTransaction(
       Transaction transaction, BuildContext context) async {
     try {
-      String reference = '${transaction.reference}_${transaction.date}';
+      String reference = transaction.reference;
       String url = "https://api.paystack.co/transaction/verify/$reference";
       final res = await http.get(
         Uri.parse(url),
