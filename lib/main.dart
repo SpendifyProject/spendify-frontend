@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
-// import 'package:spendify/const/dark_theme.dart';
+import 'package:spendify/const/dark_theme.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/theme.dart';
+import 'package:spendify/provider/theme_provider.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
@@ -33,10 +34,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(DevicePreview(
-    enabled: true,
-    builder: (context) => const MyApp(),
-  ),);
+  runApp(
+    DevicePreview(
+      enabled: true,
+      builder: (context) => const MyApp(),
+    ),
+  );
   FlutterNativeSplash.remove();
 }
 
@@ -58,27 +61,37 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => WalletProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+        ),
       ],
-      child: MaterialApp(
-        title: 'Spendify',
-        theme: themeData(context),
-        // darkTheme: darkThemeData(context),
-        debugShowCheckedModeBanner: false,
-        routes: {
-          signInRoute: (context) => const SignIn(),
-          signUpRoute: (context) => const SignUp(),
-          profileRoute: (context) => const Profile(),
-          editProfileRoute: (context) => const EditProfile(),
-          searchRoute: (context) => const Search(),
-          transactionsRoute: (context) => const Transactions(),
-          contactRoute: (context) => const Contact(),
-          changePasswordRoute: (context) => const ChangePassword(),
-          privacyRoute: (context) => const PrivacyPolicy(),
-          conditionsRoute: (context) => const TermsAndConditions(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            title: 'Spendify',
+            theme: themeProvider.darkTheme
+                ? darkThemeData(context)
+                : themeData(context),
+            debugShowCheckedModeBanner: false,
+            routes: {
+              signInRoute: (context) => const SignIn(),
+              signUpRoute: (context) => const SignUp(),
+              profileRoute: (context) => const Profile(),
+              editProfileRoute: (context) => const EditProfile(),
+              searchRoute: (context) => const Search(),
+              transactionsRoute: (context) => const Transactions(),
+              contactRoute: (context) => const Contact(),
+              changePasswordRoute: (context) => const ChangePassword(),
+              privacyRoute: (context) => const PrivacyPolicy(),
+              conditionsRoute: (context) => const TermsAndConditions(),
+            },
+            home: FirebaseAuth.instance.currentUser == null
+                ? const Onboarding1()
+                : Dashboard(
+              email: FirebaseAuth.instance.currentUser!.email.toString(),
+            ),
+          );
         },
-        home: FirebaseAuth.instance.currentUser == null
-            ? const Onboarding1()
-            : Dashboard(email: FirebaseAuth.instance.currentUser!.email.toString()),
       ),
     );
   }

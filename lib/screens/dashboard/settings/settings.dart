@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/sizing_config.dart';
+import 'package:spendify/provider/theme_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,8 +13,14 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool isDarkModeEnabled = false;
+  late ThemeProvider themeProvider;
   bool isBiometricEnabled = false;
+
+  @override
+  void initState(){
+    super.initState();
+    themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +66,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              value: isDarkModeEnabled,
+              value: themeProvider.isDarkThemeEnabled,
               onChanged: (value) {
                 setState(() {
-                  isDarkModeEnabled = !isDarkModeEnabled;
+                  themeProvider.switchTheme();
                 });
               },
               inactiveThumbColor: color.secondary,

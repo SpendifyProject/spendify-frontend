@@ -10,6 +10,7 @@ class Transaction with ChangeNotifier {
   final String paymentMethod;
   final bool isDebit;
   final String currency;
+  final String category;
 
   Transaction({
     required this.id,
@@ -21,6 +22,7 @@ class Transaction with ChangeNotifier {
     required this.paymentMethod,
     required this.isDebit,
     required this.currency,
+    required this.category,
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
@@ -33,7 +35,8 @@ class Transaction with ChangeNotifier {
       amount: json['amount'],
       paymentMethod: json['paymentMethod'],
       isDebit: json['isDebit'],
-      currency: json['currency']
+      currency: json['currency'],
+      category: json['category'],
     );
   }
 
@@ -48,13 +51,14 @@ class Transaction with ChangeNotifier {
       'paymentMethod': paymentMethod,
       'isDebit': isDebit,
       'currency': currency,
+      'category': category,
     };
   }
 
   Map<String, dynamic> toPaystackJson(String email) {
     return {
-      'amount': amount,
-      'reference': reference,
+      'amount': (amount * 100).toInt(),
+      'reference': '$reference${date.microsecondsSinceEpoch}',
       'currency': currency,
       'email': email,
     };
