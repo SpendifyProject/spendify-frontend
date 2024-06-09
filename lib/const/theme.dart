@@ -50,6 +50,6 @@ ThemeData themeData(BuildContext context) {
         disabledForegroundColor: const Color.fromRGBO(30, 30, 45, 1),
         foregroundColor: const Color.fromRGBO(30, 30, 45, 1),
       ),
-    )
+    ),
   );
 }

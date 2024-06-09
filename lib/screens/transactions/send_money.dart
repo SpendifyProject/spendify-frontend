@@ -31,6 +31,8 @@ class _SendMoneyState extends State<SendMoney> {
   late TextEditingController referenceController;
   String? radioValue = 'momo';
   int? selectedCard = 0;
+  List<String> categories = ['Entertainment', 'Food', 'Housing', 'Health', 'Shopping', 'Transport', 'Utilities', 'Other'];
+  String? selectedCategory;
   final formKey = GlobalKey<FormState>();
   String paystackApi = dotenv.env['PAYSTACK_KEY'] ?? 'NO_API_KEY_FOUND';
 
@@ -181,6 +183,29 @@ class _SendMoneyState extends State<SendMoney> {
                 SizedBox(
                   height: verticalConverter(context, 20),
                 ),
+                Wrap(
+                  spacing: 5.0,
+                  children: List<Widget>.generate(
+                    categories.length,
+                        (int index) {
+                      return ChoiceChip(
+                        showCheckmark: false,
+                        selectedColor: color.primary,
+                        disabledColor: color.onBackground,
+                        label: Text(categories[index]),
+                        selected: selectedCategory == categories[index],
+                        onSelected: (bool selected) {
+                          setState(() {
+                            selectedCategory = selected ? categories[index] : null;
+                          });
+                        },
+                      );
+                    },
+                  ).toList(),
+                ),
+                SizedBox(
+                  height: verticalConverter(context, 20),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -275,6 +300,7 @@ class _SendMoneyState extends State<SendMoney> {
                 ElevatedButton(
                   onPressed: () {
                     try {
+                      if(formKey.currentState!.validate()){}
                       double amount = double.parse(amountController.text);
                       String reference = referenceController.text;
                       String recipient = recipientController.text;
@@ -292,6 +318,7 @@ class _SendMoneyState extends State<SendMoney> {
                         paymentMethod: paymentMethod,
                         isDebit: true,
                         currency: 'GHS',
+                        category: selectedCategory!,
                       );
                       Navigator.push(
                         context,
