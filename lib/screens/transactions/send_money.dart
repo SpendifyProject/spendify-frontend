@@ -15,6 +15,9 @@ import 'package:spendify/widgets/error_dialog.dart';
 import 'package:spendify/widgets/momo_widget.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../const/constants.dart';
+import '../../widgets/amount_text_field.dart';
+
 class SendMoney extends StatefulWidget {
   const SendMoney({super.key, required this.user});
 
@@ -31,7 +34,7 @@ class _SendMoneyState extends State<SendMoney> {
   late TextEditingController referenceController;
   String? radioValue = 'momo';
   int? selectedCard = 0;
-  List<String> categories = ['Entertainment', 'Food', 'Housing', 'Health', 'Shopping', 'Transport', 'Utilities', 'Other'];
+
   String? selectedCategory;
   final formKey = GlobalKey<FormState>();
   String paystackApi = dotenv.env['PAYSTACK_KEY'] ?? 'NO_API_KEY_FOUND';
@@ -88,66 +91,7 @@ class _SendMoneyState extends State<SendMoney> {
                     height: verticalConverter(context, 310),
                     child: Column(
                       children: [
-                        Container(
-                          height: verticalConverter(context, 130),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                              color: color.secondary,
-                            ),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: verticalConverter(context, 20),
-                            horizontal: horizontalConverter(context, 10),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Enter Your Amount',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: color.onSecondary,
-                                ),
-                              ),
-                              SizedBox(
-                                height: verticalConverter(context, 10),
-                              ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    'GHc',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(155, 178, 212, 1),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: horizontalConverter(context, 15),
-                                  ),
-                                  SizedBox(
-                                    width: horizontalConverter(context, 200),
-                                    child: TextField(
-                                      controller: amountController,
-                                      keyboardType: TextInputType.number,
-                                      style: TextStyle(
-                                        color: color.onPrimary,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24,
-                                      ),
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                        AmountTextField(controller: amountController),
                         SizedBox(
                           height: verticalConverter(context, 20),
                         ),
@@ -187,7 +131,7 @@ class _SendMoneyState extends State<SendMoney> {
                   spacing: 5.0,
                   children: List<Widget>.generate(
                     categories.length,
-                        (int index) {
+                    (int index) {
                       return ChoiceChip(
                         showCheckmark: false,
                         selectedColor: color.primary,
@@ -196,7 +140,8 @@ class _SendMoneyState extends State<SendMoney> {
                         selected: selectedCategory == categories[index],
                         onSelected: (bool selected) {
                           setState(() {
-                            selectedCategory = selected ? categories[index] : null;
+                            selectedCategory =
+                                selected ? categories[index] : null;
                           });
                         },
                       );
@@ -300,7 +245,7 @@ class _SendMoneyState extends State<SendMoney> {
                 ElevatedButton(
                   onPressed: () {
                     try {
-                      if(formKey.currentState!.validate()){}
+                      if (formKey.currentState!.validate()) {}
                       double amount = double.parse(amountController.text);
                       String reference = referenceController.text;
                       String recipient = recipientController.text;

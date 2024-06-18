@@ -4,6 +4,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
+import 'package:spendify/screens/transactions/budget.dart';
+import 'package:spendify/screens/transactions/record.dart';
+import 'package:spendify/screens/transactions/schedule.dart';
 import 'package:spendify/screens/transactions/send_money.dart';
 import 'package:spendify/widgets/double_header.dart';
 
@@ -47,8 +50,9 @@ class _HomeState extends State<Home> {
             isLoading = false;
             return Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: horizontalConverter(context, 20),
-                  vertical: verticalConverter(context, 10)),
+                horizontal: horizontalConverter(context, 20),
+                vertical: verticalConverter(context, 10),
+              ),
               child: ListView(
                 children: [
                   Skeletonizer(
@@ -122,21 +126,52 @@ class _HomeState extends State<Home> {
                           child: TransactionButton(
                             iconData: Icons.schedule_outlined,
                             label: 'Schedule',
-                            onTap: (){},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ScheduleTransaction(
+                                      user: user,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Expanded(
                           child: TransactionButton(
                             iconData: Icons.savings_outlined,
                             label: 'Budget',
-                            onTap: (){},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const Budget();
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Expanded(
                           child: TransactionButton(
                             iconData: Icons.add,
                             label: 'Record',
-                            onTap: (){},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return RecordTransaction(
+                                      user: user,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],

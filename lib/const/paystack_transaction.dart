@@ -49,7 +49,7 @@ class PaystackService {
     }
   }
 
-  Future<dynamic> verifyTransaction(
+  Future<bool> verifyTransaction(
       Transaction transaction, BuildContext context) async {
     try {
       String reference = transaction.reference;
@@ -63,17 +63,14 @@ class PaystackService {
       final resData = jsonDecode(res.body);
       if (resData["data"]["status"] == "success") {
         return true;
+      } else {
+        showErrorDialog(context,
+            "Transaction verification failed. Please complete the transaction.");
+        return false;
       }
-      showErrorDialog(
-        context,
-        "Complete Transaction before tapping this button",
-      );
-      // return (resData["status"]);
     } catch (e) {
-      showErrorDialog(
-        context,
-        "Error verifying Transaction: $e",
-      );
+      showErrorDialog(context, "Error verifying transaction: $e");
+      return false;
     }
   }
 }
