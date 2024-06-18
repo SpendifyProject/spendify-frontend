@@ -6,8 +6,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../models/transaction.dart';
 
 class PaymentWebView extends StatefulWidget {
-  const PaymentWebView(
-      {super.key, required this.transaction});
+  const PaymentWebView({super.key, required this.transaction});
 
   final Transaction transaction;
 
@@ -17,14 +16,29 @@ class PaymentWebView extends StatefulWidget {
 
 class _PaymentWebViewState extends State<PaymentWebView> {
   late Future futureInitTransaction;
+  late WebViewController webViewController;
 
   @override
   void initState() {
     super.initState();
-    futureInitTransaction = PaystackService().initTransaction(
-      widget.transaction,
-      context,
-    );
+    futureInitTransaction =
+        PaystackService().initTransaction(widget.transaction, context);
+  }
+
+  @override
+  void dispose() {
+    webViewController.clearCache();
+    super.dispose();
+  }
+
+  void verifyTransactionAfterCompletion() async {
+    bool success =
+        await PaystackService().verifyTransaction(widget.transaction, context);
+    if (success) {
+      Navigator.pop(context, true);
+    } else {
+      showErrorDialog(context, 'Transaction verification failed.');
+    }
   }
 
   @override
@@ -54,24 +68,40 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         future: futureInitTransaction,
         builder: (context, snapshot) {
           final url = snapshot.data ?? 'https://flutter.dev';
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox();
-          } else if (snapshot.hasError) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              showErrorDialog(context, 'Error: ${snapshot.error}');
-            });
-          } else if (snapshot.hasData) {
+          print(url);
+          // if (snapshot.connectionState == ConnectionState.waiting) {
+          //   return const SizedBox();
+          // } else if (snapshot.hasError) {
+          //   WidgetsBinding.instance.addPostFrameCallback((_) {
+          //     showErrorDialog(context, 'Error: ${snapshot.error}');
+          //   });
+          // }
+          if (snapshot.hasData) {
             return WebViewWidget(
               controller: WebViewController()
                 ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                ..setBackgroundColor(Colors.white)
+                ..setBackgroundColor(const Color(0x00000000))
                 ..setNavigationDelegate(
                   NavigationDelegate(
-                    onPageStarted: (String url) {},
-                    onPageFinished: (String url) {},
-                    onHttpError: (HttpResponseError error) {},
-                    onWebResourceError: (WebResourceError error) {},
+                    onProgress: (int progress) {
+                      print('Progress...');
+                    },
+                    onPageStarted: (String url) {
+                      print('Page Started...');
+                    },
+                    onPageFinished: (String url) {
+                      print('Page Finished...');
+                      if (url.contains('transaction-complete')) {
+                        verifyTransactionAfterCompletion();
+                      }
+                    },
+                    onWebResourceError: (WebResourceError error) {
+                      print('Page resource error: ${error.description}');
+                      showErrorDialog(
+                          context, 'Error loading page: ${error.description}');
+                    },
                     onNavigationRequest: (NavigationRequest request) {
+                      print('Nav request...${request.url}');
                       if (request.url.startsWith('https://www.youtube.com/')) {
                         return NavigationDecision.prevent;
                       }
@@ -79,10 +109,14 @@ class _PaymentWebViewState extends State<PaymentWebView> {
                     },
                   ),
                 )
-                ..loadRequest(Uri.parse(url)),
+                ..loadRequest(
+                  Uri.parse(url!),
+                ),
             );
           }
-          return const SizedBox();
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
