@@ -122,7 +122,7 @@ class _WalletState extends State<Wallet> {
                           verticalConverter(context, 20),
                         ),
                         decoration: BoxDecoration(
-                          color: color.onBackground,
+                          color: color.onSurface,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Column(
@@ -146,7 +146,7 @@ class _WalletState extends State<Wallet> {
                             LinearProgressIndicator(
                               value: 0.4,
                               color: color.primary,
-                              backgroundColor: color.background,
+                              backgroundColor: color.surface,
                             )
                           ],
                         ),

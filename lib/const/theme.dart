@@ -8,8 +8,8 @@ ThemeData themeData(BuildContext context) {
     textTheme: GoogleFonts.poppinsTextTheme(),
     colorScheme: ThemeData().colorScheme.copyWith(
           primary: const Color.fromRGBO(0, 102, 255, 1),
-          onBackground: const Color.fromRGBO(244, 244, 244, 1),
-          background: Colors.white,
+          onSurface: const Color.fromRGBO(244, 244, 244, 1),
+          surface: Colors.white,
           secondary: const Color.fromRGBO(162, 162, 167, 1),
           tertiary: const Color.fromRGBO(235, 10, 36, 1),
           onPrimary: const Color.fromRGBO(30, 30, 45, 1),
@@ -24,17 +24,17 @@ ThemeData themeData(BuildContext context) {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        elevation: MaterialStateProperty.all(0),
+        elevation: WidgetStateProperty.all(0),
         backgroundColor:
-            MaterialStateProperty.all(const Color.fromRGBO(0, 102, 255, 1)),
+            WidgetStateProperty.all(const Color.fromRGBO(0, 102, 255, 1)),
         foregroundColor:
-            MaterialStateProperty.all(Colors.white),
-        shape: MaterialStateProperty.all(
+            WidgetStateProperty.all(Colors.white),
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        fixedSize: MaterialStateProperty.all(
+        fixedSize: WidgetStateProperty.all(
           Size(
             horizontalConverter(context, 335),
             verticalConverter(context, 56),

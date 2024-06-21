@@ -24,18 +24,21 @@ class TransactionProvider with ChangeNotifier {
   final List<Transaction> _sortedTransactions = [];
 
   Transaction get transaction => _transaction;
+
   List<Transaction> get transactions => _transactions;
+
   List<Transaction> get sortedTransactions => _sortedTransactions;
 
   Future<void> fetchTransactions(User user) async {
-    try{
+    try {
       _transactions.clear();
       final transactionSnap = await f.FirebaseFirestore.instance
           .collection('transactions')
           .where('uid', isEqualTo: user.uid)
+          .orderBy('date', descending: true)
           .get();
 
-      for(final doc in transactionSnap.docs){
+      for (final doc in transactionSnap.docs) {
         Transaction transaction = Transaction(
           id: doc['id'] as String,
           uid: doc['uid'] as String,
@@ -48,24 +51,25 @@ class TransactionProvider with ChangeNotifier {
           currency: doc['currency'] as String,
           category: doc['category'] as String,
         );
-        if(_transactions.contains(transaction)){
+        if (_transactions.contains(transaction)) {
           continue;
-        }
-        else{
+        } else {
           _transactions.add(transaction);
         }
         notifyListeners();
       }
-    }
-    catch(error){
+    } catch (error) {
       log('Error: $error');
       rethrow;
     }
   }
 
-  Future<void> saveTransaction(Transaction newTransaction) async{
-    try{
-      await f.FirebaseFirestore.instance.collection('transaction').doc(newTransaction.id).set({
+  Future<void> saveTransaction(Transaction newTransaction) async {
+    try {
+      await f.FirebaseFirestore.instance
+          .collection('transaction')
+          .doc(newTransaction.id)
+          .set({
         'id': newTransaction.id,
         'uid': newTransaction.uid,
         'recipient': newTransaction.recipient,
@@ -78,8 +82,7 @@ class TransactionProvider with ChangeNotifier {
         'category': newTransaction.category,
       });
       notifyListeners();
-    }
-    catch(error){
+    } catch (error) {
       log('Error: error');
       rethrow;
     }

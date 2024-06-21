@@ -23,8 +23,12 @@ import 'package:spendify/screens/profile/edit_profile.dart';
 import 'package:spendify/screens/profile/profile.dart';
 import 'package:spendify/screens/transactions/search.dart';
 import 'package:spendify/screens/transactions/transaction_history.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'firebase_options.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -42,6 +46,7 @@ Future<void> main() async {
   );
   FlutterNativeSplash.remove();
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -88,8 +93,8 @@ class _MyAppState extends State<MyApp> {
             home: FirebaseAuth.instance.currentUser == null
                 ? const Onboarding1()
                 : Dashboard(
-              email: FirebaseAuth.instance.currentUser!.email.toString(),
-            ),
+                    email: FirebaseAuth.instance.currentUser!.email.toString(),
+                  ),
           );
         },
       ),

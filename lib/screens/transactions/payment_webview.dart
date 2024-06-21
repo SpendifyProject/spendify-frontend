@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spendify/const/paystack_transaction.dart';
+import 'package:spendify/services/paystack_service.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -17,12 +17,14 @@ class PaymentWebView extends StatefulWidget {
 class _PaymentWebViewState extends State<PaymentWebView> {
   late Future futureInitTransaction;
   late WebViewController webViewController;
+  late final PlatformWebViewControllerCreationParams params;
 
   @override
   void initState() {
     super.initState();
     futureInitTransaction =
         PaystackService().initTransaction(widget.transaction, context);
+    params = const PlatformWebViewControllerCreationParams();
   }
 
   @override
@@ -45,6 +47,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -64,60 +67,48 @@ class _PaymentWebViewState extends State<PaymentWebView> {
           ),
         ),
       ),
-      body: FutureBuilder(
-        future: futureInitTransaction,
-        builder: (context, snapshot) {
-          final url = snapshot.data ?? 'https://flutter.dev';
-          print(url);
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //   return const SizedBox();
-          // } else if (snapshot.hasError) {
-          //   WidgetsBinding.instance.addPostFrameCallback((_) {
-          //     showErrorDialog(context, 'Error: ${snapshot.error}');
-          //   });
-          // }
-          if (snapshot.hasData) {
-            return WebViewWidget(
-              controller: WebViewController()
-                ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                ..setBackgroundColor(const Color(0x00000000))
-                ..setNavigationDelegate(
-                  NavigationDelegate(
-                    onProgress: (int progress) {
-                      print('Progress...');
-                    },
-                    onPageStarted: (String url) {
-                      print('Page Started...');
-                    },
-                    onPageFinished: (String url) {
-                      print('Page Finished...');
-                      if (url.contains('transaction-complete')) {
-                        verifyTransactionAfterCompletion();
-                      }
-                    },
-                    onWebResourceError: (WebResourceError error) {
-                      print('Page resource error: ${error.description}');
-                      showErrorDialog(
-                          context, 'Error loading page: ${error.description}');
-                    },
-                    onNavigationRequest: (NavigationRequest request) {
-                      print('Nav request...${request.url}');
-                      if (request.url.startsWith('https://www.youtube.com/')) {
-                        return NavigationDecision.prevent;
-                      }
-                      return NavigationDecision.navigate;
-                    },
+      body: SafeArea(
+        child: FutureBuilder(
+          future: futureInitTransaction,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final url = snapshot.data ?? 'https://flutter.dev';
+              print(url);
+              return WebViewWidget(
+                controller: WebViewController.fromPlatformCreationParams(params)
+                  ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                  ..setBackgroundColor(const Color(0x00000000))
+                  ..setNavigationDelegate(
+                    NavigationDelegate(
+                      onProgress: (int progress) {
+                        // Update loading bar.
+                      },
+                      onPageStarted: (String url) {},
+                      onPageFinished: (String url) {},
+                      onWebResourceError: (WebResourceError error) {},
+                      onNavigationRequest: (NavigationRequest request) {
+                        print('Navigation request');
+                        print(url);
+                        print(request.url);
+                        print(request);
+                        if (request.url
+                            .startsWith('https://www.youtube.com/')) {
+                          return NavigationDecision.prevent;
+                        }
+                        return NavigationDecision.navigate;
+                      },
+                    ),
+                  )
+                  ..loadRequest(
+                    Uri.parse(url!),
                   ),
-                )
-                ..loadRequest(
-                  Uri.parse(url!),
-                ),
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
     );
   }

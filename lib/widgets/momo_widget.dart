@@ -21,7 +21,7 @@ class MomoWidget extends StatelessWidget {
       height: verticalConverter(context, 180),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: color.onPrimary,
+        color: const Color.fromRGBO(30, 30, 45, 1),
       ),
       child: Padding(
         padding: EdgeInsets.all(
@@ -34,14 +34,14 @@ class MomoWidget extends StatelessWidget {
             Text(
               phoneNumber,
               style: TextStyle(
-                color: color.background,
+                color: Colors.white,
                 fontSize: verticalConverter(context, 24),
               ),
             ),
             Text(
               fullName,
               style: TextStyle(
-                color: color.background,
+                color: Colors.white,
                 fontSize: verticalConverter(context, 14),
               ),
             ),
@@ -58,7 +58,7 @@ class MomoWidget extends StatelessWidget {
               subtitle: Text(
                 network.toUpperCase(),
                 style: TextStyle(
-                  color: color.background,
+                  color: Colors.white,
                   fontSize: verticalConverter(context, 13),
                 ),
               ),

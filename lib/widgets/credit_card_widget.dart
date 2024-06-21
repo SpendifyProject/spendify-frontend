@@ -23,7 +23,7 @@ class CreditCardWidget extends StatelessWidget {
       height: verticalConverter(context, 180),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: color.onPrimary,
+        color: const Color.fromRGBO(30, 30, 45, 1),
         image: const DecorationImage(
           image: AssetImage('assets/images/worldmap.png'),
         ),
@@ -42,15 +42,15 @@ class CreditCardWidget extends StatelessWidget {
                 RegExp(r".{4}"),
                 (match) => "${match.group(0)}   ",
               ),
-              style: TextStyle(
-                color: color.background,
+              style: const TextStyle(
+                color: Colors.white,
                 fontSize: 24,
               ),
             ),
             Text(
               fullName,
-              style: TextStyle(
-                color: color.background,
+              style: const TextStyle(
+                color: Colors.white,
                 fontSize: 14,
               ),
             ),
@@ -66,8 +66,8 @@ class CreditCardWidget extends StatelessWidget {
               ),
               subtitle: Text(
                 expiryDate,
-                style: TextStyle(
-                  color: color.background,
+                style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 13,
                 ),
               ),

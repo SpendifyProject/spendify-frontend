@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spendify/const/constants.dart';
 
 import '../const/sizing_config.dart';
 
@@ -23,13 +24,13 @@ class TransactionWidget extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
-        backgroundColor: color.onBackground,
+        backgroundColor: color.onSurface,
         radius: 45,
-        child: Image.asset(
-          'assets/images/$icon.png',
-          width: horizontalConverter(context, 25),
-          height: verticalConverter(context, 25),
-        ),
+        child: Icon(
+          pickCategoryIcon(category),
+          size: 30,
+          color: color.onPrimary,
+        )
       ),
       title: Text(
         name,
@@ -48,7 +49,7 @@ class TransactionWidget extends StatelessWidget {
       trailing: Text(
         'GHc${amount.toStringAsFixed(2)}',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 12,
           color: isProfit ? color.onTertiary : color.tertiary,
         ),
       ),

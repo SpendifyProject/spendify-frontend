@@ -103,8 +103,8 @@ class _SendMoneyState extends State<SendMoney> {
                             color: color.secondary,
                             size: 30,
                           ),
-                          keyboardType: TextInputType.number,
-                          labelText: 'Recipient Phone Number',
+                          keyboardType: TextInputType.text,
+                          labelText: "Recipient's Name",
                         ),
                         SizedBox(
                           height: verticalConverter(context, 15),
