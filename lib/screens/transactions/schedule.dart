@@ -19,6 +19,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
   late TextEditingController amountController;
   late TextEditingController referenceController;
   late TextEditingController dateController;
+  late TextEditingController recipientController;
   DateTime? _selectedDate;
   String? selectedCategory;
   final formKey = GlobalKey<FormState>();
@@ -30,6 +31,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
     amountController.text = '0.00';
     referenceController = TextEditingController();
     dateController = TextEditingController();
+    recipientController = TextEditingController();
   }
 
   @override
@@ -38,6 +40,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
     amountController.dispose();
     referenceController.dispose();
     dateController.dispose();
+    recipientController.dispose();
   }
 
   @override
@@ -72,11 +75,25 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
           Form(
             key: formKey,
             child: SizedBox(
-              height: verticalConverter(context, 320),
+              height: verticalConverter(context, 390),
               child: Column(
                 children: [
                   AmountTextField(
                     controller: amountController,
+                  ),
+                  SizedBox(
+                    height: verticalConverter(context, 20),
+                  ),
+                  CustomAuthTextField(
+                    controller: recipientController,
+                    obscureText: false,
+                    icon: Icon(
+                      Icons.person_pin_outlined,
+                      color: color.secondary,
+                      size: 30,
+                    ),
+                    keyboardType: TextInputType.text,
+                    labelText: "Recipient",
                   ),
                   SizedBox(
                     height: verticalConverter(context, 20),
@@ -164,7 +181,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
             ).toList(),
           ),
           SizedBox(
-            height: verticalConverter(context, 60),
+            height: verticalConverter(context, 30),
           ),
           ElevatedButton(
             onPressed: (){

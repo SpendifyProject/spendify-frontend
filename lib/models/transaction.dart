@@ -64,3 +64,53 @@ class Transaction with ChangeNotifier {
     };
   }
 }
+
+class ScheduledTransaction with ChangeNotifier {
+  final String id;
+  final String uid;
+  final String reference;
+  final double amount;
+  final DateTime scheduledDate;
+  final String category;
+  final bool isDebit;
+  final String recipient;
+  final String currency;
+
+  ScheduledTransaction({
+    required this.id,
+    required this.uid,
+    required this.reference,
+    required this.recipient,
+    required this.amount,
+    required this.scheduledDate,
+    required this.category,
+    required this.isDebit,
+    required this.currency,
+  });
+}
+
+class RecordedTransaction with ChangeNotifier {
+  final double amount;
+  final String sender;
+  final String recipient;
+  final String reference;
+  final String category;
+  final String id;
+  final String uid;
+  final DateTime date;
+  final bool isDebit;
+  final String currency;
+
+  RecordedTransaction({
+    required this.id,
+    required this.uid,
+    required this.amount,
+    required this.sender,
+    required this.recipient,
+    required this.reference,
+    required this.category,
+    required this.date,
+    required this.isDebit,
+    required this.currency,
+  });
+}

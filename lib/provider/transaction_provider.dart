@@ -87,4 +87,102 @@ class TransactionProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> recordExternalTransaction(
+      RecordedTransaction recordedTransaction) async {
+    try {
+      Transaction transaction = Transaction(
+        id: recordedTransaction.id,
+        uid: recordedTransaction.uid,
+        recipient: recordedTransaction.recipient,
+        reference: recordedTransaction.reference,
+        date: recordedTransaction.date,
+        amount: recordedTransaction.amount,
+        paymentMethod: "External Payment",
+        isDebit: recordedTransaction.isDebit,
+        currency: recordedTransaction.currency,
+        category: recordedTransaction.category,
+      );
+      await saveTransaction(transaction);
+      notifyListeners();
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
+    }
+  }
+
+  Future<void> scheduleTransaction(
+      ScheduledTransaction scheduledTransaction) async {
+    try {
+      await f.FirebaseFirestore.instance
+          .collection('scheduled_transactions')
+          .doc(scheduledTransaction.id)
+          .set({
+        'id': scheduledTransaction.id,
+        'uid': scheduledTransaction.uid,
+        'reference': scheduledTransaction.reference,
+        'recipient': scheduledTransaction.recipient,
+        'amount': scheduledTransaction.amount,
+        'scheduledDate': scheduledTransaction.scheduledDate,
+        'category': scheduledTransaction.category,
+        'isDebit': scheduledTransaction.isDebit,
+        'currency': scheduledTransaction.currency,
+      });
+      notifyListeners();
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
+    }
+  }
+
+  Future<void> checkDueTransactions() async {
+    final scheduledTransactionsSnap = await f.FirebaseFirestore.instance
+        .collection('scheduled_transactions')
+        .get();
+
+    final now = DateTime.now();
+
+    for (final doc in scheduledTransactionsSnap.docs) {
+      ScheduledTransaction scheduledTransaction = ScheduledTransaction(
+        id: doc['id'],
+        uid: doc['uid'],
+        reference: doc['reference'],
+        recipient: doc['recipient'],
+        amount: doc['amount'],
+        scheduledDate: (doc['scheduledDate'] as f.Timestamp).toDate(),
+        category: doc['category'],
+        isDebit: doc['isDebit'],
+        currency: doc['currency'],
+      );
+
+      if (scheduledTransaction.scheduledDate.isBefore(now)) {
+        Transaction newTransaction = Transaction(
+          id: scheduledTransaction.id,
+          uid: scheduledTransaction.uid,
+          recipient: scheduledTransaction.recipient,
+          reference: scheduledTransaction.reference,
+          date: scheduledTransaction.scheduledDate,
+          amount: scheduledTransaction.amount,
+          paymentMethod: 'Scheduled Payment',
+          isDebit: scheduledTransaction.isDebit,
+          currency: scheduledTransaction.currency,
+          category: scheduledTransaction.category,
+        );
+        await saveTransaction(newTransaction);
+        notifyListeners();
+
+        await f.FirebaseFirestore.instance
+            .collection('scheduled_transactions')
+            .doc(scheduledTransaction.id)
+            .update({
+          'scheduledDate': DateTime(
+            scheduledTransaction.scheduledDate.year,
+            scheduledTransaction.scheduledDate.month + 1,
+            scheduledTransaction.scheduledDate.day,
+          ),
+        });
+        notifyListeners();
+      }
+    }
+  }
 }
