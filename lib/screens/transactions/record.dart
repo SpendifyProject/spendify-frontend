@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spendify/const/snackbar.dart';
+import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
+import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/widgets/amount_text_field.dart';
+import 'package:spendify/widgets/error_dialog.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../const/constants.dart';
 import '../../const/sizing_config.dart';
@@ -20,19 +26,21 @@ class _RecordTransactionState extends State<RecordTransaction> {
   late TextEditingController senderController;
   late TextEditingController recipientController;
   late TextEditingController referenceController;
+  late TransactionProvider transactionProvider;
   final formKey = GlobalKey<FormState>();
   String? radioValue;
-  bool? isDebit;
   String? selectedCategory;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     amountController = TextEditingController();
     amountController.text = '0.00';
     senderController = TextEditingController();
     recipientController = TextEditingController();
     referenceController = TextEditingController();
+    transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
   }
 
   @override
@@ -180,7 +188,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
             spacing: 5.0,
             children: List<Widget>.generate(
               categories.length,
-                  (int index) {
+              (int index) {
                 return ChoiceChip(
                   showCheckmark: false,
                   selectedColor: color.primary,
@@ -200,8 +208,27 @@ class _RecordTransactionState extends State<RecordTransaction> {
             height: verticalConverter(context, 40),
           ),
           ElevatedButton(
-            onPressed: (){
-              Navigator.pop(context);
+            onPressed: () {
+              try {
+                if (formKey.currentState!.validate()) {}
+                RecordedTransaction transaction = RecordedTransaction(
+                  id: const Uuid().v4(),
+                  uid: widget.user.uid,
+                  amount: double.parse(amountController.text),
+                  sender: senderController.text,
+                  recipient: recipientController.text,
+                  reference: referenceController.text,
+                  category: selectedCategory!,
+                  date: DateTime.now(),
+                  isDebit: senderController.text == widget.user.fullName,
+                  currency: 'GHS',
+                );
+                transactionProvider.recordExternalTransaction(transaction);
+                showCustomSnackbar(context, 'Transaction recorded successfully');
+                Navigator.pop(context);
+              } catch (error) {
+                showErrorDialog(context, '$error');
+              }
             },
             child: Text(
               'Record',

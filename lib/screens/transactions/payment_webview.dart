@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spendify/const/snackbar.dart';
+import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/screens/animations/done.dart';
 import 'package:spendify/screens/dashboard/dashboard.dart';
 import 'package:spendify/services/paystack_service.dart';
@@ -21,6 +24,7 @@ class PaymentWebView extends StatefulWidget {
 class _PaymentWebViewState extends State<PaymentWebView> {
   late Future futureInitTransaction;
   late WebViewController webViewController;
+  late TransactionProvider transactionProvider;
   late final PlatformWebViewControllerCreationParams params;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -30,6 +34,8 @@ class _PaymentWebViewState extends State<PaymentWebView> {
     futureInitTransaction =
         PaystackService().initTransaction(widget.transaction, context);
     params = const PlatformWebViewControllerCreationParams();
+    transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
   }
 
   @override
@@ -40,8 +46,9 @@ class _PaymentWebViewState extends State<PaymentWebView> {
 
   void verifyTransactionAfterCompletion() async {
     bool success =
-    await PaystackService().verifyTransaction(widget.transaction, context);
+        await PaystackService().verifyTransaction(widget.transaction, context);
     if (success) {
+      transactionProvider.saveTransaction(widget.transaction);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -55,7 +62,8 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         ),
       );
     } else {
-      showErrorDialog(_scaffoldKey.currentContext!, 'Transaction verification failed.');
+      showErrorDialog(
+          _scaffoldKey.currentContext!, 'Transaction verification failed.');
     }
   }
 
@@ -106,7 +114,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
               print(url);
               _launchURL(url);
               verifyTransactionAfterCompletion();
-
+              showCustomSnackbar(context, 'Transaction completed successfully',);
               // return WebViewWidget(
               //   controller: WebViewController.fromPlatformCreationParams(params)
               //     ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -139,15 +147,6 @@ class _PaymentWebViewState extends State<PaymentWebView> {
             }
             return const SizedBox();
           },
-        ),
-      ),
-      bottomNavigationBar: GestureDetector(
-        child: Container(
-          width: double.infinity,
-          height: 50,
-          decoration: BoxDecoration(
-            color: color.primary,
-          ),
         ),
       ),
     );

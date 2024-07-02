@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spendify/const/snackbar.dart';
+import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
+import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/widgets/amount_text_field.dart';
+import 'package:spendify/widgets/error_dialog.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../const/constants.dart';
 import '../../const/sizing_config.dart';
@@ -20,6 +26,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
   late TextEditingController referenceController;
   late TextEditingController dateController;
   late TextEditingController recipientController;
+  late TransactionProvider transactionProvider;
   DateTime? _selectedDate;
   String? selectedCategory;
   final formKey = GlobalKey<FormState>();
@@ -32,6 +39,8 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
     referenceController = TextEditingController();
     dateController = TextEditingController();
     recipientController = TextEditingController();
+    transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
   }
 
   @override
@@ -184,8 +193,29 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
             height: verticalConverter(context, 30),
           ),
           ElevatedButton(
-            onPressed: (){
-              Navigator.pop(context);
+            onPressed: () {
+              try {
+                if (formKey.currentState!.validate()) {}
+                ScheduledTransaction transaction = ScheduledTransaction(
+                  id: const Uuid().v4(),
+                  uid: widget.user.uid,
+                  reference: referenceController.text,
+                  recipient: recipientController.text,
+                  amount: double.parse(amountController.text),
+                  scheduledDate: _selectedDate!,
+                  category: selectedCategory!,
+                  isDebit: true,
+                  currency: 'GHS',
+                );
+                transactionProvider.scheduleTransaction(transaction);
+                showCustomSnackbar(
+                  context,
+                  'Transaction scheduled for ${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year} successfully',
+                );
+                Navigator.pop(context);
+              } catch (error) {
+                showErrorDialog(context, '$error');
+              }
             },
             child: Text(
               'Save',
