@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:spendify/const/constants.dart';
 
-import '../const/sizing_config.dart';
-
 class TransactionWidget extends StatelessWidget {
   const TransactionWidget(
       {super.key,
         required this.name,
         required this.category,
-        required this.icon,
-        required this.isProfit,
+        this.icon,
+        required this.isDebit,
         required this.amount});
 
   final String name;
   final String category;
-  final String icon;
-  final bool isProfit;
+  final String? icon;
+  final bool isDebit;
   final double amount;
 
   @override
@@ -50,7 +48,7 @@ class TransactionWidget extends StatelessWidget {
         'GHc${amount.toStringAsFixed(2)}',
         style: TextStyle(
           fontSize: 12,
-          color: isProfit ? color.onTertiary : color.tertiary,
+          color: isDebit ? color.tertiary : color.onTertiary,
         ),
       ),
     );

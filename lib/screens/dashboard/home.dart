@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/profile/preferences.dart';
@@ -10,6 +10,7 @@ import 'package:spendify/screens/transactions/budget.dart';
 import 'package:spendify/screens/transactions/record.dart';
 import 'package:spendify/screens/transactions/schedule.dart';
 import 'package:spendify/screens/transactions/send_money.dart';
+import 'package:spendify/screens/transactions/transaction_history.dart';
 import 'package:spendify/widgets/double_header.dart';
 
 import '../../const/routes.dart';
@@ -64,7 +65,7 @@ class _HomeState extends State<Home> {
               },
               {
                 'title':
-                    'Add your mobile money to ensure a seamless payment experience',
+                    'Add your mobile money account to ensure a seamless payment experience',
                 'route': AddMomo(uid: user.uid),
                 'asset': 'assets/images/momo.jpeg',
               },
@@ -91,46 +92,44 @@ class _HomeState extends State<Home> {
                     );
                   },
                   child: Container(
-                    width: double.infinity,
-                    height: verticalConverter(context, 300),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: color.onSurface,
-                      border: Border.all(color: color.onPrimary)
-                    ),
-                    child: Column(
-                      children: [
-                        ClipRRect(
+                      width: double.infinity,
+                      height: 300.h,
+                      decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            info[index]['asset'],
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-                            height: verticalConverter(context, 200),
+                          color: color.onSurface,
+                          border: Border.all(color: color.onPrimary)),
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              info[index]['asset'],
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              height: 200.h,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: verticalConverter(context, 10),
-                        ),
-                        Text(
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Text(
                             info[index]['title'],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: color.onPrimary,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: color.onPrimary,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  ),
+                        ],
+                      )),
                 ),
               ),
             );
             return Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: horizontalConverter(context, 20),
-                vertical: verticalConverter(context, 10),
+                horizontal: 20.w,
+                vertical: 10.h,
               ),
               child: ListView(
                 children: [
@@ -146,8 +145,8 @@ class _HomeState extends State<Home> {
                         child: ClipOval(
                           child: Image.network(
                             user.imagePath,
-                            width: horizontalConverter(context, 50),
-                            height: verticalConverter(context, 50),
+                            width: 50.w,
+                            height: 50.h,
                           ),
                         ),
                       ),
@@ -168,7 +167,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 10),
+                    height: 10.h,
                   ),
                   SizedBox(
                     height: 300,
@@ -182,25 +181,26 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 10),
+                    height: 10.h,
                   ),
                   Center(
                     child: SmoothPageIndicator(
                       controller: controller,
                       count: 3,
                       effect: WormEffect(
-                          dotColor: color.onSurface,
-                          activeDotColor: color.primary,
-                          dotHeight: 10,
-                          dotWidth: 10,
-                          spacing: 15),
+                        dotColor: color.onSurface,
+                        activeDotColor: color.primary,
+                        dotHeight: 10,
+                        dotWidth: 10,
+                        spacing: 15,
+                      ),
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 90),
+                    height: 90.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -277,46 +277,55 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
-                  const DoubleHeader(
+                  DoubleHeader(
                     leading: 'Transactions',
                     trailing: 'See All',
-                    routeName: transactionsRoute,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return Transactions(user: user);
+                          },
+                        ),
+                      );
+                    },
                   ),
                   const TransactionWidget(
                     name: 'Spotify',
                     category: 'Entertainment',
                     icon: 'entertainment',
-                    isProfit: false,
+                    isDebit: true,
                     amount: 8.50,
                   ),
                   const TransactionWidget(
                     name: 'Apple TV',
                     category: 'Entertainment',
                     icon: 'entertainment',
-                    isProfit: false,
+                    isDebit: true,
                     amount: 12.99,
                   ),
                   const TransactionWidget(
                     name: 'Groceries',
                     category: 'Food and Dining',
                     icon: 'food',
-                    isProfit: false,
+                    isDebit: true,
                     amount: 30,
                   ),
                   const TransactionWidget(
                     name: 'Cash In',
                     category: 'Money Transfer',
                     icon: 'transfer',
-                    isProfit: true,
+                    isDebit: false,
                     amount: 300,
                   ),
                   const TransactionWidget(
                     name: 'Gym Membership',
                     category: 'Health and Fitness',
                     icon: 'health',
-                    isProfit: false,
+                    isDebit: true,
                     amount: 250,
                   ),
                 ],
@@ -348,7 +357,7 @@ class TransactionButton extends StatelessWidget {
           onTap: onTap,
           child: CircleAvatar(
             backgroundColor: color.onSurface,
-            radius: horizontalConverter(context, 27),
+            radius: 27.w,
             child: Icon(
               iconData,
               color: color.onPrimary,

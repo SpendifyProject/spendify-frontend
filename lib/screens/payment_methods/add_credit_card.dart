@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/credit_card.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:spendify/widgets/error_dialog.dart';
@@ -62,8 +62,8 @@ class _AddCardState extends State<AddCard> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: verticalConverter(context, 20),
-          horizontal: horizontalConverter(context, 10),
+          vertical: 20.h,
+          horizontal: 10.w,
         ),
         child: ListView(
           children: [
@@ -83,7 +83,7 @@ class _AddCardState extends State<AddCard> {
                     labelText: 'Cardholder Full Name',
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   CustomAuthTextField(
                     controller: numberController,
@@ -97,7 +97,7 @@ class _AddCardState extends State<AddCard> {
                     labelText: 'Card Number',
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   CustomAuthTextField(
                     controller: dateController,
@@ -142,7 +142,7 @@ class _AddCardState extends State<AddCard> {
                     readOnly: true,
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   CustomAuthTextField(
                     controller: issuerController,
@@ -184,7 +184,7 @@ class _AddCardState extends State<AddCard> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 40),
+              height: 40.h,
             ),
             Center(
               child: ElevatedButton(

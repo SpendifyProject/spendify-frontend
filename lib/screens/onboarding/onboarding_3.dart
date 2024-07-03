@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
-
-import '../../const/sizing_config.dart';
 
 class Onboarding3 extends StatelessWidget {
   const Onboarding3({super.key});
@@ -16,18 +15,18 @@ class Onboarding3 extends StatelessWidget {
           const Spacer(),
           Padding(
             padding: EdgeInsets.only(
-              left: horizontalConverter(context, 20),
+              left: 20.w,
             ),
             child: Image.asset(
               'assets/images/onboarding_3.png',
-              width: horizontalConverter(context, 335),
-              height: verticalConverter(context, 140.53),
+              width: 335.w,
+              height: 140.53.h,
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: verticalConverter(context, 20),
-              horizontal: horizontalConverter(context, 47),
+              vertical: 20.h,
+              horizontal: 20.w,
             ),
             child: const Center(
               child: Text(
@@ -42,7 +41,7 @@ class Onboarding3 extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: horizontalConverter(context, 52),
+              horizontal: 52.w,
             ),
             child: Center(
               child: Text(
@@ -56,12 +55,12 @@ class Onboarding3 extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: verticalConverter(context, 20),
+            height: 20.h,
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: verticalConverter(context, 30),
-              horizontal: horizontalConverter(context, 20),
+              vertical: 30.h,
+              horizontal: 20.w,
             ),
             child: ElevatedButton(
               onPressed: () {

@@ -32,13 +32,16 @@ class TransactionProvider with ChangeNotifier {
   Future<void> fetchTransactions(User user) async {
     try {
       _transactions.clear();
+      print(user.uid);
       final transactionSnap = await f.FirebaseFirestore.instance
-          .collection('transactions')
+          .collection('transaction')
           .where('uid', isEqualTo: user.uid)
           .orderBy('date', descending: true)
           .get();
-
+      print('fetched');
       for (final doc in transactionSnap.docs) {
+        print('document');
+        print(doc);
         Transaction transaction = Transaction(
           id: doc['id'] as String,
           uid: doc['uid'] as String,
@@ -54,6 +57,7 @@ class TransactionProvider with ChangeNotifier {
         if (_transactions.contains(transaction)) {
           continue;
         } else {
+          print(transaction);
           _transactions.add(transaction);
         }
         notifyListeners();

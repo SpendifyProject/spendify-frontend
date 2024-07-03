@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spendify/const/routes.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/widgets/double_header.dart';
 
 import '../../widgets/transaction_widget.dart';
@@ -34,8 +33,8 @@ class Statistics extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: horizontalConverter(context, 20),
-          vertical: verticalConverter(context, 10),
+          horizontal: 20.w,
+          vertical: 20.h,
         ),
         child: ListView(
           children: [
@@ -56,12 +55,12 @@ class Statistics extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: verticalConverter(context, 20),
+              height: 20.h,
             ),
             Image.asset('assets/images/charts.png'),
             Image.asset('assets/images/months.png'),
             SizedBox(
-              height: verticalConverter(context, 20),
+              height: 20.h,
             ),
             Text(
               'Category Chart',
@@ -74,46 +73,45 @@ class Statistics extends StatelessWidget {
             Image.asset('assets/images/category.png'),
             Image.asset('assets/images/legend.png'),
             SizedBox(
-              height: verticalConverter(context, 20),
+              height: 20.h,
             ),
             const DoubleHeader(
               leading: 'Recent Transactions',
               trailing: 'See All',
-              routeName: transactionsRoute,
             ),
             const TransactionWidget(
               name: 'Spotify',
               category: 'Entertainment',
               icon: 'entertainment',
-              isProfit: false,
+              isDebit: false,
               amount: 8.50,
             ),
             const TransactionWidget(
               name: 'Apple TV',
               category: 'Entertainment',
               icon: 'entertainment',
-              isProfit: false,
+              isDebit: false,
               amount: 12.99,
             ),
             const TransactionWidget(
               name: 'Groceries',
               category: 'Food and Dining',
               icon: 'food',
-              isProfit: false,
+              isDebit: false,
               amount: 30,
             ),
             const TransactionWidget(
               name: 'Cash In',
               category: 'Money Transfer',
               icon: 'transfer',
-              isProfit: true,
+              isDebit: true,
               amount: 300,
             ),
             const TransactionWidget(
               name: 'Gym Membership',
               category: 'Health and Fitness',
               icon: 'health',
-              isProfit: false,
+              isDebit: false,
               amount: 250,
             ),
           ],

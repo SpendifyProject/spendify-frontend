@@ -33,6 +33,7 @@ class _DashboardState extends State<Dashboard> {
         elevation: 5,
         selectedItemColor: color.primary,
         unselectedItemColor: color.onSecondary,
+        backgroundColor: color.onBackground,
         showUnselectedLabels: true,
         onTap: (index){
           setState(() {

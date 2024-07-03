@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../const/sizing_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AmountTextField extends StatelessWidget {
   const AmountTextField({super.key, required this.controller});
@@ -11,7 +10,7 @@ class AmountTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return Container(
-      height: verticalConverter(context, 130),
+      height: 130.h,
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
@@ -20,8 +19,8 @@ class AmountTextField extends StatelessWidget {
         ),
       ),
       padding: EdgeInsets.symmetric(
-        vertical: verticalConverter(context, 20),
-        horizontal: horizontalConverter(context, 10),
+        vertical: 20.h,
+        horizontal: 10.w,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -35,7 +34,7 @@ class AmountTextField extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: verticalConverter(context, 10),
+            height: 10.h,
           ),
           Row(
             children: [
@@ -48,10 +47,10 @@ class AmountTextField extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: horizontalConverter(context, 15),
+                width: 15.w,
               ),
               SizedBox(
-                width: horizontalConverter(context, 200),
+                width: 200.w,
                 child: TextField(
                   controller: controller,
                   keyboardType: TextInputType.number,

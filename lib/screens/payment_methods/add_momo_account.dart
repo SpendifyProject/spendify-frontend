@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/models/momo_accounts.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../const/sizing_config.dart';
 import '../../widgets/custom_auth_text_field.dart';
 import '../../widgets/error_dialog.dart';
 
@@ -59,8 +59,8 @@ class _AddMomoState extends State<AddMomo> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: verticalConverter(context, 20),
-          horizontal: horizontalConverter(context, 10),
+          vertical: 20.h,
+          horizontal: 10.w,
         ),
         child: ListView(
           children: [
@@ -80,7 +80,7 @@ class _AddMomoState extends State<AddMomo> {
                     labelText: 'Full Name',
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   CustomAuthTextField(
                     controller: numberController,
@@ -94,7 +94,7 @@ class _AddMomoState extends State<AddMomo> {
                     labelText: 'Phone Number',
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   CustomAuthTextField(
                     controller: networkController,
@@ -111,7 +111,7 @@ class _AddMomoState extends State<AddMomo> {
                           networkController.text = _selectedNetwork;
                         });
                       },
-                      color: color.background,
+                      color: color.onPrimary,
                       icon: Icon(
                         Icons.edit_outlined,
                         color: color.secondary,
@@ -141,7 +141,7 @@ class _AddMomoState extends State<AddMomo> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 40),
+              height: 40.h,
             ),
             Center(
               child: ElevatedButton(

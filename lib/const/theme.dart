@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spendify/const/sizing_config.dart';
 
 ThemeData themeData(BuildContext context) {
   return ThemeData(
@@ -27,8 +27,7 @@ ThemeData themeData(BuildContext context) {
         elevation: WidgetStateProperty.all(0),
         backgroundColor:
             WidgetStateProperty.all(const Color.fromRGBO(0, 102, 255, 1)),
-        foregroundColor:
-            WidgetStateProperty.all(Colors.white),
+        foregroundColor: WidgetStateProperty.all(Colors.white),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -36,8 +35,8 @@ ThemeData themeData(BuildContext context) {
         ),
         fixedSize: WidgetStateProperty.all(
           Size(
-            horizontalConverter(context, 335),
-            verticalConverter(context, 56),
+            335.w,
+            56.h,
           ),
         ),
       ),

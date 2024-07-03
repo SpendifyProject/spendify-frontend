@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spendify/const/sizing_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spendify/const/text.dart';
 
 class TermsAndConditions extends StatelessWidget {
@@ -30,8 +30,8 @@ class TermsAndConditions extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: verticalConverter(context, 20),
-          horizontal: horizontalConverter(context, 10),
+          vertical: 20.h,
+          horizontal: 10.w,
         ),
         child: ListView(
           children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spendify/const/sizing_config.dart';
 
 ThemeData darkThemeData(BuildContext context) {
   return ThemeData(
@@ -35,8 +35,8 @@ ThemeData darkThemeData(BuildContext context) {
         ),
         fixedSize: WidgetStateProperty.all(
           Size(
-            horizontalConverter(context, 335),
-            verticalConverter(context, 56),
+            335.w,
+            56.h,
           ),
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/dark_theme.dart';
 import 'package:spendify/const/routes.dart';
@@ -39,15 +40,15 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    DevicePreview(
+  runApp(ScreenUtilInit(
+    designSize: const Size(375, 812),
+    builder: (_, child) => DevicePreview(
       enabled: true,
       builder: (context) => const MyApp(),
     ),
-  );
+  ));
   FlutterNativeSplash.remove();
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -88,7 +89,6 @@ class _MyAppState extends State<MyApp> {
               profileRoute: (context) => const Profile(),
               editProfileRoute: (context) => const EditProfile(),
               searchRoute: (context) => const Search(),
-              transactionsRoute: (context) => const Transactions(),
               contactRoute: (context) => const Contact(),
               changePasswordRoute: (context) => const ChangePassword(),
               privacyRoute: (context) => const PrivacyPolicy(),

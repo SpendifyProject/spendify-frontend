@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/models/transaction.dart';
@@ -9,7 +10,6 @@ import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../const/constants.dart';
-import '../../const/sizing_config.dart';
 import '../../widgets/custom_auth_text_field.dart';
 
 class RecordTransaction extends StatefulWidget {
@@ -68,14 +68,14 @@ class _RecordTransactionState extends State<RecordTransaction> {
       ),
       body: ListView(
         padding: EdgeInsets.symmetric(
-          horizontal: horizontalConverter(context, 20),
-          vertical: verticalConverter(context, 10),
+          horizontal: 20.w,
+          vertical: 10.h,
         ),
         children: [
           Form(
             key: formKey,
             child: SizedBox(
-              height: verticalConverter(context, 470),
+              height: 470.h,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -83,7 +83,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     controller: amountController,
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   Text(
                     'Did you send or receive the money?',
@@ -115,7 +115,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                         ),
                       ),
                       SizedBox(
-                        width: horizontalConverter(context, 20),
+                        width: 20.w,
                       ),
                       Radio(
                         value: 'received',
@@ -139,7 +139,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     ],
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   CustomAuthTextField(
                     controller: senderController,
@@ -153,7 +153,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     labelText: "Sender's Full Name",
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   CustomAuthTextField(
                     controller: recipientController,
@@ -167,7 +167,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     labelText: "Recipient's Full Name",
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   CustomAuthTextField(
                     controller: referenceController,
@@ -205,7 +205,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
             ).toList(),
           ),
           SizedBox(
-            height: verticalConverter(context, 40),
+            height: 40.h,
           ),
           ElevatedButton(
             onPressed: () {
@@ -224,7 +224,8 @@ class _RecordTransactionState extends State<RecordTransaction> {
                   currency: 'GHS',
                 );
                 transactionProvider.recordExternalTransaction(transaction);
-                showCustomSnackbar(context, 'Transaction recorded successfully');
+                showCustomSnackbar(
+                    context, 'Transaction recorded successfully');
                 Navigator.pop(context);
               } catch (error) {
                 showErrorDialog(context, '$error');

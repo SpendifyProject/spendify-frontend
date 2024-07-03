@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/credit_card.dart';
 import 'package:spendify/models/momo_accounts.dart';
 import 'package:spendify/provider/wallet_provider.dart';
@@ -58,8 +58,8 @@ class _AllCardsState extends State<AllCards> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: verticalConverter(context, 20),
-          horizontal: horizontalConverter(context, 10),
+          vertical: 20.h,
+          horizontal: 10.w,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,7 +88,7 @@ class _AllCardsState extends State<AllCards> {
               },
             ),
             SizedBox(
-              height: verticalConverter(context, 20),
+              height: 20.h,
             ),
             FutureBuilder(
               future: walletProvider.fetchWallet(widget.user),
@@ -107,7 +107,7 @@ class _AllCardsState extends State<AllCards> {
                   List<CreditCard> cards = wallet.creditCards;
                   List<MomoAccount> momoAccounts = wallet.momoAccounts;
                   return SizedBox(
-                    height: verticalConverter(context, 500),
+                    height: 500.h,
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       itemCount: selected == 'cards'
@@ -132,7 +132,7 @@ class _AllCardsState extends State<AllCards> {
                                     network: momoAccounts[index].network,
                                   ),
                             SizedBox(
-                              height: verticalConverter(context, 20),
+                              height: 20.h,
                             ),
                           ],
                         );

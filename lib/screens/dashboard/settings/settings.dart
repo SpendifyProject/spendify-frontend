@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/routes.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/provider/theme_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool isBiometricEnabled = false;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     themeProvider = Provider.of<ThemeProvider>(context, listen: false);
   }
@@ -36,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: (){
+            onPressed: () {
               signOut(context);
             },
             icon: Icon(
@@ -49,8 +49,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: verticalConverter(context, 10),
-          horizontal: horizontalConverter(context, 20),
+          vertical: 10.h,
+          horizontal: 20.w,
         ),
         child: ListView(
           children: [
@@ -62,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 10),
+              height: 10.h,
             ),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
@@ -103,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, contactRoute);
               },
               title: Text(
@@ -120,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 25),
+              height: 25.h,
             ),
             Text(
               'Security',
@@ -130,11 +130,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 10),
+              height: 10.h,
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, changePasswordRoute);
               },
               title: Text(
@@ -152,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, conditionsRoute);
               },
               title: Text(
@@ -170,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, privacyRoute);
               },
               title: Text(
@@ -187,7 +187,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 25),
+              height: 25.h,
             ),
             Text(
               'Change what data you share with us',
@@ -197,7 +197,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 10),
+              height: 10.h,
             ),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,

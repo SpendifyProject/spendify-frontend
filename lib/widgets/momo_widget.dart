@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../const/sizing_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MomoWidget extends StatelessWidget {
   const MomoWidget(
@@ -17,15 +16,15 @@ class MomoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return Container(
-      width: horizontalConverter(context, 335),
-      height: verticalConverter(context, 180),
+      width: 335.w,
+      height: 180.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: const Color.fromRGBO(30, 30, 45, 1),
       ),
       child: Padding(
         padding: EdgeInsets.all(
-          verticalConverter(context, 20),
+          20.h,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -35,14 +34,14 @@ class MomoWidget extends StatelessWidget {
               phoneNumber,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: verticalConverter(context, 24),
+                fontSize: 24.h,
               ),
             ),
             Text(
               fullName,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: verticalConverter(context, 14),
+                fontSize: 14.h,
               ),
             ),
             const Spacer(),
@@ -52,20 +51,20 @@ class MomoWidget extends StatelessWidget {
                 'Network',
                 style: TextStyle(
                   color: color.secondary,
-                  fontSize: verticalConverter(context, 9),
+                  fontSize: 9.h,
                 ),
               ),
               subtitle: Text(
                 network.toUpperCase(),
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: verticalConverter(context, 13),
+                  fontSize: 13.h,
                 ),
               ),
               trailing: Image.asset(
                 'assets/images/${network.toLowerCase()}.jpg',
-                height: verticalConverter(context, 30),
-                width: horizontalConverter(context, 50),
+                height: 30.h,
+                width: 50.w,
               ),
             ),
           ],

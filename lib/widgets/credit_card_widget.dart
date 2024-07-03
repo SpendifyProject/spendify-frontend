@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../const/sizing_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreditCardWidget extends StatelessWidget {
   const CreditCardWidget(
@@ -19,8 +18,8 @@ class CreditCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return Container(
-      width: horizontalConverter(context, 335),
-      height: verticalConverter(context, 180),
+      width: 335.w,
+      height: 180.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: const Color.fromRGBO(30, 30, 45, 1),
@@ -30,8 +29,8 @@ class CreditCardWidget extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: verticalConverter(context, 20),
-          horizontal: horizontalConverter(context, 20),
+          vertical: 20.h,
+          horizontal: 20.w,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

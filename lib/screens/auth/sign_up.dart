@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/provider/user_provider.dart';
@@ -7,7 +8,6 @@ import 'package:spendify/screens/auth/sign_in.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../const/sizing_config.dart';
 import '../../models/user.dart';
 import '../../widgets/error_dialog.dart';
 
@@ -51,12 +51,12 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: horizontalConverter(context, 20),
+          horizontal: 20.w,
         ),
         child: ListView(
           children: [
             SizedBox(
-              height: verticalConverter(context, 50),
+              height: 50.h,
             ),
             Text(
               'Sign Up',
@@ -66,7 +66,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 30),
+              height: 30.h,
             ),
             Form(
               key: formKey,
@@ -83,7 +83,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
+              height: 15.h,
             ),
             CustomAuthTextField(
               controller: numberController,
@@ -97,7 +97,7 @@ class _SignUpState extends State<SignUp> {
               labelText: 'Number',
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
+              height: 15.h,
             ),
             CustomAuthTextField(
               controller: emailController,
@@ -111,7 +111,7 @@ class _SignUpState extends State<SignUp> {
               labelText: 'Email Address',
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
+              height: 15.h,
             ),
             CustomAuthTextField(
               controller: passwordController,
@@ -139,7 +139,7 @@ class _SignUpState extends State<SignUp> {
               labelText: 'Password',
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
+              height: 15.h,
             ),
             CustomAuthTextField(
               controller: incomeController,
@@ -153,7 +153,7 @@ class _SignUpState extends State<SignUp> {
               labelText: 'Monthly Income',
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
+              height: 15.h,
             ),
             CustomAuthTextField(
               controller: dateController,
@@ -198,7 +198,7 @@ class _SignUpState extends State<SignUp> {
               readOnly: true,
             ),
             SizedBox(
-              height: verticalConverter(context, 30),
+              height: 30.h,
             ),
             Center(
               child: ElevatedButton(
@@ -254,7 +254,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
+              height: 15.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -289,7 +289,7 @@ class _SignUpState extends State<SignUp> {
               ],
             ),
             SizedBox(
-              height: verticalConverter(context, 100),
+              height: 100.h,
             ),
           ],
         ),

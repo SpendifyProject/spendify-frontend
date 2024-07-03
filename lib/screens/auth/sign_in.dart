@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spendify/const/auth.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
@@ -34,12 +34,12 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: horizontalConverter(context, 20),
+          horizontal: 20.w,
         ),
         child: ListView(
           children: [
             SizedBox(
-              height: verticalConverter(context, 149),
+              height: 149.h,
             ),
             Text(
               'Sign In',
@@ -49,7 +49,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 30),
+              height: 30.h,
             ),
             Form(
               key: formKey,
@@ -66,7 +66,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
+              height: 15.h,
             ),
             CustomAuthTextField(
               controller: passwordController,
@@ -94,7 +94,7 @@ class _SignInState extends State<SignIn> {
               labelText: 'Password',
             ),
             SizedBox(
-              height: verticalConverter(context, 30),
+              height: 30.h,
             ),
             Center(
               child: ElevatedButton(
@@ -134,7 +134,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 15),
+              height: 15.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

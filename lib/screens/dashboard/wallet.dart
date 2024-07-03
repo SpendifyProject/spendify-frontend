@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/routes.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/payment_methods/add_credit_card.dart';
@@ -98,8 +97,8 @@ class _WalletState extends State<Wallet> {
             isLoading = false;
             return Padding(
               padding: EdgeInsets.symmetric(
-                vertical: verticalConverter(context, 10),
-                horizontal: horizontalConverter(context, 20),
+                vertical: 10.h,
+                horizontal: 20.w,
               ),
               child: ListView(
                 children: [
@@ -111,15 +110,15 @@ class _WalletState extends State<Wallet> {
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 10),
+                    height: 10.h,
                   ),
                   Center(
                     child: Expanded(
                       child: Container(
-                        width: horizontalConverter(context, 335),
-                        height: verticalConverter(context, 113),
+                        width: 335.w,
+                        height: 113.h,
                         padding: EdgeInsets.all(
-                          verticalConverter(context, 20),
+                          20.h,
                         ),
                         decoration: BoxDecoration(
                           color: color.onSurface,
@@ -154,15 +153,14 @@ class _WalletState extends State<Wallet> {
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 25),
+                    height: 25.h,
                   ),
                   const DoubleHeader(
                     leading: 'Last Card Used',
                     trailing: 'View History',
-                    routeName: transactionsRoute,
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 10),
+                    height: 10.h,
                   ),
                   CreditCardWidget(
                     cardNumber: '4562112245957852',
@@ -171,7 +169,7 @@ class _WalletState extends State<Wallet> {
                     assetName: 'mastercard.png',
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 10),
+                    height: 10.h,
                   ),
                   MomoWidget(
                     phoneNumber: '0263600727',
