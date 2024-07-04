@@ -54,7 +54,7 @@ class _SendMoneyState extends State<SendMoney> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return FutureBuilder(
-      future: walletProvider.fetchWallet(widget.user),
+      future: walletProvider.fetchWallet(widget.user, context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final Wallet wallet = snapshot.data!;

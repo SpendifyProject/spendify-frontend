@@ -91,7 +91,7 @@ class _AllCardsState extends State<AllCards> {
               height: 20.h,
             ),
             FutureBuilder(
-              future: walletProvider.fetchWallet(widget.user),
+              future: walletProvider.fetchWallet(widget.user, context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox();
@@ -101,6 +101,8 @@ class _AllCardsState extends State<AllCards> {
                   Wallet wallet = snapshot.data ??
                       Wallet(
                         uid: 'WALLET_UNAVAILABLE',
+                        monthlyIncome: 0,
+                        monthlyExpenses: 0,
                         creditCards: [],
                         momoAccounts: [],
                       );

@@ -216,7 +216,9 @@ class _RecordTransactionState extends State<RecordTransaction> {
                   uid: widget.user.uid,
                   amount: double.parse(amountController.text),
                   sender: senderController.text,
-                  recipient: recipientController.text,
+                  recipient: recipientController.text == widget.user.fullName
+                      ? 'Cash In'
+                      : recipientController.text,
                   reference: referenceController.text,
                   category: selectedCategory!,
                   date: DateTime.now(),
@@ -226,7 +228,6 @@ class _RecordTransactionState extends State<RecordTransaction> {
                 transactionProvider.recordExternalTransaction(transaction);
                 showCustomSnackbar(
                     context, 'Transaction recorded successfully');
-                Navigator.pop(context);
               } catch (error) {
                 showErrorDialog(context, '$error');
               }

@@ -21,27 +21,20 @@ class TransactionProvider with ChangeNotifier {
   );
 
   final List<Transaction> _transactions = [];
-  final List<Transaction> _sortedTransactions = [];
 
   Transaction get transaction => _transaction;
 
   List<Transaction> get transactions => _transactions;
 
-  List<Transaction> get sortedTransactions => _sortedTransactions;
-
   Future<void> fetchTransactions(User user) async {
     try {
       _transactions.clear();
-      print(user.uid);
       final transactionSnap = await f.FirebaseFirestore.instance
           .collection('transaction')
           .where('uid', isEqualTo: user.uid)
           .orderBy('date', descending: true)
           .get();
-      print('fetched');
       for (final doc in transactionSnap.docs) {
-        print('document');
-        print(doc);
         Transaction transaction = Transaction(
           id: doc['id'] as String,
           uid: doc['uid'] as String,
@@ -57,7 +50,6 @@ class TransactionProvider with ChangeNotifier {
         if (_transactions.contains(transaction)) {
           continue;
         } else {
-          print(transaction);
           _transactions.add(transaction);
         }
         notifyListeners();
@@ -188,5 +180,24 @@ class TransactionProvider with ChangeNotifier {
         notifyListeners();
       }
     }
+  }
+
+  Future<List<Transaction>> getMonthlyTransactions(User user) async{
+    await fetchTransactions(user);
+    List<Transaction> allTransactions = transactions;
+    List<Transaction> monthlyTransactions = [];
+    DateTime now = DateTime.now();
+    for(Transaction transaction in allTransactions){
+      if (transaction.date.month == now.month){
+        if(monthlyTransactions.contains(transaction)){
+          continue;
+        }
+        else{
+          monthlyTransactions.add(transaction);
+        }
+      }
+    }
+    notifyListeners();
+    return monthlyTransactions;
   }
 }
