@@ -191,6 +191,17 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 20.h,
             ),
+            Text(
+              'Quick Actions',
+              style: TextStyle(
+                fontSize: 18,
+                 fontWeight: FontWeight.w500,
+                color: color.onPrimary,
+              ),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
             SizedBox(
               height: 90.h,
               child: Row(

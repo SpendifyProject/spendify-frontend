@@ -25,6 +25,7 @@ class WalletProvider with ChangeNotifier {
 
   Future<Wallet> fetchWallet(User user, BuildContext context) async {
     _transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
+    await _transactionProvider.fetchTransactions(user);
     List<t.Transaction> monthlyTransactions = await _transactionProvider.getMonthlyTransactions(user);
     double monthlyIncome = user.monthlyIncome;
     double monthlyExpenses = 0;

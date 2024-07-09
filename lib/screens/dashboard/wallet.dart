@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/constants.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/models/wallet.dart' as w;
 import 'package:spendify/provider/wallet_provider.dart';
@@ -25,7 +26,7 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
   bool isLoading = true;
   late WalletProvider walletProvider;
-  double limit = 10000.00;
+  double limit = 1000.00;
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _WalletState extends State<Wallet> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Wallet',
+          'Budget',
           style: TextStyle(
             color: color.onPrimary,
             fontSize: 18,
@@ -68,7 +69,7 @@ class _WalletState extends State<Wallet> {
                 );
               }
             },
-            color: color.background,
+            color: color.surface,
             icon: Icon(
               Icons.monetization_on_outlined,
               color: color.onPrimary,
@@ -114,76 +115,127 @@ class _WalletState extends State<Wallet> {
               Text(
                 'Monthly spending limit',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 15,
                   color: color.onPrimary,
                 ),
               ),
               SizedBox(
                 height: 10.h,
               ),
-              Center(
-                child: Expanded(
-                  child: Container(
-                    width: 335.w,
-                    height: 113.h,
-                    padding: EdgeInsets.all(
-                      20.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: color.onSurface,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Limit: GHc10,000.00',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: color.onPrimary,
+              Stack(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: 335.w,
+                      height: 113.h,
+                      padding: EdgeInsets.all(
+                        20.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: color.onSurface,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Limit: GHc ${formatAmount(limit)}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: color.onPrimary,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Expenses: GHc${wallet.monthlyExpenses.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: color.onPrimary,
+                          Text(
+                            'Monthly Income: GHc ${formatAmount(wallet.monthlyIncome)}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: color.onPrimary,
+                            ),
                           ),
-                        ),
-                        LinearProgressIndicator(
-                          value: wallet.monthlyExpenses/limit,
-                          color: color.primary,
-                          backgroundColor: color.surface,
-                        )
-                      ],
+                          Text(
+                            'Expenses: GHc ${formatAmount(wallet.monthlyExpenses)}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: color.onPrimary,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          LinearProgressIndicator(
+                            value: wallet.monthlyExpenses / limit,
+                            color: color.primary,
+                            backgroundColor: color.surface,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Transform.translate(
+                      offset: Offset(-20.w, 10.h),
+                      child: GestureDetector(
+                        child: CircleAvatar(
+                          backgroundColor: color.primary,
+                          radius: 20.w,
+                          child: Icon(
+                            Icons.edit_outlined,
+                            color: color.surface,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'General financial tips',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: color.onPrimary,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Icon(
+                      Icons.info_outlined,
+                      color: color.onSecondary,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                width: double.infinity,
+                height: 150.h,
+                decoration: BoxDecoration(
+                    color: color.onSurface,
+                    borderRadius: BorderRadius.circular(20)),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Text(
+                'Specialised financial tips',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: color.onPrimary,
                 ),
               ),
-              SizedBox(
-                height: 25.h,
-              ),
-              const DoubleHeader(
-                leading: 'Last Card Used',
-                trailing: 'View History',
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              CreditCardWidget(
-                cardNumber: '4562112245957852',
-                fullName: widget.user.fullName,
-                expiryDate: '12/2024',
-                assetName: 'mastercard.png',
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              MomoWidget(
-                phoneNumber: '0263600727',
-                fullName: widget.user.fullName,
-                network: 'mtn',
+              Container(
+                width: double.infinity,
+                height: 150.h,
+                decoration: BoxDecoration(
+                    color: color.onSurface,
+                    borderRadius: BorderRadius.circular(20)),
               ),
             ],
           );

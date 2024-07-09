@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 List<String> categories = [
   'Entertainment',
@@ -9,6 +10,17 @@ List<String> categories = [
   'Transport',
   'Utilities and Repairs',
   'Other'
+];
+
+final List<Color> categoryColors = [
+  Colors.redAccent,
+  Colors.greenAccent,
+  Colors.lightBlueAccent,
+  Colors.orangeAccent,
+  Colors.purpleAccent,
+  Colors.yellow,
+  Colors.cyanAccent,
+  Colors.grey,
 ];
 
 IconData pickCategoryIcon(String category) {
@@ -29,4 +41,13 @@ IconData pickCategoryIcon(String category) {
   } else {
     return Icons.more_horiz;
   }
+}
+
+String formatAmount(double amount) {
+  final formatter = NumberFormat("#,##0.00", "en_UK");
+  return formatter.format(amount);
+}
+
+double amountToPercentages(double amount, double totalExpenses){
+  return ((amount / totalExpenses) * 100).roundToDouble();
 }

@@ -45,7 +45,7 @@ class TransactionWidget extends StatelessWidget {
         ),
       ),
       trailing: Text(
-        'GHc${amount.toStringAsFixed(2)}',
+        'GHc ${formatAmount(amount)}',
         style: TextStyle(
           fontSize: 12,
           color: isDebit ? color.tertiary : color.onTertiary,

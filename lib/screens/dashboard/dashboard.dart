@@ -51,7 +51,9 @@ class _DashboardState extends State<Dashboard> {
             Wallet(
               user: user,
             ),
-            const Statistics(),
+            Statistics(
+              user: user,
+            ),
             const SettingsScreen(),
           ];
           return screens[currentIndex];
@@ -59,11 +61,12 @@ class _DashboardState extends State<Dashboard> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
-        elevation: 5,
+        elevation: 0,
         selectedItemColor: color.primary,
         unselectedItemColor: color.onSecondary,
-        backgroundColor: color.onBackground,
+        backgroundColor: color.surface,
         showUnselectedLabels: true,
+        useLegacyColorScheme: false,
         onTap: (index) {
           setState(() {
             currentIndex = index;
@@ -73,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
           BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.wallet_outlined), label: 'Wallet'),
+              icon: Icon(Icons.savings_outlined), label: 'Budget'),
           BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.chart_bar), label: 'Statistics'),
           BottomNavigationBarItem(

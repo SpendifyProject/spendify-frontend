@@ -200,4 +200,46 @@ class TransactionProvider with ChangeNotifier {
     notifyListeners();
     return monthlyTransactions;
   }
+
+  Future<List<Transaction>> getTransactionsSortedByCategory(User user, String category) async{
+    await fetchTransactions(user);
+    List<Transaction> allTransactions = transactions;
+    List<Transaction> sortedTransactions = [];
+    for(Transaction transaction in allTransactions){
+      if (transaction.category == category){
+        if(sortedTransactions.contains(transaction)){
+          continue;
+        }
+        else{
+          sortedTransactions.add(transaction);
+        }
+      }
+    }
+    notifyListeners();
+    return sortedTransactions;
+  }
+
+  Future<Map<String, double>> getCategoryExpenses(User user, int month) async {
+    await fetchTransactions(user);
+    List<Transaction> allTransactions = transactions;
+    Map<String, double> expenses = {
+      'Entertainment': 0.0,
+      'Food and Dining': 0.0,
+      'Rent and Housing': 0.0,
+      'Health and Fitness': 0.0,
+      'Shopping': 0.0,
+      'Transport': 0.0,
+      'Utilities and Repairs': 0.0,
+      'Other': 0.0,
+    };
+
+    for (Transaction transaction in allTransactions) {
+      if (transaction.date.month == month && transaction.isDebit) {
+        expenses[transaction.category] = (expenses[transaction.category] ?? 0.0) + transaction.amount;
+      }
+    }
+
+    notifyListeners();
+    return expenses;
+  }
 }
