@@ -20,14 +20,17 @@ class Empty extends StatelessWidget {
             'assets/animations/empty.json',
           ),
         ),
-        Text(
-          text,
-          style: TextStyle(
-            color: color.onPrimary,
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 50.w),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: color.onPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         )
       ],
     );

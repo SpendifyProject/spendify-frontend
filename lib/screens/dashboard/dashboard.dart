@@ -60,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         elevation: 0,
         selectedItemColor: color.primary,

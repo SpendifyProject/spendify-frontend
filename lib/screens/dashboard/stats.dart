@@ -79,7 +79,7 @@ class _StatisticsState extends State<Statistics> {
               );
           if (transactionProvider.transactions.isEmpty) {
             return const Empty(
-              text: 'Please make some transactions to access this page',
+              text: 'Make some transactions to view this screen',
             );
           } else {
             return ListView(
