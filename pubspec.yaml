@@ -35,6 +35,8 @@ dependencies:
   url_launcher: ^6.3.0
   flutter_screenutil: ^5.9.3
   fl_chart: ^0.68.0
+  google_generative_ai: ^0.4.3
+  dotenv: ^4.2.0
 
 dev_dependencies:
   flutter_test:

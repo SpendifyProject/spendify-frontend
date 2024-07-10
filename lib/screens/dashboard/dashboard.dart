@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/dashboard/home.dart';
 import 'package:spendify/screens/dashboard/stats.dart';
-import 'package:spendify/screens/dashboard/wallet.dart';
+import 'package:spendify/screens/dashboard/budget.dart';
 import 'package:spendify/screens/dashboard/settings/settings.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
