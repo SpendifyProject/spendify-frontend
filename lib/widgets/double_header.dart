@@ -5,11 +5,11 @@ class DoubleHeader extends StatelessWidget {
       {super.key,
       required this.leading,
       required this.trailing,
-      this.routeName});
+      this.onTap});
 
   final String leading;
   final String trailing;
-  final String? routeName;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +26,7 @@ class DoubleHeader extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {
-            if (routeName != null) {
-              Navigator.pushNamed(
-                context,
-                routeName!,
-              );
-            } else {
-              null;
-            }
-          },
+          onTap: onTap,
           child: Text(
             trailing,
             style: TextStyle(

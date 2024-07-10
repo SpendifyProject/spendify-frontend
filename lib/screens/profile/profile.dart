@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/routes.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
@@ -75,8 +75,8 @@ class _ProfileState extends State<Profile> {
               final User user = userProvider.user;
               return Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: verticalConverter(context, 25),
-                  horizontal: horizontalConverter(context, 20),
+                  vertical: 25.h,
+                  horizontal: 20.w,
                 ),
                 child: ListView(
                   children: [
@@ -85,8 +85,8 @@ class _ProfileState extends State<Profile> {
                       leading: ClipOval(
                         child: Image.network(
                           user.imagePath,
-                          width: horizontalConverter(context, 50),
-                          height: verticalConverter(context, 50),
+                          width: 50.w,
+                          height: 50.h,
                         ),
                       ),
                       title: Text(
@@ -98,7 +98,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     SizedBox(
-                      height: verticalConverter(context, 10),
+                      height: 10.h,
                     ),
                     ListTile(
                       contentPadding: EdgeInsets.zero,
@@ -121,7 +121,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     SizedBox(
-                      height: verticalConverter(context, 10),
+                      height: 10.h,
                     ),
                     ListTile(
                       contentPadding: EdgeInsets.zero,
@@ -144,7 +144,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     SizedBox(
-                      height: verticalConverter(context, 10),
+                      height: 10.h,
                     ),
                     ListTile(
                       onTap: () {
@@ -179,7 +179,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     SizedBox(
-                      height: verticalConverter(context, 10),
+                      height: 10.h,
                     ),
                     ListTile(
                       contentPadding: EdgeInsets.zero,

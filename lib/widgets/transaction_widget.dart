@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-
-import '../const/sizing_config.dart';
+import 'package:spendify/const/constants.dart';
 
 class TransactionWidget extends StatelessWidget {
   const TransactionWidget(
       {super.key,
         required this.name,
         required this.category,
-        required this.icon,
-        required this.isProfit,
+        this.icon,
+        required this.isDebit,
         required this.amount});
 
   final String name;
   final String category;
-  final String icon;
-  final bool isProfit;
+  final String? icon;
+  final bool isDebit;
   final double amount;
 
   @override
@@ -23,13 +22,13 @@ class TransactionWidget extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
-        backgroundColor: color.onBackground,
+        backgroundColor: color.onSurface,
         radius: 45,
-        child: Image.asset(
-          'assets/images/$icon.png',
-          width: horizontalConverter(context, 25),
-          height: verticalConverter(context, 25),
-        ),
+        child: Icon(
+          pickCategoryIcon(category),
+          size: 30,
+          color: color.onPrimary,
+        )
       ),
       title: Text(
         name,
@@ -46,10 +45,10 @@ class TransactionWidget extends StatelessWidget {
         ),
       ),
       trailing: Text(
-        'GHc${amount.toStringAsFixed(2)}',
+        'GHc ${formatAmount(amount)}',
         style: TextStyle(
-          fontSize: 16,
-          color: isProfit ? color.onTertiary : color.tertiary,
+          fontSize: 12,
+          color: isDebit ? color.tertiary : color.onTertiary,
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:spendify/widgets/error_dialog.dart';
@@ -86,8 +86,8 @@ class _EditProfileState extends State<EditProfile> {
                 '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
             return Padding(
               padding: EdgeInsets.symmetric(
-                vertical: verticalConverter(context, 25),
-                horizontal: horizontalConverter(context, 10),
+                vertical: 25.h,
+                horizontal: 10.w,
               ),
               child: ListView(
                 children: [
@@ -95,13 +95,13 @@ class _EditProfileState extends State<EditProfile> {
                     child: ClipOval(
                       child: Image.network(
                         user.imagePath,
-                        width: horizontalConverter(context, 90),
-                        height: verticalConverter(context, 90),
+                        width: 90.w,
+                        height: 90.h,
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 20),
+                    height: 20.h,
                   ),
                   Form(
                     key: formKey,
@@ -118,7 +118,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 15),
+                    height: 15.h,
                   ),
                   CustomAuthTextField(
                     controller: numberController,
@@ -132,7 +132,7 @@ class _EditProfileState extends State<EditProfile> {
                     labelText: 'Number',
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 15),
+                    height: 15.h,
                   ),
                   CustomAuthTextField(
                     controller: emailController,
@@ -146,7 +146,7 @@ class _EditProfileState extends State<EditProfile> {
                     labelText: 'Email Address',
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 15),
+                    height: 15.h,
                   ),
                   CustomAuthTextField(
                     controller: incomeController,
@@ -160,7 +160,7 @@ class _EditProfileState extends State<EditProfile> {
                     labelText: 'Monthly Income',
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 15),
+                    height: 15.h,
                   ),
                   CustomAuthTextField(
                     controller: dateController,
@@ -206,7 +206,7 @@ class _EditProfileState extends State<EditProfile> {
                     readOnly: true,
                   ),
                   SizedBox(
-                    height: verticalConverter(context, 30),
+                    height: 30.h,
                   ),
                   Center(
                     child: ElevatedButton(

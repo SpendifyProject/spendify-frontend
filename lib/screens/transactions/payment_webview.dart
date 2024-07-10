@@ -1,6 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:spendify/const/paystack_transaction.dart';
+import 'package:provider/provider.dart';
+import 'package:spendify/const/snackbar.dart';
+import 'package:spendify/provider/transaction_provider.dart';
+import 'package:spendify/screens/animations/done.dart';
+import 'package:spendify/screens/dashboard/dashboard.dart';
+import 'package:spendify/services/paystack_service.dart';
 import 'package:spendify/widgets/error_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../models/transaction.dart';
@@ -17,12 +24,18 @@ class PaymentWebView extends StatefulWidget {
 class _PaymentWebViewState extends State<PaymentWebView> {
   late Future futureInitTransaction;
   late WebViewController webViewController;
+  late TransactionProvider transactionProvider;
+  late final PlatformWebViewControllerCreationParams params;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     futureInitTransaction =
         PaystackService().initTransaction(widget.transaction, context);
+    params = const PlatformWebViewControllerCreationParams();
+    transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
   }
 
   @override
@@ -35,9 +48,36 @@ class _PaymentWebViewState extends State<PaymentWebView> {
     bool success =
         await PaystackService().verifyTransaction(widget.transaction, context);
     if (success) {
-      Navigator.pop(context, true);
+      transactionProvider.saveTransaction(widget.transaction);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return DoneScreen(
+              nextPage: Dashboard(
+                email: FirebaseAuth.instance.currentUser!.email.toString(),
+              ),
+            );
+          },
+        ),
+      );
     } else {
-      showErrorDialog(context, 'Transaction verification failed.');
+      showErrorDialog(
+          _scaffoldKey.currentContext!, 'Transaction verification failed.');
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    Uri uri = Uri.parse(url);
+    print("Attempting to launch URL: $url");
+    bool canLaunch = await canLaunchUrl(uri);
+    print("Can launch URL: $canLaunch");
+    if (canLaunch) {
+      await launchUrl(uri, mode: LaunchMode.inAppWebView);
+      print("URL launched successfully");
+    } else {
+      showErrorDialog(_scaffoldKey.currentContext!, 'Could not launch $url');
+      print("Could not launch URL");
     }
   }
 
@@ -45,6 +85,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -64,60 +105,49 @@ class _PaymentWebViewState extends State<PaymentWebView> {
           ),
         ),
       ),
-      body: FutureBuilder(
-        future: futureInitTransaction,
-        builder: (context, snapshot) {
-          final url = snapshot.data ?? 'https://flutter.dev';
-          print(url);
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //   return const SizedBox();
-          // } else if (snapshot.hasError) {
-          //   WidgetsBinding.instance.addPostFrameCallback((_) {
-          //     showErrorDialog(context, 'Error: ${snapshot.error}');
-          //   });
-          // }
-          if (snapshot.hasData) {
-            return WebViewWidget(
-              controller: WebViewController()
-                ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                ..setBackgroundColor(const Color(0x00000000))
-                ..setNavigationDelegate(
-                  NavigationDelegate(
-                    onProgress: (int progress) {
-                      print('Progress...');
-                    },
-                    onPageStarted: (String url) {
-                      print('Page Started...');
-                    },
-                    onPageFinished: (String url) {
-                      print('Page Finished...');
-                      if (url.contains('transaction-complete')) {
-                        verifyTransactionAfterCompletion();
-                      }
-                    },
-                    onWebResourceError: (WebResourceError error) {
-                      print('Page resource error: ${error.description}');
-                      showErrorDialog(
-                          context, 'Error loading page: ${error.description}');
-                    },
-                    onNavigationRequest: (NavigationRequest request) {
-                      print('Nav request...${request.url}');
-                      if (request.url.startsWith('https://www.youtube.com/')) {
-                        return NavigationDecision.prevent;
-                      }
-                      return NavigationDecision.navigate;
-                    },
-                  ),
-                )
-                ..loadRequest(
-                  Uri.parse(url!),
-                ),
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+      body: SafeArea(
+        child: FutureBuilder(
+          future: futureInitTransaction,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final url = snapshot.data ?? 'https://flutter.dev';
+              print(url);
+              _launchURL(url);
+              verifyTransactionAfterCompletion();
+              showCustomSnackbar(context, 'Transaction completed successfully',);
+              // return WebViewWidget(
+              //   controller: WebViewController.fromPlatformCreationParams(params)
+              //     ..setJavaScriptMode(JavaScriptMode.unrestricted)
+              //     ..setBackgroundColor(const Color(0x00000000))
+              //     ..setNavigationDelegate(
+              //       NavigationDelegate(
+              //         onProgress: (int progress) {
+              //           // Update loading bar.
+              //         },
+              //         onPageStarted: (String url) {},
+              //         onPageFinished: (String url) {},
+              //         onWebResourceError: (WebResourceError error) {},
+              //         onNavigationRequest: (NavigationRequest request) {
+              //           print('Navigation request');
+              //           print(url);
+              //           print(request.url);
+              //           print(request);
+              //           if (request.url
+              //               .startsWith('https://www.youtube.com/')) {
+              //             return NavigationDecision.prevent;
+              //           }
+              //           return NavigationDecision.navigate;
+              //         },
+              //       ),
+              //     )
+              //     ..loadRequest(
+              //       Uri.parse(url!),
+              //     ),
+              // );
+            }
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }

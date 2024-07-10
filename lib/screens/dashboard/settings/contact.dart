@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spendify/const/sizing_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 
 class Contact extends StatefulWidget {
@@ -45,9 +45,9 @@ class _ContactState extends State<Contact> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(
-          verticalConverter(context, 20),
-          horizontalConverter(context, 10),
-          verticalConverter(context, 20),
+          20.h,
+          10.w,
+          20.h,
           0,
         ),
         child: ListView(
@@ -64,7 +64,7 @@ class _ContactState extends State<Contact> {
               labelText: 'Title',
             ),
             SizedBox(
-              height: verticalConverter(context, 20),
+              height: 20.h,
             ),
             Text(
               'Content',
@@ -80,7 +80,7 @@ class _ContactState extends State<Contact> {
               style: TextStyle(color: color.onPrimary, fontSize: 14),
             ),
             SizedBox(
-              height: verticalConverter(context, 20),
+              height: 20.h,
             ),
             Center(
               child: ElevatedButton(

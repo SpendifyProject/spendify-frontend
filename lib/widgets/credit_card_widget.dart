@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../const/sizing_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreditCardWidget extends StatelessWidget {
   const CreditCardWidget(
@@ -19,19 +18,19 @@ class CreditCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return Container(
-      width: horizontalConverter(context, 335),
-      height: verticalConverter(context, 180),
+      width: 335.w,
+      height: 180.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: color.onPrimary,
+        color: const Color.fromRGBO(30, 30, 45, 1),
         image: const DecorationImage(
           image: AssetImage('assets/images/worldmap.png'),
         ),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: verticalConverter(context, 20),
-          horizontal: horizontalConverter(context, 20),
+          vertical: 20.h,
+          horizontal: 20.w,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -42,15 +41,15 @@ class CreditCardWidget extends StatelessWidget {
                 RegExp(r".{4}"),
                 (match) => "${match.group(0)}   ",
               ),
-              style: TextStyle(
-                color: color.background,
+              style: const TextStyle(
+                color: Colors.white,
                 fontSize: 24,
               ),
             ),
             Text(
               fullName,
-              style: TextStyle(
-                color: color.background,
+              style: const TextStyle(
+                color: Colors.white,
                 fontSize: 14,
               ),
             ),
@@ -66,8 +65,8 @@ class CreditCardWidget extends StatelessWidget {
               ),
               subtitle: Text(
                 expiryDate,
-                style: TextStyle(
-                  color: color.background,
+                style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 13,
                 ),
               ),

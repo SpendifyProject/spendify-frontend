@@ -51,25 +51,21 @@ class PaystackService {
 
   Future<bool> verifyTransaction(
       Transaction transaction, BuildContext context) async {
-    try {
-      String reference = transaction.reference;
-      String url = "https://api.paystack.co/transaction/verify/$reference";
-      final res = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $_secretKey',
-        },
-      );
-      final resData = jsonDecode(res.body);
-      if (resData["data"]["status"] == "success") {
-        return true;
-      } else {
-        showErrorDialog(context,
-            "Transaction verification failed. Please complete the transaction.");
-        return false;
-      }
-    } catch (e) {
-      showErrorDialog(context, "Error verifying transaction: $e");
+    String reference = transaction.reference;
+    String url = "https://api.paystack.co/transaction/verify/$reference";
+    final res = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $_secretKey',
+      },
+    );
+    final resData = jsonDecode(res.body);
+    if (resData != null && resData.containsKey('status')) {
+      print(resData);
+      return true;
+    } else {
+      showErrorDialog(context,
+          "Transaction verification failed. Please complete the transaction.");
       return false;
     }
   }

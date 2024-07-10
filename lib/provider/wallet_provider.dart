@@ -2,21 +2,41 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spendify/models/credit_card.dart';
 import 'package:spendify/models/momo_accounts.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/models/wallet.dart';
+import 'package:spendify/models/transaction.dart' as t;
+import 'package:spendify/provider/transaction_provider.dart';
+
+late TransactionProvider _transactionProvider;
 
 class WalletProvider with ChangeNotifier {
   Wallet _wallet = Wallet(
     uid: "uid",
     creditCards: <CreditCard>[],
     momoAccounts: <MomoAccount>[],
+    monthlyIncome: 0,
+    monthlyExpenses: 0,
   );
 
   Wallet get wallet => _wallet;
 
-  Future<Wallet> fetchWallet(User user) async {
+  Future<Wallet> fetchWallet(User user, BuildContext context) async {
+    _transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
+    await _transactionProvider.fetchTransactions(user);
+    List<t.Transaction> monthlyTransactions = await _transactionProvider.getMonthlyTransactions(user);
+    double monthlyIncome = user.monthlyIncome;
+    double monthlyExpenses = 0;
+    for(t.Transaction transaction in monthlyTransactions){
+      if(transaction.isDebit){
+        monthlyExpenses += transaction.amount;
+      }
+      else{
+        monthlyIncome += transaction.amount;
+      }
+    }
     _wallet.creditCards.clear();
     _wallet.momoAccounts.clear();
     _wallet.uid = user.uid;
@@ -24,6 +44,8 @@ class WalletProvider with ChangeNotifier {
     await getAccountInfo(user.uid);
     _wallet = Wallet(
       uid: user.uid,
+      monthlyIncome: monthlyIncome,
+      monthlyExpenses: monthlyExpenses,
       creditCards: _wallet.creditCards,
       momoAccounts: _wallet.momoAccounts,
     );
@@ -47,10 +69,9 @@ class WalletProvider with ChangeNotifier {
           uid: doc['uid'] as String,
           id: doc['id'] as String,
         );
-        if(_wallet.creditCards.contains(card)){
+        if (_wallet.creditCards.contains(card)) {
           continue;
-        }
-        else{
+        } else {
           _wallet.creditCards.add(card);
         }
         notifyListeners();
@@ -95,10 +116,9 @@ class WalletProvider with ChangeNotifier {
           network: doc['network'] as String,
           phoneNumber: doc['phoneNumber'] as String,
         );
-        if(_wallet.momoAccounts.contains(account)){
+        if (_wallet.momoAccounts.contains(account)) {
           continue;
-        }
-        else{
+        } else {
           _wallet.momoAccounts.add(account);
         }
       }

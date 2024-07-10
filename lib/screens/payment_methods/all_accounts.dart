@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/credit_card.dart';
 import 'package:spendify/models/momo_accounts.dart';
 import 'package:spendify/provider/wallet_provider.dart';
@@ -12,6 +12,7 @@ import 'package:spendify/widgets/momo_widget.dart';
 import '../../models/user.dart';
 import '../../models/wallet.dart';
 import '../../widgets/credit_card_widget.dart';
+import '../animations/empty.dart';
 
 class AllCards extends StatefulWidget {
   const AllCards({super.key, required this.user});
@@ -58,8 +59,8 @@ class _AllCardsState extends State<AllCards> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: verticalConverter(context, 20),
-          horizontal: horizontalConverter(context, 10),
+          vertical: 20.h,
+          horizontal: 10.w,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,57 +89,68 @@ class _AllCardsState extends State<AllCards> {
               },
             ),
             SizedBox(
-              height: verticalConverter(context, 20),
+              height: 20.h,
             ),
             FutureBuilder(
-              future: walletProvider.fetchWallet(widget.user),
+              future: walletProvider.fetchWallet(widget.user, context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox();
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 } else if (snapshot.hasError) {
                   showErrorDialog(context, 'Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
                   Wallet wallet = snapshot.data ??
                       Wallet(
                         uid: 'WALLET_UNAVAILABLE',
+                        monthlyIncome: 0,
+                        monthlyExpenses: 0,
                         creditCards: [],
                         momoAccounts: [],
                       );
                   List<CreditCard> cards = wallet.creditCards;
                   List<MomoAccount> momoAccounts = wallet.momoAccounts;
-                  return SizedBox(
-                    height: verticalConverter(context, 500),
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: selected == 'cards'
-                          ? cards.length
-                          : momoAccounts.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            selected == 'cards'
-                                ? CreditCardWidget(
-                                    cardNumber: cards[index].cardNumber,
-                                    fullName: cards[index].fullName,
-                                    expiryDate:
-                                        '${cards[index].expiryDate.month}/${cards[index].expiryDate.year}',
-                                    assetName:
-                                        '${cards[index].issuer.toLowerCase()}.png',
-                                  )
-                                : MomoWidget(
-                                    phoneNumber:
-                                        momoAccounts[index].phoneNumber,
-                                    fullName: momoAccounts[index].fullName,
-                                    network: momoAccounts[index].network,
-                                  ),
-                            SizedBox(
-                              height: verticalConverter(context, 20),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  );
+                  if(cards.isEmpty && momoAccounts.isEmpty){
+                    return const Empty(
+                      text: 'Add your credit cards and mobile money accounts',
+                    );
+                  }
+                  else{
+                    return SizedBox(
+                      height: 500.h,
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: selected == 'cards'
+                            ? cards.length
+                            : momoAccounts.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              selected == 'cards'
+                                  ? CreditCardWidget(
+                                cardNumber: cards[index].cardNumber,
+                                fullName: cards[index].fullName,
+                                expiryDate:
+                                '${cards[index].expiryDate.month}/${cards[index].expiryDate.year}',
+                                assetName:
+                                '${cards[index].issuer.toLowerCase()}.png',
+                              )
+                                  : MomoWidget(
+                                phoneNumber:
+                                momoAccounts[index].phoneNumber,
+                                fullName: momoAccounts[index].fullName,
+                                network: momoAccounts[index].network,
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  }
                 }
                 return const SizedBox();
               },

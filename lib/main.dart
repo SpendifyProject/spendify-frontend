@@ -4,11 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/dark_theme.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/theme.dart';
 import 'package:spendify/provider/theme_provider.dart';
+import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
@@ -23,8 +25,12 @@ import 'package:spendify/screens/profile/edit_profile.dart';
 import 'package:spendify/screens/profile/profile.dart';
 import 'package:spendify/screens/transactions/search.dart';
 import 'package:spendify/screens/transactions/transaction_history.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'firebase_options.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -34,12 +40,13 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    DevicePreview(
+  runApp(ScreenUtilInit(
+    designSize: const Size(375, 812),
+    builder: (_, child) => DevicePreview(
       enabled: true,
       builder: (context) => const MyApp(),
     ),
-  );
+  ));
   FlutterNativeSplash.remove();
 }
 
@@ -64,6 +71,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => ThemeProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => TransactionProvider(),
+        ),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
@@ -79,7 +89,6 @@ class _MyAppState extends State<MyApp> {
               profileRoute: (context) => const Profile(),
               editProfileRoute: (context) => const EditProfile(),
               searchRoute: (context) => const Search(),
-              transactionsRoute: (context) => const Transactions(),
               contactRoute: (context) => const Contact(),
               changePasswordRoute: (context) => const ChangePassword(),
               privacyRoute: (context) => const PrivacyPolicy(),
@@ -88,8 +97,8 @@ class _MyAppState extends State<MyApp> {
             home: FirebaseAuth.instance.currentUser == null
                 ? const Onboarding1()
                 : Dashboard(
-              email: FirebaseAuth.instance.currentUser!.email.toString(),
-            ),
+                    email: FirebaseAuth.instance.currentUser!.email.toString(),
+                  ),
           );
         },
       ),

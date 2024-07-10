@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spendify/const/sizing_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../widgets/custom_auth_text_field.dart';
 
@@ -17,7 +17,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool isHidden2 = true;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     passwordController = TextEditingController();
     confirmController = TextEditingController();
@@ -48,9 +48,9 @@ class _ChangePasswordState extends State<ChangePassword> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(
-          horizontalConverter(context, 10),
-          verticalConverter(context, 20),
-          horizontalConverter(context, 10),
+          10.w,
+          20.h,
+          10.w,
           0,
         ),
         child: ListView(
@@ -81,7 +81,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               labelText: 'New Password',
             ),
             SizedBox(
-              height: verticalConverter(context, 20),
+              height: 20.h,
             ),
             CustomAuthTextField(
               controller: confirmController,
@@ -109,7 +109,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               labelText: 'Confirm New Password',
             ),
             SizedBox(
-              height: verticalConverter(context, 10),
+              height: 10.h,
             ),
             Text(
               'Both Passwords Must Match',
@@ -119,7 +119,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               ),
             ),
             SizedBox(
-              height: verticalConverter(context, 40),
+              height: 40.h,
             ),
             Center(
               child: ElevatedButton(

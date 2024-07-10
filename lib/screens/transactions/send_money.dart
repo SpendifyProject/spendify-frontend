@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/sizing_config.dart';
 import 'package:spendify/models/credit_card.dart';
 import 'package:spendify/models/momo_accounts.dart';
 import 'package:spendify/models/transaction.dart';
@@ -17,6 +17,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../const/constants.dart';
 import '../../widgets/amount_text_field.dart';
+import '../payment_methods/add_momo_account.dart';
 
 class SendMoney extends StatefulWidget {
   const SendMoney({super.key, required this.user});
@@ -53,7 +54,7 @@ class _SendMoneyState extends State<SendMoney> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return FutureBuilder(
-      future: walletProvider.fetchWallet(widget.user),
+      future: walletProvider.fetchWallet(widget.user, context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final Wallet wallet = snapshot.data!;
@@ -79,217 +80,267 @@ class _SendMoneyState extends State<SendMoney> {
                 ),
               ),
             ),
-            body: ListView(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalConverter(context, 20),
-                vertical: verticalConverter(context, 10),
-              ),
-              children: [
-                Form(
-                  key: formKey,
-                  child: SizedBox(
-                    height: verticalConverter(context, 310),
-                    child: Column(
-                      children: [
-                        AmountTextField(controller: amountController),
-                        SizedBox(
-                          height: verticalConverter(context, 20),
-                        ),
-                        CustomAuthTextField(
-                          controller: recipientController,
-                          obscureText: false,
-                          icon: Icon(
-                            Icons.person_outline,
-                            color: color.secondary,
-                            size: 30,
+            body: momoAccounts.isEmpty && cards.isEmpty
+                ? Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return AddMomo(uid: widget.user.uid);
+                            },
                           ),
-                          keyboardType: TextInputType.number,
-                          labelText: 'Recipient Phone Number',
-                        ),
-                        SizedBox(
-                          height: verticalConverter(context, 15),
-                        ),
-                        CustomAuthTextField(
-                          controller: referenceController,
-                          obscureText: false,
-                          icon: Icon(
-                            Icons.message_outlined,
-                            color: color.secondary,
-                            size: 30,
-                          ),
-                          keyboardType: TextInputType.text,
-                          labelText: 'Reference',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: verticalConverter(context, 20),
-                ),
-                Wrap(
-                  spacing: 5.0,
-                  children: List<Widget>.generate(
-                    categories.length,
-                    (int index) {
-                      return ChoiceChip(
-                        showCheckmark: false,
-                        selectedColor: color.primary,
-                        disabledColor: color.onBackground,
-                        label: Text(categories[index]),
-                        selected: selectedCategory == categories[index],
-                        onSelected: (bool selected) {
-                          setState(() {
-                            selectedCategory =
-                                selected ? categories[index] : null;
-                          });
-                        },
-                      );
-                    },
-                  ).toList(),
-                ),
-                SizedBox(
-                  height: verticalConverter(context, 20),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Radio(
-                      value: 'momo',
-                      groupValue: radioValue,
-                      onChanged: (newValue) {
-                        setState(() {
-                          radioValue = newValue;
-                        });
+                        );
                       },
-                    ),
-                    Text(
-                      'Mobile Money',
-                      style: TextStyle(
-                        color: color.onPrimary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                      child: Container(
+                        width: 300.w,
+                        height: 300.h,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: color.onSurface,
+                            border: Border.all(color: color.onPrimary)),
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                'assets/images/momo.jpeg',
+                                fit: BoxFit.fill,
+                                width: double.infinity,
+                                height: 200.h,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              'Add your mobile money account to ensure a seamless payment experience',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: color.onPrimary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    SizedBox(
-                      width: horizontalConverter(context, 20),
+                  )
+                : ListView(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 10.h,
                     ),
-                    Radio(
-                      value: 'card',
-                      groupValue: radioValue,
-                      onChanged: (newValue) {
-                        setState(() {
-                          radioValue = newValue;
-                        });
-                      },
-                    ),
-                    Text(
-                      'Credit Card',
-                      style: TextStyle(
-                        color: color.onPrimary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: verticalConverter(context, 10),
-                ),
-                SizedBox(
-                  height: verticalConverter(context, 230),
-                  child: ListView.builder(
-                    itemCount: radioValue == 'momo'
-                        ? momoAccounts.length
-                        : cards.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Row(
+                    children: [
+                      Form(
+                        key: formKey,
+                        child: SizedBox(
+                          height: 310.h,
+                          child: Column(
                             children: [
-                              radioValue == "momo"
-                                  ? MomoWidget(
-                                      phoneNumber:
-                                          momoAccounts[index].phoneNumber,
-                                      fullName: momoAccounts[index].fullName,
-                                      network: momoAccounts[index].network,
-                                    )
-                                  : CreditCardWidget(
-                                      cardNumber: cards[index].cardNumber,
-                                      fullName: cards[index].fullName,
-                                      expiryDate:
-                                          '${cards[index].expiryDate.month}/${cards[index].expiryDate.year}',
-                                      assetName:
-                                          '${cards[index].issuer.toLowerCase()}.png',
-                                    ),
+                              AmountTextField(controller: amountController),
                               SizedBox(
-                                width: horizontalConverter(context, 20),
+                                height: 20.h,
+                              ),
+                              CustomAuthTextField(
+                                controller: recipientController,
+                                obscureText: false,
+                                icon: Icon(
+                                  Icons.person_outline,
+                                  color: color.secondary,
+                                  size: 30,
+                                ),
+                                keyboardType: TextInputType.text,
+                                labelText: "Recipient's Name",
+                              ),
+                              SizedBox(
+                                height: 15.h,
+                              ),
+                              CustomAuthTextField(
+                                controller: referenceController,
+                                obscureText: false,
+                                icon: Icon(
+                                  Icons.message_outlined,
+                                  color: color.secondary,
+                                  size: 30,
+                                ),
+                                keyboardType: TextInputType.text,
+                                labelText: 'Reference',
                               ),
                             ],
                           ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Wrap(
+                        spacing: 5.0,
+                        children: List<Widget>.generate(
+                          categories.length,
+                          (int index) {
+                            return ChoiceChip(
+                              showCheckmark: false,
+                              selectedColor: color.primary,
+                              disabledColor: color.onBackground,
+                              label: Text(categories[index]),
+                              selected: selectedCategory == categories[index],
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  selectedCategory =
+                                      selected ? categories[index] : null;
+                                });
+                              },
+                            );
+                          },
+                        ).toList(),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
                           Radio(
-                            value: index,
-                            groupValue: selectedCard,
+                            value: 'momo',
+                            groupValue: radioValue,
                             onChanged: (newValue) {
                               setState(() {
-                                selectedCard = newValue;
+                                radioValue = newValue;
                               });
                             },
                           ),
+                          Text(
+                            'Mobile Money',
+                            style: TextStyle(
+                              color: color.onPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Radio(
+                            value: 'card',
+                            groupValue: radioValue,
+                            onChanged: (newValue) {
+                              setState(() {
+                                radioValue = newValue;
+                              });
+                            },
+                          ),
+                          Text(
+                            'Credit Card',
+                            style: TextStyle(
+                              color: color.onPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ],
-                      );
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    try {
-                      if (formKey.currentState!.validate()) {}
-                      double amount = double.parse(amountController.text);
-                      String reference = referenceController.text;
-                      String recipient = recipientController.text;
-                      String id = const Uuid().v4();
-                      String paymentMethod = radioValue == 'momo'
-                          ? momoAccounts[selectedCard ?? 0].id
-                          : cards[selectedCard ?? 0].id;
-                      Transaction transaction = Transaction(
-                        id: id,
-                        uid: widget.user.uid,
-                        recipient: recipient,
-                        reference: reference,
-                        date: DateTime.now(),
-                        amount: amount,
-                        paymentMethod: paymentMethod,
-                        isDebit: true,
-                        currency: 'GHS',
-                        category: selectedCategory!,
-                      );
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return PaymentWebView(
-                              transaction: transaction,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      SizedBox(
+                        height: 300.h,
+                        child: ListView.builder(
+                          itemCount: radioValue == 'momo'
+                              ? momoAccounts.length
+                              : cards.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    radioValue == "momo"
+                                        ? MomoWidget(
+                                            phoneNumber:
+                                                momoAccounts[index].phoneNumber,
+                                            fullName:
+                                                momoAccounts[index].fullName,
+                                            network:
+                                                momoAccounts[index].network,
+                                          )
+                                        : CreditCardWidget(
+                                            cardNumber: cards[index].cardNumber,
+                                            fullName: cards[index].fullName,
+                                            expiryDate:
+                                                '${cards[index].expiryDate.month}/${cards[index].expiryDate.year}',
+                                            assetName:
+                                                '${cards[index].issuer.toLowerCase()}.png',
+                                          ),
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                  ],
+                                ),
+                                Radio(
+                                  value: index,
+                                  groupValue: selectedCard,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedCard = newValue;
+                                    });
+                                  },
+                                ),
+                              ],
                             );
                           },
                         ),
-                      );
-                    } catch (error) {
-                      showErrorDialog(context, 'Error: $error}');
-                    }
-                  },
-                  child: Text(
-                    'Send Money',
-                    style: TextStyle(
-                      color: color.background,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          try {
+                            if (formKey.currentState!.validate()) {}
+                            double amount = double.parse(amountController.text);
+                            String reference = referenceController.text;
+                            String recipient = recipientController.text;
+                            String id = const Uuid().v4();
+                            String paymentMethod = radioValue == 'momo'
+                                ? momoAccounts[selectedCard ?? 0].id
+                                : cards[selectedCard ?? 0].id;
+                            Transaction transaction = Transaction(
+                              id: id,
+                              uid: widget.user.uid,
+                              recipient: recipient,
+                              reference: reference,
+                              date: DateTime.now(),
+                              amount: amount,
+                              paymentMethod: paymentMethod,
+                              isDebit: true,
+                              currency: 'GHS',
+                              category: selectedCategory!,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return PaymentWebView(
+                                    transaction: transaction,
+                                  );
+                                },
+                              ),
+                            );
+                          } catch (error) {
+                            showErrorDialog(context, 'Error: $error}');
+                          }
+                        },
+                        child: Text(
+                          'Send Money',
+                          style: TextStyle(
+                            color: color.background,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox();

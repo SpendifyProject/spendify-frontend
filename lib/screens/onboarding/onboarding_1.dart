@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spendify/const/sizing_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'onboarding_2.dart';
 
@@ -16,18 +16,18 @@ class Onboarding1 extends StatelessWidget {
           const Spacer(),
           Padding(
             padding: EdgeInsets.only(
-              left: horizontalConverter(context, 20),
+              left: 20.w,
             ),
             child: Image.asset(
               'assets/images/onboarding_1.png',
-              width: horizontalConverter(context, 335),
-              height: verticalConverter(context, 248.53),
+              width: 335.w,
+              height: 248.53.h,
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: verticalConverter(context, 20),
-              horizontal: horizontalConverter(context, 47),
+              vertical: 20.h,
+              horizontal: 47.w,
             ),
             child: const Center(
               child: Text(
@@ -42,7 +42,7 @@ class Onboarding1 extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: horizontalConverter(context, 52),
+              horizontal: 52.w,
             ),
             child: Center(
               child: Text(
@@ -56,11 +56,11 @@ class Onboarding1 extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: verticalConverter(context, 20),
+            height: 20.h,
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: horizontalConverter(context, 20),
+              horizontal: 20.w,
             ),
             child: ElevatedButton(
               onPressed: () {
