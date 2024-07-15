@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/models/credit_card.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:spendify/widgets/error_dialog.dart';
@@ -46,7 +47,7 @@ class _AddCardState extends State<AddCard> {
           'Add New Card',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         leading: IconButton(
@@ -56,7 +57,7 @@ class _AddCardState extends State<AddCard> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
       ),
@@ -77,7 +78,7 @@ class _AddCardState extends State<AddCard> {
                     icon: Icon(
                       Icons.person_outline,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
                     labelText: 'Cardholder Full Name',
@@ -91,7 +92,7 @@ class _AddCardState extends State<AddCard> {
                     icon: Icon(
                       Icons.credit_card,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.number,
                     labelText: 'Card Number',
@@ -105,7 +106,7 @@ class _AddCardState extends State<AddCard> {
                     icon: Icon(
                       Icons.date_range_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     suffix: GestureDetector(
                       onTap: () async {
@@ -126,7 +127,7 @@ class _AddCardState extends State<AddCard> {
                             setState(() {
                               _selectedDate = pickedDate;
                               dateController.text =
-                              '${_selectedDate?.month}/${_selectedDate?.year}';
+                                  '${_selectedDate?.month}/${_selectedDate?.year}';
                             });
                           }
                         });
@@ -134,7 +135,7 @@ class _AddCardState extends State<AddCard> {
                       child: Icon(
                         Icons.edit_outlined,
                         color: color.secondary,
-                        size: 30,
+                        size: 30.sp,
                       ),
                     ),
                     keyboardType: TextInputType.text,
@@ -150,7 +151,7 @@ class _AddCardState extends State<AddCard> {
                     icon: Icon(
                       Icons.business_center_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     suffix: PopupMenuButton(
                       onSelected: (String value) {
@@ -159,20 +160,31 @@ class _AddCardState extends State<AddCard> {
                           issuerController.text = _selectedIssuer;
                         });
                       },
-                      color: color.background,
+                      color: color.surface,
                       icon: Icon(
                         Icons.edit_outlined,
                         color: color.secondary,
-                        size: 30,
+                        size: 30.sp,
                       ),
-                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
                           value: 'Mastercard',
-                          child: Text('Mastercard'),
+                          child: Text(
+                            'Mastercard',
+                            style: TextStyle(
+                              color: color.onPrimary,
+                            ),
+                          ),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'Visa',
-                          child: Text('Visa'),
+                          child: Text(
+                            'Visa',
+                            style: TextStyle(
+                              color: color.onPrimary,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -209,11 +221,7 @@ class _AddCardState extends State<AddCard> {
                     );
 
                     walletProvider.saveCard(newCard);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Credit card saved successfully'),
-                      ),
-                    );
+                    showCustomSnackbar(context, 'Credit card saved successfully',);
                     Navigator.pop(context);
                   } catch (error) {
                     showErrorDialog(context, 'Error: $error');
@@ -222,7 +230,7 @@ class _AddCardState extends State<AddCard> {
                 child: Text(
                   'Add Card',
                   style: TextStyle(
-                    color: color.background,
+                    color: color.surface,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),

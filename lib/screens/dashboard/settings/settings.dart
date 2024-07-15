@@ -31,7 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Settings',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         actions: [
@@ -42,7 +42,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             icon: Icon(
               Icons.logout,
               color: color.onPrimary,
-              size: 20,
+              size: 20.sp,
             ),
           ),
         ],
@@ -57,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Text(
               'General',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 color: color.secondary,
               ),
             ),
@@ -72,14 +72,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   themeProvider.switchTheme();
                 });
               },
-              inactiveThumbColor: color.secondary,
-              inactiveTrackColor: color.onBackground,
+              inactiveThumbColor: color.onPrimary,
+              inactiveTrackColor: color.onSurface,
               activeColor: color.primary,
               title: Text(
                 'Enable Dark Mode',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
@@ -92,13 +92,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'My Profile',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 color: color.secondary,
-                size: 20,
+                size: 20.sp,
               ),
             ),
             ListTile(
@@ -110,13 +110,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'Contact Us',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 color: color.secondary,
-                size: 20,
+                size: 20.sp,
               ),
             ),
             SizedBox(
@@ -125,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Text(
               'Security',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 color: color.secondary,
               ),
             ),
@@ -141,13 +141,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'Change Password',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 color: color.secondary,
-                size: 20,
+                size: 20.sp,
               ),
             ),
             ListTile(
@@ -159,13 +159,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'Terms and Conditions',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 color: color.secondary,
-                size: 20,
+                size: 20.sp,
               ),
             ),
             ListTile(
@@ -177,13 +177,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'Privacy Policy',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 color: color.secondary,
-                size: 20,
+                size: 20.sp,
               ),
             ),
             SizedBox(
@@ -192,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Text(
               'Change what data you share with us',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 color: color.secondary,
               ),
             ),
@@ -207,14 +207,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   isBiometricEnabled = !isBiometricEnabled;
                 });
               },
-              inactiveThumbColor: color.secondary,
-              inactiveTrackColor: color.onBackground,
+              inactiveThumbColor: color.onPrimary,
+              inactiveTrackColor: color.onSurface,
               activeColor: color.primary,
               title: Text(
                 'Biometrics',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ),

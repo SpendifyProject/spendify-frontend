@@ -44,7 +44,7 @@ class _SignInState extends State<SignIn> {
             Text(
               'Sign In',
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 32.sp,
                 color: color.onPrimary,
               ),
             ),
@@ -59,7 +59,7 @@ class _SignInState extends State<SignIn> {
                 icon: Icon(
                   Icons.email_outlined,
                   color: color.secondary,
-                  size: 30,
+                  size: 30.sp,
                 ),
                 keyboardType: TextInputType.emailAddress,
                 labelText: 'Email Address',
@@ -74,7 +74,7 @@ class _SignInState extends State<SignIn> {
               icon: Icon(
                 Icons.lock_outline,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               suffix: GestureDetector(
                 onTap: () {
@@ -87,7 +87,7 @@ class _SignInState extends State<SignIn> {
                       ? Icons.visibility_outlined
                       : Icons.visibility_off_outlined,
                   color: color.secondary,
-                  size: 30,
+                  size: 30.sp,
                 ),
               ),
               keyboardType: TextInputType.text,
@@ -126,8 +126,8 @@ class _SignInState extends State<SignIn> {
                 child: Text(
                   'Sign In',
                   style: TextStyle(
-                    color: color.background,
-                    fontSize: 16,
+                    color: color.onSurface,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -143,7 +143,7 @@ class _SignInState extends State<SignIn> {
                   "I'm a new user.",
                   style: TextStyle(
                     color: color.secondary,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                   ),
                 ),
                 TextButton(
@@ -161,7 +161,7 @@ class _SignInState extends State<SignIn> {
                     'Sign Up',
                     style: TextStyle(
                       color: color.primary,
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

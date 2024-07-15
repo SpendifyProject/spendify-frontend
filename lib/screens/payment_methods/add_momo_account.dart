@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/models/momo_accounts.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -43,7 +44,7 @@ class _AddMomoState extends State<AddMomo> {
           'Add New Mobile Money Account',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         leading: IconButton(
@@ -53,7 +54,7 @@ class _AddMomoState extends State<AddMomo> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
       ),
@@ -74,7 +75,7 @@ class _AddMomoState extends State<AddMomo> {
                     icon: Icon(
                       Icons.person_outline,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
                     labelText: 'Full Name',
@@ -88,7 +89,7 @@ class _AddMomoState extends State<AddMomo> {
                     icon: Icon(
                       Icons.credit_card,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.number,
                     labelText: 'Phone Number',
@@ -102,7 +103,7 @@ class _AddMomoState extends State<AddMomo> {
                     icon: Icon(
                       Icons.business_center_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     suffix: PopupMenuButton(
                       onSelected: (String value) {
@@ -115,21 +116,36 @@ class _AddMomoState extends State<AddMomo> {
                       icon: Icon(
                         Icons.edit_outlined,
                         color: color.secondary,
-                        size: 30,
+                        size: 30.sp,
                       ),
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'mtn',
-                          child: Text('MTN'),
+                          child: Text(
+                            'MTN',
+                            style: TextStyle(
+                              color: color.onPrimary,
+                            ),
+                          ),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'telecel',
-                          child: Text('Telecel'),
+                          child: Text(
+                            'Telecel',
+                            style: TextStyle(
+                              color: color.onPrimary,
+                            ),
+                          ),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'airtel',
-                          child: Text('AirtelTigo'),
+                          child: Text(
+                            'AirtelTigo',
+                            style: TextStyle(
+                              color: color.onPrimary,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -164,11 +180,7 @@ class _AddMomoState extends State<AddMomo> {
                     );
 
                     walletProvider.saveAccount(newAccount);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Mobile money account saved successfully'),
-                      ),
-                    );
+                    showCustomSnackbar(context, 'Mobile money account saved successfully',);
                     Navigator.pop(context);
                   } catch (error) {
                     showErrorDialog(context, 'Error: $error');
@@ -177,8 +189,8 @@ class _AddMomoState extends State<AddMomo> {
                 child: Text(
                   'Add Account',
                   style: TextStyle(
-                    color: color.background,
-                    fontSize: 14,
+                    color: color.surface,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -26,7 +26,7 @@ class Empty extends StatelessWidget {
             text,
             style: TextStyle(
               color: color.onPrimary,
-              fontSize: 20,
+              fontSize: 20.sp,
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,

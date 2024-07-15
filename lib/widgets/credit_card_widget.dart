@@ -41,16 +41,16 @@ class CreditCardWidget extends StatelessWidget {
                 RegExp(r".{4}"),
                 (match) => "${match.group(0)}   ",
               ),
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: 24.sp,
               ),
             ),
             Text(
               fullName,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
             const Spacer(),
@@ -60,14 +60,14 @@ class CreditCardWidget extends StatelessWidget {
                 'Expiry Date',
                 style: TextStyle(
                   color: color.secondary,
-                  fontSize: 9,
+                  fontSize: 9.sp,
                 ),
               ),
               subtitle: Text(
                 expiryDate,
-                style: const TextStyle(
+                style:TextStyle(
                   color: Colors.white,
-                  fontSize: 13,
+                  fontSize: 13.sp,
                 ),
               ),
               trailing: Image.asset('assets/images/$assetName'),

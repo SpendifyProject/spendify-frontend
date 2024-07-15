@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<void> showErrorDialog(BuildContext context, String text) {
   return showDialog(
@@ -8,7 +9,7 @@ Future<void> showErrorDialog(BuildContext context, String text) {
         title: const Text('An error occurred'),
         content: Text(
           text,
-          style: const TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 15.sp),
         ),
         actions: [
           TextButton(

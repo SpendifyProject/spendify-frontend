@@ -28,11 +28,11 @@ class Onboarding2 extends StatelessWidget {
               vertical: 20.h,
               horizontal: 47.w,
             ),
-            child: const Center(
+            child: Center(
               child: Text(
                 'Set Budget and Spending Goals',
                 style: TextStyle(
-                  fontSize: 26,
+                  fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -47,7 +47,7 @@ class Onboarding2 extends StatelessWidget {
               child: Text(
                 'Spendify helps you take control of your finances by setting realistic spending goals',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: color.onPrimary,
                 ),
                 textAlign: TextAlign.center,
@@ -72,11 +72,11 @@ class Onboarding2 extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 'Next',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
             ),

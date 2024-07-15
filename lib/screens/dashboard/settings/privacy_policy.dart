@@ -14,7 +14,7 @@ class PrivacyPolicy extends StatelessWidget {
           'Privacy Policy',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         leading: IconButton(
@@ -24,7 +24,7 @@ class PrivacyPolicy extends StatelessWidget {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
       ),
@@ -40,7 +40,7 @@ class PrivacyPolicy extends StatelessWidget {
                 text: privacyPolicy,
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
               softWrap: true,

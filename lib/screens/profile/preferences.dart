@@ -5,7 +5,6 @@ class PaymentPreferences extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme;
     return const Placeholder();
   }
 }

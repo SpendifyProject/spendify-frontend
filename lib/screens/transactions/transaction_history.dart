@@ -37,7 +37,7 @@ class _TransactionsState extends State<Transactions> {
           'Transaction History',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         leading: IconButton(
@@ -47,7 +47,7 @@ class _TransactionsState extends State<Transactions> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
         actions: [
@@ -56,7 +56,7 @@ class _TransactionsState extends State<Transactions> {
             icon: Icon(
               CupertinoIcons.search,
               color: color.onPrimary,
-              size: 20,
+              size: 20.sp,
             ),
           ),
         ],

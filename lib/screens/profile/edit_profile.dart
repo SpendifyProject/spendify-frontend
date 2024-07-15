@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:spendify/widgets/error_dialog.dart';
@@ -53,7 +54,7 @@ class _EditProfileState extends State<EditProfile> {
           'Edit Profile',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         leading: IconButton(
@@ -63,7 +64,7 @@ class _EditProfileState extends State<EditProfile> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
       ),
@@ -111,7 +112,7 @@ class _EditProfileState extends State<EditProfile> {
                       icon: Icon(
                         Icons.person_outline,
                         color: color.secondary,
-                        size: 30,
+                        size: 30.sp,
                       ),
                       keyboardType: TextInputType.text,
                       labelText: 'Full Name',
@@ -126,7 +127,7 @@ class _EditProfileState extends State<EditProfile> {
                     icon: Icon(
                       Icons.phone_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.number,
                     labelText: 'Number',
@@ -140,7 +141,7 @@ class _EditProfileState extends State<EditProfile> {
                     icon: Icon(
                       Icons.email_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.emailAddress,
                     labelText: 'Email Address',
@@ -154,7 +155,7 @@ class _EditProfileState extends State<EditProfile> {
                     icon: Icon(
                       Icons.monetization_on_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.number,
                     labelText: 'Monthly Income',
@@ -168,7 +169,7 @@ class _EditProfileState extends State<EditProfile> {
                     icon: Icon(
                       Icons.date_range_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     suffix: GestureDetector(
                       onTap: () async {
@@ -179,12 +180,7 @@ class _EditProfileState extends State<EditProfile> {
                           initialDate: DateTime.now(),
                         ).then((pickedDate) {
                           if (pickedDate == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content:
-                                    Text('Please select your date of birth'),
-                              ),
-                            );
+                            showCustomSnackbar(context, 'Please select your date of birth',);
                             return;
                           } else {
                             setState(() {
@@ -198,7 +194,7 @@ class _EditProfileState extends State<EditProfile> {
                       child: Icon(
                         Icons.edit_outlined,
                         color: color.secondary,
-                        size: 30,
+                        size: 30.sp,
                       ),
                     ),
                     keyboardType: TextInputType.text,
@@ -214,8 +210,8 @@ class _EditProfileState extends State<EditProfile> {
                       child: Text(
                         'Save Changes',
                         style: TextStyle(
-                          color: color.background,
-                          fontSize: 16,
+                          color: color.surface,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

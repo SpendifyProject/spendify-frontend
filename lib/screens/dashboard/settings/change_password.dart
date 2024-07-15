@@ -32,7 +32,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           'Change Password',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         leading: IconButton(
@@ -42,7 +42,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
       ),
@@ -61,7 +61,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               icon: Icon(
                 Icons.lock_outline,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               suffix: GestureDetector(
                 onTap: () {
@@ -89,7 +89,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               icon: Icon(
                 Icons.lock_outline,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               suffix: GestureDetector(
                 onTap: () {
@@ -102,7 +102,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ? Icons.visibility_outlined
                       : Icons.visibility_off_outlined,
                   color: color.secondary,
-                  size: 30,
+                  size: 30.sp,
                 ),
               ),
               keyboardType: TextInputType.text,
@@ -115,7 +115,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               'Both Passwords Must Match',
               style: TextStyle(
                 color: color.secondary,
-                fontSize: 12,
+                fontSize: 12.sp,
               ),
             ),
             SizedBox(
@@ -127,8 +127,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                 child: Text(
                   'Change Password',
                   style: TextStyle(
-                    color: color.background,
-                    fontSize: 14,
+                    color: color.surface,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

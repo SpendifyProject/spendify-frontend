@@ -29,7 +29,7 @@ class AmountTextField extends StatelessWidget {
           Text(
             'Enter Your Amount',
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 11.sp,
               color: color.onSecondary,
             ),
           ),
@@ -38,10 +38,10 @@ class AmountTextField extends StatelessWidget {
           ),
           Row(
             children: [
-              const Text(
+              Text(
                 'GHc',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: Color.fromRGBO(155, 178, 212, 1),
                 ),

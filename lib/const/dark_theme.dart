@@ -30,7 +30,7 @@ ThemeData darkThemeData(BuildContext context) {
         foregroundColor: WidgetStateProperty.all(Colors.white),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
           ),
         ),
         fixedSize: WidgetStateProperty.all(

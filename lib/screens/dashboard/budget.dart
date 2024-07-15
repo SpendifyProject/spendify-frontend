@@ -34,7 +34,8 @@ class _WalletState extends State<Wallet> {
   void initState() {
     super.initState();
     walletProvider = Provider.of<WalletProvider>(context, listen: false);
-    transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
+    transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
   }
 
   @override
@@ -46,7 +47,7 @@ class _WalletState extends State<Wallet> {
           'Budget',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         actions: [
@@ -72,20 +73,29 @@ class _WalletState extends State<Wallet> {
                 );
               }
             },
+            elevation: 10.sp,
             color: color.surface,
             icon: Icon(
               Icons.monetization_on_outlined,
               color: color.onPrimary,
-              size: 30,
+              size: 30.sp,
             ),
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'card',
-                child: Text('Add new credit card'),
+                child: Text(
+                  'Add new credit card',
+                  style: TextStyle(color: color.onPrimary),
+                ),
               ),
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'momo',
-                child: Text('Add new mobile money account'),
+                child: Text(
+                  'Add new mobile money account',
+                  style: TextStyle(
+                    color: color.onPrimary,
+                  ),
+                ),
               ),
             ],
           ),
@@ -123,7 +133,7 @@ class _WalletState extends State<Wallet> {
                 Text(
                   'Monthly spending limit',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     color: color.onPrimary,
                     fontWeight: FontWeight.w800,
                   ),
@@ -142,7 +152,7 @@ class _WalletState extends State<Wallet> {
                         ),
                         decoration: BoxDecoration(
                           color: color.onSurface,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,21 +161,21 @@ class _WalletState extends State<Wallet> {
                             Text(
                               'Limit: GHc ${formatAmount(limit)}',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 color: color.onPrimary,
                               ),
                             ),
                             Text(
                               'Monthly Income: GHc ${formatAmount(wallet.monthlyIncome)}',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 color: color.onPrimary,
                               ),
                             ),
                             Text(
                               'Expenses: GHc ${formatAmount(wallet.monthlyExpenses)}',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 color: color.onPrimary,
                               ),
                             ),
@@ -188,11 +198,11 @@ class _WalletState extends State<Wallet> {
                         child: GestureDetector(
                           child: CircleAvatar(
                             backgroundColor: color.primary,
-                            radius: 20.w,
+                            radius: 20.r,
                             child: Icon(
                               Icons.edit_outlined,
                               color: color.surface,
-                              size: 30,
+                              size: 30.sp,
                             ),
                           ),
                         ),
@@ -209,7 +219,7 @@ class _WalletState extends State<Wallet> {
                     Text(
                       'General financial tip',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 15.sp,
                         color: color.onPrimary,
                         fontWeight: FontWeight.w800,
                       ),
@@ -233,16 +243,16 @@ class _WalletState extends State<Wallet> {
                       vertical: 10.h,
                     ),
                     width: double.infinity,
-                    height: 180.h,
+                    height: 220.h,
                     decoration: BoxDecoration(
                       color: color.onSurface,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Text(
                       getTip(context),
                       style: TextStyle(
                         color: color.onPrimary,
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -257,7 +267,7 @@ class _WalletState extends State<Wallet> {
                     Text(
                       'Specialised financial tip',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 15.sp,
                         color: color.onPrimary,
                         fontWeight: FontWeight.w800,
                       ),
@@ -284,7 +294,7 @@ class _WalletState extends State<Wallet> {
                         height: 180.h,
                         decoration: BoxDecoration(
                           color: color.onSurface,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: const Center(
                           child: CircularProgressIndicator(),
@@ -299,16 +309,16 @@ class _WalletState extends State<Wallet> {
                             vertical: 10.h,
                           ),
                           width: double.infinity,
-                          height: 180.h,
+                          height: 220.h,
                           decoration: BoxDecoration(
                             color: color.onSurface,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: Text(
                             text,
                             style: TextStyle(
                               color: color.onPrimary,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

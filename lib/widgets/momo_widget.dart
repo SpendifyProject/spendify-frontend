@@ -34,14 +34,14 @@ class MomoWidget extends StatelessWidget {
               phoneNumber,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 24.h,
+                fontSize: 24.sp,
               ),
             ),
             Text(
               fullName,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14.h,
+                fontSize: 14.sp,
               ),
             ),
             const Spacer(),
@@ -51,14 +51,14 @@ class MomoWidget extends StatelessWidget {
                 'Network',
                 style: TextStyle(
                   color: color.secondary,
-                  fontSize: 9.h,
+                  fontSize: 9.sp,
                 ),
               ),
               subtitle: Text(
                 network.toUpperCase(),
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 13.h,
+                  fontSize: 13.sp,
                 ),
               ),
               trailing: Image.asset(

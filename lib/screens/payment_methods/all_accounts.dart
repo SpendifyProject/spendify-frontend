@@ -43,7 +43,7 @@ class _AllCardsState extends State<AllCards> {
           'All Accounts',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         leading: IconButton(
@@ -53,7 +53,7 @@ class _AllCardsState extends State<AllCards> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
       ),
@@ -173,8 +173,8 @@ class _AllCardsState extends State<AllCards> {
                 child: Text(
                   selected == 'cards' ? 'Add Card' : 'Add Momo Account',
                   style: TextStyle(
-                    color: color.background,
-                    fontSize: 14,
+                    color: color.surface,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

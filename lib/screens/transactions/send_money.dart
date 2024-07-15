@@ -69,14 +69,14 @@ class _SendMoneyState extends State<SendMoney> {
                 icon: Icon(
                   Icons.arrow_back_ios,
                   color: color.onPrimary,
-                  size: 20,
+                  size: 20.sp,
                 ),
               ),
               title: Text(
                 'Send Money',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 18,
+                  fontSize: 18.sp,
                 ),
               ),
             ),
@@ -119,7 +119,7 @@ class _SendMoneyState extends State<SendMoney> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: color.onPrimary,
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -150,7 +150,7 @@ class _SendMoneyState extends State<SendMoney> {
                                 icon: Icon(
                                   Icons.person_outline,
                                   color: color.secondary,
-                                  size: 30,
+                                  size: 30.sp,
                                 ),
                                 keyboardType: TextInputType.text,
                                 labelText: "Recipient's Name",
@@ -164,7 +164,7 @@ class _SendMoneyState extends State<SendMoney> {
                                 icon: Icon(
                                   Icons.message_outlined,
                                   color: color.secondary,
-                                  size: 30,
+                                  size: 30.sp,
                                 ),
                                 keyboardType: TextInputType.text,
                                 labelText: 'Reference',
@@ -184,7 +184,7 @@ class _SendMoneyState extends State<SendMoney> {
                             return ChoiceChip(
                               showCheckmark: false,
                               selectedColor: color.primary,
-                              disabledColor: color.onBackground,
+                              disabledColor: color.onSurface,
                               label: Text(categories[index]),
                               selected: selectedCategory == categories[index],
                               onSelected: (bool selected) {
@@ -216,7 +216,7 @@ class _SendMoneyState extends State<SendMoney> {
                             'Mobile Money',
                             style: TextStyle(
                               color: color.onPrimary,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -236,7 +236,7 @@ class _SendMoneyState extends State<SendMoney> {
                             'Credit Card',
                             style: TextStyle(
                               color: color.onPrimary,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -333,8 +333,8 @@ class _SendMoneyState extends State<SendMoney> {
                         child: Text(
                           'Send Money',
                           style: TextStyle(
-                            color: color.background,
-                            fontSize: 16,
+                            color: color.surface,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

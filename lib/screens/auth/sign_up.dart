@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/auth.dart';
+import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
@@ -61,7 +62,7 @@ class _SignUpState extends State<SignUp> {
             Text(
               'Sign Up',
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 32.sp,
                 color: color.onPrimary,
               ),
             ),
@@ -76,7 +77,7 @@ class _SignUpState extends State<SignUp> {
                 icon: Icon(
                   Icons.person_outline,
                   color: color.secondary,
-                  size: 30,
+                  size: 30.sp,
                 ),
                 keyboardType: TextInputType.text,
                 labelText: 'Full Name',
@@ -91,7 +92,7 @@ class _SignUpState extends State<SignUp> {
               icon: Icon(
                 Icons.phone_outlined,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               keyboardType: TextInputType.number,
               labelText: 'Number',
@@ -105,7 +106,7 @@ class _SignUpState extends State<SignUp> {
               icon: Icon(
                 Icons.email_outlined,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               keyboardType: TextInputType.emailAddress,
               labelText: 'Email Address',
@@ -119,7 +120,7 @@ class _SignUpState extends State<SignUp> {
               icon: Icon(
                 Icons.lock_outline,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               suffix: GestureDetector(
                 onTap: () {
@@ -132,7 +133,7 @@ class _SignUpState extends State<SignUp> {
                       ? Icons.visibility_outlined
                       : Icons.visibility_off_outlined,
                   color: color.secondary,
-                  size: 30,
+                  size: 30.sp,
                 ),
               ),
               keyboardType: TextInputType.text,
@@ -147,7 +148,7 @@ class _SignUpState extends State<SignUp> {
               icon: Icon(
                 Icons.monetization_on_outlined,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               keyboardType: TextInputType.number,
               labelText: 'Monthly Income',
@@ -161,7 +162,7 @@ class _SignUpState extends State<SignUp> {
               icon: Icon(
                 Icons.date_range_outlined,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               suffix: GestureDetector(
                 onTap: () async {
@@ -172,11 +173,7 @@ class _SignUpState extends State<SignUp> {
                     initialDate: DateTime.now(),
                   ).then((pickedDate) {
                     if (pickedDate == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please select your date of birth'),
-                        ),
-                      );
+                      showCustomSnackbar(context, 'Please select your date of birth');
                       return;
                     } else {
                       setState(() {
@@ -190,7 +187,7 @@ class _SignUpState extends State<SignUp> {
                 child: Icon(
                   Icons.edit_outlined,
                   color: color.secondary,
-                  size: 30,
+                  size: 30.sp,
                 ),
               ),
               keyboardType: TextInputType.text,
@@ -246,8 +243,8 @@ class _SignUpState extends State<SignUp> {
                 child: Text(
                   'Sign Up',
                   style: TextStyle(
-                    color: color.background,
-                    fontSize: 16,
+                    color: color.surface,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -263,7 +260,7 @@ class _SignUpState extends State<SignUp> {
                   "Already have an account?",
                   style: TextStyle(
                     color: color.secondary,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                   ),
                 ),
                 TextButton(
@@ -281,7 +278,7 @@ class _SignUpState extends State<SignUp> {
                     'Sign In',
                     style: TextStyle(
                       color: color.primary,
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

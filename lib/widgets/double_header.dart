@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoubleHeader extends StatelessWidget {
   const DoubleHeader(
@@ -21,7 +22,7 @@ class DoubleHeader extends StatelessWidget {
         Text(
           leading,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 18.sp,
             color: color.onPrimary,
           ),
         ),
@@ -30,7 +31,7 @@ class DoubleHeader extends StatelessWidget {
           child: Text(
             trailing,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: color.primary,
             ),
           ),

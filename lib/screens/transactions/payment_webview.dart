@@ -1,14 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/constants.dart';
 import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/screens/animations/done.dart';
 import 'package:spendify/screens/dashboard/dashboard.dart';
+import 'package:spendify/services/notification_service.dart';
 import 'package:spendify/services/paystack_service.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:spendify/models/notification.dart' as n;
 
 import '../../models/transaction.dart';
 
@@ -49,6 +53,13 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         await PaystackService().verifyTransaction(widget.transaction, context);
     if (success) {
       transactionProvider.saveTransaction(widget.transaction);
+      n.Notification notification = n.Notification(
+        title: 'Transaction completed',
+        body: 'Your payment of GHc ${formatAmount(widget.transaction.amount)} to ${widget.transaction.recipient} has been competed.',
+        date: widget.transaction.date,
+      );
+      await NotificationService.showInstantNotification(notification);
+      showCustomSnackbar(context, 'Transaction completed successfully',);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -94,14 +105,14 @@ class _PaymentWebViewState extends State<PaymentWebView> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
         title: Text(
           'Complete Payment',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
       ),
@@ -114,7 +125,6 @@ class _PaymentWebViewState extends State<PaymentWebView> {
               print(url);
               _launchURL(url);
               verifyTransactionAfterCompletion();
-              showCustomSnackbar(context, 'Transaction completed successfully',);
               // return WebViewWidget(
               //   controller: WebViewController.fromPlatformCreationParams(params)
               //     ..setJavaScriptMode(JavaScriptMode.unrestricted)
