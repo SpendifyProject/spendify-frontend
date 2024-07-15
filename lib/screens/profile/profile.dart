@@ -36,7 +36,7 @@ class _ProfileState extends State<Profile> {
             'Profile',
             style: TextStyle(
               color: color.onPrimary,
-              fontSize: 18,
+              fontSize: 18.sp,
             ),
           ),
           leading: IconButton(
@@ -46,7 +46,7 @@ class _ProfileState extends State<Profile> {
             icon: Icon(
               Icons.arrow_back_ios,
               color: color.onPrimary,
-              size: 20,
+              size: 20.sp,
             ),
           ),
           actions: [
@@ -57,7 +57,7 @@ class _ProfileState extends State<Profile> {
               icon: Icon(
                 Icons.edit_outlined,
                 color: color.onPrimary,
-                size: 20,
+                size: 20.sp,
               ),
             ),
           ],
@@ -93,7 +93,7 @@ class _ProfileState extends State<Profile> {
                         user.fullName,
                         style: TextStyle(
                           color: color.onPrimary,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                         ),
                       ),
                     ),
@@ -105,19 +105,19 @@ class _ProfileState extends State<Profile> {
                       leading: Icon(
                         Icons.person_outline,
                         color: color.secondary,
-                        size: 20,
+                        size: 20.sp,
                       ),
                       title: Text(
                         'Personal Information',
                         style: TextStyle(
                           color: color.onPrimary,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                         ),
                       ),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
                         color: color.secondary,
-                        size: 20,
+                        size: 20.sp,
                       ),
                     ),
                     SizedBox(
@@ -128,19 +128,19 @@ class _ProfileState extends State<Profile> {
                       leading: Icon(
                         CupertinoIcons.money_dollar_circle,
                         color: color.secondary,
-                        size: 20,
+                        size: 20.sp,
                       ),
                       title: Text(
                         'Payment Preferences',
                         style: TextStyle(
                           color: color.onPrimary,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                         ),
                       ),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
                         color: color.secondary,
-                        size: 20,
+                        size: 20.sp,
                       ),
                     ),
                     SizedBox(
@@ -163,19 +163,19 @@ class _ProfileState extends State<Profile> {
                       leading: Icon(
                         Icons.wallet_outlined,
                         color: color.secondary,
-                        size: 20,
+                        size: 20.sp,
                       ),
                       title: Text(
                         'Cards and Mobile Money',
                         style: TextStyle(
                           color: color.onPrimary,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                         ),
                       ),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
                         color: color.secondary,
-                        size: 20,
+                        size: 20.sp,
                       ),
                     ),
                     SizedBox(
@@ -186,13 +186,13 @@ class _ProfileState extends State<Profile> {
                       leading: Icon(
                         Icons.notifications_none,
                         color: color.secondary,
-                        size: 20,
+                        size: 20.sp,
                       ),
                       title: Text(
                         'Notifications',
                         style: TextStyle(
                           color: color.onPrimary,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                         ),
                       ),
                       trailing: Badge(

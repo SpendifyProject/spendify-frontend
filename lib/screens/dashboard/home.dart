@@ -7,7 +7,6 @@ import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/profile/preferences.dart';
-import 'package:spendify/screens/transactions/budget.dart';
 import 'package:spendify/screens/transactions/record.dart';
 import 'package:spendify/screens/transactions/schedule.dart';
 import 'package:spendify/screens/transactions/send_money.dart';
@@ -86,13 +85,13 @@ class _HomeState extends State<Home> {
               width: double.infinity,
               height: 300.h,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   color: color.onSurface,
-                  border: Border.all(color: color.onPrimary)),
+                  border: Border.all(color: color.onPrimary),),
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                     child: Image.asset(
                       info[index]['asset'],
                       fit: BoxFit.fill,
@@ -108,12 +107,12 @@ class _HomeState extends State<Home> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: color.onPrimary,
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
-              )),
+              ),),
         ),
       ),
     );
@@ -146,14 +145,14 @@ class _HomeState extends State<Home> {
                   'Welcome,',
                   style: TextStyle(
                     color: color.secondary,
-                    fontSize: 12,
+                    fontSize: 12.sp,
                   ),
                 ),
                 subtitle: Text(
                   widget.user.fullName,
                   style: TextStyle(
                     color: color.onPrimary,
-                    fontSize: 18,
+                    fontSize: 18.sp,
                   ),
                 ),
               ),
@@ -162,7 +161,7 @@ class _HomeState extends State<Home> {
               height: 10.h,
             ),
             SizedBox(
-              height: 300,
+              height: 300.h,
               child: PageView.builder(
                 padEnds: false,
                 controller: controller,
@@ -194,7 +193,7 @@ class _HomeState extends State<Home> {
             Text(
               'Quick Actions',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 18.sp,
                  fontWeight: FontWeight.w500,
                 color: color.onPrimary,
               ),
@@ -345,11 +344,11 @@ class TransactionButton extends StatelessWidget {
           onTap: onTap,
           child: CircleAvatar(
             backgroundColor: color.onSurface,
-            radius: 27.w,
+            radius: 27.r,
             child: Icon(
               iconData,
               color: color.onPrimary,
-              size: 30,
+              size: 30.sp,
             ),
           ),
         ),
@@ -357,7 +356,7 @@ class TransactionButton extends StatelessWidget {
           label,
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 13,
+            fontSize: 13.sp,
           ),
           softWrap: true,
           textAlign: TextAlign.center,

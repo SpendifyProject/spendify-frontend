@@ -5,9 +5,11 @@ import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/transaction_provider.dart';
+import 'package:spendify/services/notification_service.dart';
 import 'package:spendify/widgets/amount_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
+import 'package:spendify/models/notification.dart' as n;
 
 import '../../const/constants.dart';
 import '../../widgets/custom_auth_text_field.dart';
@@ -55,14 +57,14 @@ class _RecordTransactionState extends State<RecordTransaction> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
         title: Text(
           'Record Transaction',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
       ),
@@ -89,7 +91,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     'Did you send or receive the money?',
                     style: TextStyle(
                       color: color.secondary,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                     ),
                   ),
                   Row(
@@ -110,7 +112,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                         'Sent',
                         style: TextStyle(
                           color: color.onPrimary,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -132,7 +134,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                         'Received',
                         style: TextStyle(
                           color: color.onPrimary,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -147,7 +149,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     icon: Icon(
                       Icons.person_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
                     labelText: "Sender's Full Name",
@@ -161,7 +163,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     icon: Icon(
                       Icons.person_pin_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
                     labelText: "Recipient's Full Name",
@@ -175,7 +177,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     icon: Icon(
                       Icons.message_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
                     labelText: 'Reference',
@@ -192,7 +194,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                 return ChoiceChip(
                   showCheckmark: false,
                   selectedColor: color.primary,
-                  disabledColor: color.onBackground,
+                  disabledColor: color.onSurface,
                   label: Text(categories[index]),
                   selected: selectedCategory == categories[index],
                   onSelected: (bool selected) {
@@ -208,7 +210,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
             height: 40.h,
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async{
               try {
                 if (formKey.currentState!.validate()) {}
                 RecordedTransaction transaction = RecordedTransaction(
@@ -226,8 +228,15 @@ class _RecordTransactionState extends State<RecordTransaction> {
                   currency: 'GHS',
                 );
                 transactionProvider.recordExternalTransaction(transaction);
+                n.Notification notification = n.Notification(
+                  title: 'Recorded Transaction',
+                  body: 'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} ${senderController.text == widget.user.fullName ? 'to ${recipientController.text}' : 'from ${senderController.text}'} has been recorded.',
+                  date: DateTime.now(),
+                );
+                await NotificationService.showInstantNotification(notification);
                 showCustomSnackbar(
-                    context, 'Transaction recorded successfully');
+                    context, 'Transaction recorded successfully',
+                );
               } catch (error) {
                 showErrorDialog(context, '$error');
               }
@@ -235,8 +244,8 @@ class _RecordTransactionState extends State<RecordTransaction> {
             child: Text(
               'Record',
               style: TextStyle(
-                color: color.background,
-                fontSize: 16,
+                color: Colors.white,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),

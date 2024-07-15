@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spendify/const/constants.dart';
 
 class TransactionWidget extends StatelessWidget {
@@ -26,28 +27,28 @@ class TransactionWidget extends StatelessWidget {
         radius: 45,
         child: Icon(
           pickCategoryIcon(category),
-          size: 30,
+          size: 30.sp,
           color: color.onPrimary,
         )
       ),
       title: Text(
         name,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 16.sp,
           color: color.onPrimary,
         ),
       ),
       subtitle: Text(
         category,
         style: TextStyle(
-          fontSize: 12,
+          fontSize: 12.sp,
           color: color.secondary,
         ),
       ),
       trailing: Text(
         'GHc ${formatAmount(amount)}',
         style: TextStyle(
-          fontSize: 12,
+          fontSize: 12.sp,
           color: isDebit ? color.tertiary : color.onTertiary,
         ),
       ),

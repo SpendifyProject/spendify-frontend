@@ -29,7 +29,7 @@ class _ContactState extends State<Contact> {
           'Contact',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         leading: IconButton(
@@ -39,7 +39,7 @@ class _ContactState extends State<Contact> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
       ),
@@ -58,7 +58,7 @@ class _ContactState extends State<Contact> {
               icon: Icon(
                 Icons.topic_outlined,
                 color: color.secondary,
-                size: 30,
+                size: 30.sp,
               ),
               keyboardType: TextInputType.text,
               labelText: 'Title',
@@ -69,7 +69,7 @@ class _ContactState extends State<Contact> {
             Text(
               'Content',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 color: color.secondary,
               ),
             ),
@@ -88,8 +88,8 @@ class _ContactState extends State<Contact> {
                 child: Text(
                   'Send Message',
                   style: TextStyle(
-                    color: color.background,
-                    fontSize: 14,
+                    color: color.surface,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

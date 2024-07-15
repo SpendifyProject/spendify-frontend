@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomAuthTextField extends StatelessWidget {
   const CustomAuthTextField(
@@ -29,7 +30,7 @@ class CustomAuthTextField extends StatelessWidget {
         Text(
           labelText,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             color: color.secondary,
           ),
         ),

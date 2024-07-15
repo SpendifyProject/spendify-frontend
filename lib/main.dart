@@ -24,29 +24,37 @@ import 'package:spendify/screens/onboarding/onboarding_1.dart';
 import 'package:spendify/screens/profile/edit_profile.dart';
 import 'package:spendify/screens/profile/profile.dart';
 import 'package:spendify/screens/transactions/search.dart';
-import 'package:spendify/screens/transactions/transaction_history.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:spendify/services/notification_service.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'firebase_options.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
 Future<void> main() async {
+  //Initialize dot env
   await dotenv.load(fileName: ".env");
+
+  //Initialize flutter native splash screen
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  //Initialize local notifications
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
+  await NotificationService.init();
+
+  //Initialize firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ScreenUtilInit(
-    designSize: const Size(375, 812),
-    builder: (_, child) => DevicePreview(
-      enabled: true,
-      builder: (context) => const MyApp(),
+  runApp(
+    ScreenUtilInit(
+      designSize: const Size(375, 812),
+      builder: (_, child) => DevicePreview(
+        enabled: true,
+        builder: (context) => const MyApp(),
+      ),
     ),
-  ));
+  );
   FlutterNativeSplash.remove();
 }
 

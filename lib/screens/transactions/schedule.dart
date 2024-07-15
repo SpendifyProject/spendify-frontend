@@ -10,6 +10,8 @@ import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../const/constants.dart';
+import '../../models/notification.dart' as n;
+import '../../services/notification_service.dart';
 import '../../widgets/custom_auth_text_field.dart';
 
 class ScheduleTransaction extends StatefulWidget {
@@ -64,14 +66,14 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
           icon: Icon(
             Icons.arrow_back_ios,
             color: color.onPrimary,
-            size: 20,
+            size: 20.sp,
           ),
         ),
         title: Text(
           'Schedule Payments',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
       ),
@@ -99,7 +101,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                     icon: Icon(
                       Icons.person_pin_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
                     labelText: "Recipient",
@@ -113,7 +115,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                     icon: Icon(
                       Icons.message_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
                     labelText: 'Reference',
@@ -127,7 +129,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                     icon: Icon(
                       Icons.date_range_outlined,
                       color: color.secondary,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     suffix: GestureDetector(
                       onTap: () async {
@@ -138,13 +140,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                           initialDate: DateTime.now(),
                         ).then((pickedDate) {
                           if (pickedDate == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Please select your next payment date',
-                                ),
-                              ),
-                            );
+                            showCustomSnackbar(context, 'Please select your next payment date',);
                             return;
                           } else {
                             setState(() {
@@ -158,7 +154,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                       child: Icon(
                         Icons.edit_outlined,
                         color: color.secondary,
-                        size: 30,
+                        size: 30.sp,
                       ),
                     ),
                     keyboardType: TextInputType.text,
@@ -177,7 +173,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                 return ChoiceChip(
                   showCheckmark: false,
                   selectedColor: color.primary,
-                  disabledColor: color.onBackground,
+                  disabledColor: color.onSurface,
                   label: Text(categories[index]),
                   selected: selectedCategory == categories[index],
                   onSelected: (bool selected) {
@@ -193,7 +189,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
             height: 30.h,
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async{
               try {
                 if (formKey.currentState!.validate()) {}
                 ScheduledTransaction transaction = ScheduledTransaction(
@@ -212,6 +208,12 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                   context,
                   'Transaction scheduled for ${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year} successfully',
                 );
+                n.Notification notification = n.Notification(
+                  title: 'Transaction Completed',
+                  body: 'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
+                  date: _selectedDate!,
+                );
+                await NotificationService.scheduleNotification(notification);
                 Navigator.pop(context);
               } catch (error) {
                 showErrorDialog(context, '$error');
@@ -220,8 +222,8 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
             child: Text(
               'Save',
               style: TextStyle(
-                color: color.background,
-                fontSize: 16,
+                color: Colors.white,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -45,7 +45,7 @@ class _StatisticsState extends State<Statistics> {
           'Statistics',
           style: TextStyle(
             color: color.onPrimary,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         actions: [
@@ -92,7 +92,7 @@ class _StatisticsState extends State<Statistics> {
                   'Monthly Expenses',
                   style: TextStyle(
                     color: color.secondary,
-                    fontSize: 18,
+                    fontSize: 18.sp,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -100,7 +100,7 @@ class _StatisticsState extends State<Statistics> {
                   'GHc ${formatAmount(wallet.monthlyExpenses)}',
                   style: TextStyle(
                     color: color.onPrimary,
-                    fontSize: 26,
+                    fontSize: 26.sp,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -118,7 +118,7 @@ class _StatisticsState extends State<Statistics> {
                   'Category Chart',
                   style: TextStyle(
                     color: color.secondary,
-                    fontSize: 18,
+                    fontSize: 18.sp,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -263,7 +263,7 @@ class CategoryLineChart extends StatelessWidget {
                 'Key',
                 style: TextStyle(
                   color: color.onPrimary,
-                  fontSize: 15,
+                  fontSize: 15.sp,
                 ),
               ),
               buildLegend(context),

@@ -28,11 +28,11 @@ class Onboarding3 extends StatelessWidget {
               vertical: 20.h,
               horizontal: 20.w,
             ),
-            child: const Center(
+            child: Center(
               child: Text(
                 'Personalized Financial Advice and Account Health Tracking',
                 style: TextStyle(
-                  fontSize: 26,
+                  fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -47,7 +47,7 @@ class Onboarding3 extends StatelessWidget {
               child: Text(
                 'Spendify offers users personalized financial and savings advice based on their income and expenses',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: color.onPrimary,
                 ),
                 textAlign: TextAlign.center,
@@ -73,11 +73,11 @@ class Onboarding3 extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 'Next',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
             ),
