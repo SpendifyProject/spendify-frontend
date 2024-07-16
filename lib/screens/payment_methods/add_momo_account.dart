@@ -41,7 +41,7 @@ class _AddMomoState extends State<AddMomo> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add New Mobile Money Account',
+          'Add Mobile Money Account',
           style: TextStyle(
             color: color.onPrimary,
             fontSize: 18.sp,

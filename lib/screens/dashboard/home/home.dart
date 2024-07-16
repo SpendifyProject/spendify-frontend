@@ -2,23 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
-import 'package:spendify/screens/profile/preferences.dart';
+import 'package:spendify/screens/dashboard/home/all_savings_goals.dart';
 import 'package:spendify/screens/transactions/record.dart';
 import 'package:spendify/screens/transactions/schedule.dart';
 import 'package:spendify/screens/transactions/send_money.dart';
 import 'package:spendify/screens/transactions/transaction_history.dart';
 import 'package:spendify/widgets/double_header.dart';
 
-import '../../const/routes.dart';
-import '../../provider/transaction_provider.dart';
-import '../../widgets/error_dialog.dart';
-import '../../widgets/transaction_widget.dart';
-import '../payment_methods/add_credit_card.dart';
-import '../payment_methods/add_momo_account.dart';
+import 'package:spendify/const/routes.dart';
+import '../../../provider/transaction_provider.dart';
+import '../../../widgets/error_dialog.dart';
+import '../../../widgets/transaction_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key, required this.user});
@@ -47,75 +44,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     isLoading = false;
-    List info = [
-      {
-        'title': 'Add your credit card to ensure a seamless payment experience',
-        'route': AddCard(uid: widget.user.uid),
-        'asset': 'assets/images/cards.jpeg',
-      },
-      {
-        'title':
-            'Add your mobile money account to ensure a seamless payment experience',
-        'route': AddMomo(uid: widget.user.uid),
-        'asset': 'assets/images/momo.jpeg',
-      },
-      {
-        'title': 'Edit your payment preferences',
-        'route': const PaymentPreferences(),
-        'asset': 'assets/images/prefs.jpeg',
-      },
-    ];
-
-    final pages = List.generate(
-      3,
-      (index) => Padding(
-        padding: const EdgeInsets.only(right: 20),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return info[index]['route'];
-                },
-              ),
-            );
-          },
-          child: Container(
-              width: double.infinity,
-              height: 300.h,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  color: color.onSurface,
-                  border: Border.all(color: color.onPrimary),),
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.r),
-                    child: Image.asset(
-                      info[index]['asset'],
-                      fit: BoxFit.fill,
-                      width: double.infinity,
-                      height: 200.h,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Text(
-                    info[index]['title'],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: color.onPrimary,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),),
-        ),
-      ),
-    );
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -160,41 +88,11 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 10.h,
             ),
-            SizedBox(
-              height: 300.h,
-              child: PageView.builder(
-                padEnds: false,
-                controller: controller,
-                itemCount: pages.length,
-                itemBuilder: (_, index) {
-                  return pages[index % pages.length];
-                },
-              ),
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Center(
-              child: SmoothPageIndicator(
-                controller: controller,
-                count: 3,
-                effect: WormEffect(
-                  dotColor: color.onSurface,
-                  activeDotColor: color.primary,
-                  dotHeight: 10,
-                  dotWidth: 10,
-                  spacing: 15,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
             Text(
               'Quick Actions',
               style: TextStyle(
                 fontSize: 18.sp,
-                 fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w500,
                 color: color.onPrimary,
               ),
             ),
@@ -262,8 +160,83 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
+            DoubleHeader(
+              leading: 'Savings',
+              trailing: 'See All',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AllSavingsGoals(
+                        user: widget.user,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
             SizedBox(
-              height: 20.h,
+              height: 10.h,
+            ),
+            SizedBox(
+              height: 240.h,
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 4,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10.h,
+                  crossAxisSpacing: 10.w,
+                  mainAxisExtent: 110.h,
+                ),
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: 156.w,
+                    height: 90.h,
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.h,
+                      horizontal: 12.w,
+                    ),
+                    decoration: BoxDecoration(
+                      color: color.onSurface,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Play Station 5',
+                          style: TextStyle(
+                            color: color.onSecondary,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Text(
+                          'GHc 8,000.00',
+                          style: TextStyle(
+                            color: color.onPrimary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                        const Spacer(),
+                        LinearProgressIndicator(
+                          backgroundColor: color.surface,
+                          color: color.primary,
+                          value: 0.6,
+                          borderRadius: BorderRadius.circular(7.r),
+                          minHeight: 7.h,
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
             FutureBuilder(
               future: transactionProvider.fetchTransactions(widget.user),
