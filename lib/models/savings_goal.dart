@@ -13,7 +13,7 @@ class SavingsGoal with ChangeNotifier {
     required this.uid,
     required this.goal,
     required this.targetAmount,
-    this.currentAmount = 0.0,
+    required this.currentAmount,
     required this.deadline,
   });
 }

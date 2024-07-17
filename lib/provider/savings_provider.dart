@@ -7,17 +7,7 @@ import 'package:spendify/models/savings_goal.dart';
 import '../models/user.dart';
 
 class SavingsProvider with ChangeNotifier {
-  final SavingsGoal _goal = SavingsGoal(
-    id: "id",
-    uid: "uid",
-    goal: "goal",
-    targetAmount: 0.0,
-    deadline: DateTime.now(),
-  );
-
   final List<SavingsGoal> _goals = [];
-
-  SavingsGoal get savingsGoal => _goal;
 
   List<SavingsGoal> get savingsGoals => _goals;
 
@@ -55,6 +45,7 @@ class SavingsProvider with ChangeNotifier {
           goal: doc['goal'] as String,
           targetAmount: doc['targetAmount'] as double,
           deadline: (doc['deadline'] as Timestamp).toDate(),
+          currentAmount: doc['currentAmount'] as double,
         );
         if (_goals.contains(goal)) {
           continue;
@@ -63,6 +54,21 @@ class SavingsProvider with ChangeNotifier {
         }
         notifyListeners();
       }
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
+    }
+  }
+
+  Future<void> updateCurrentAmount(String id, double currentAmount, double newAmount) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('savings_goals')
+          .doc(id)
+          .update({
+        'currentAmount': newAmount + currentAmount,
+      });
+      notifyListeners();
     } catch (error) {
       log('Error: $error');
       rethrow;

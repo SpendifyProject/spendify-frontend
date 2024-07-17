@@ -97,7 +97,7 @@ class _WalletState extends State<Wallet> {
                   )
                 else ...[
                   SizedBox(
-                    height: 160,
+                    height: 180,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +155,9 @@ class _WalletState extends State<Wallet> {
                                     height: 10.h,
                                   ),
                                   LinearProgressIndicator(
-                                    value: wallet!.monthlyExpenses / limit,
+                                    value: limit > 0
+                                        ? wallet!.monthlyExpenses / limit
+                                        : 0.01,
                                     color: color.primary,
                                     backgroundColor: color.surface,
                                   ),
@@ -172,6 +174,8 @@ class _WalletState extends State<Wallet> {
                                       context: context,
                                       builder: (context) {
                                         return Dialog(
+                                          backgroundColor: color.surface,
+                                          elevation: 10,
                                           child: SizedBox(
                                             height: 200.h,
                                             width: 200.w,
@@ -185,7 +189,9 @@ class _WalletState extends State<Wallet> {
                                                   Text(
                                                     'New Spending Limit',
                                                     style: TextStyle(
-                                                        fontSize: 15.sp),
+                                                      fontSize: 15.sp,
+                                                      color: color.secondary,
+                                                    ),
                                                   ),
                                                   CustomAuthTextField(
                                                     controller: limitController,

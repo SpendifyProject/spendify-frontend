@@ -9,6 +9,10 @@ import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../const/constants.dart';
+import '../../animations/done.dart';
+import '../dashboard.dart';
+
 class NewSavingsGoal extends StatefulWidget {
   const NewSavingsGoal({super.key, required this.uid});
 
@@ -167,7 +171,7 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      try{
+                      try {
                         final form = formKey.currentState!;
                         if (form.validate()) {}
 
@@ -177,12 +181,24 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
                           goal: goalController.text,
                           targetAmount: double.parse(targetController.text),
                           deadline: _selectedDate!,
+                          currentAmount: 0,
                         );
 
                         savingsProvider.createGoal(goal);
                         showCustomSnackbar(context, 'New savings goal created');
-                      }
-                      catch(error){
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return DoneScreen(
+                                nextPage: Dashboard(
+                                  email: firebaseEmail,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      } catch (error) {
                         showErrorDialog(context, 'Error: $error');
                       }
                     },

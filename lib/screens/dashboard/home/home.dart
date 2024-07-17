@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:spendify/const/constants.dart';
+import 'package:spendify/models/savings_goal.dart';
 import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
+import 'package:spendify/provider/savings_provider.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/dashboard/home/all_savings_goals.dart';
 import 'package:spendify/screens/transactions/record.dart';
@@ -28,6 +31,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late UserProvider userProvider;
   late TransactionProvider transactionProvider;
+  late SavingsProvider savingsProvider;
   bool isLoading = true;
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
   int pageIndex = 0;
@@ -38,6 +42,7 @@ class _HomeState extends State<Home> {
     userProvider = Provider.of<UserProvider>(context, listen: false);
     transactionProvider =
         Provider.of<TransactionProvider>(context, listen: false);
+    savingsProvider = Provider.of<SavingsProvider>(context, listen: false);
   }
 
   @override
@@ -160,83 +165,8 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            DoubleHeader(
-              leading: 'Savings',
-              trailing: 'See All',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AllSavingsGoals(
-                        user: widget.user,
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
             SizedBox(
-              height: 10.h,
-            ),
-            SizedBox(
-              height: 240.h,
-              child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 4,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10.h,
-                  crossAxisSpacing: 10.w,
-                  mainAxisExtent: 110.h,
-                ),
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 156.w,
-                    height: 90.h,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.h,
-                      horizontal: 12.w,
-                    ),
-                    decoration: BoxDecoration(
-                      color: color.onSurface,
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Play Station 5',
-                          style: TextStyle(
-                            color: color.onSecondary,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text(
-                          'GHc 8,000.00',
-                          style: TextStyle(
-                            color: color.onPrimary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        const Spacer(),
-                        LinearProgressIndicator(
-                          backgroundColor: color.surface,
-                          color: color.primary,
-                          value: 0.6,
-                          borderRadius: BorderRadius.circular(7.r),
-                          minHeight: 7.h,
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
+              height: 20.h,
             ),
             FutureBuilder(
               future: transactionProvider.fetchTransactions(widget.user),
@@ -268,7 +198,7 @@ class _HomeState extends State<Home> {
                         },
                       ),
                       SizedBox(
-                        height: 400.h,
+                        height: 320.h,
                         child: ListView.builder(
                           itemCount: transactions.length <= 5
                               ? transactions.length
@@ -290,6 +220,71 @@ class _HomeState extends State<Home> {
                 } else {
                   return const SizedBox();
                 }
+              },
+            ),
+            FutureBuilder(
+              future: savingsProvider.fetchGoals(widget.user),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  showErrorDialog(context, 'Error: ${snapshot.error}');
+                } else {
+                  List<SavingsGoal> goals = savingsProvider.savingsGoals;
+                  return goals.isEmpty
+                      ? const SizedBox()
+                      : SizedBox(
+                          height: goals.length <= 2 ? 180.h :280.h,
+                          child: Column(
+                            children: [
+                              DoubleHeader(
+                                leading: 'Savings',
+                                trailing: 'See All',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return AllSavingsGoals(
+                                          user: widget.user,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Expanded(
+                                child: GridView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                      goals.length <= 4 ? goals.length : 4,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 10.h,
+                                    crossAxisSpacing: 10.w,
+                                    mainAxisExtent: 110.h,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    SavingsGoal goal = goals[index];
+                                    return HomeSavingsGoalWidget(
+                                      goal: goal.goal,
+                                      targetAmount: goal.targetAmount,
+                                      currentAmount: goal.currentAmount,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                }
+                return const SizedBox();
               },
             ),
           ],
@@ -335,6 +330,67 @@ class TransactionButton extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ],
+    );
+  }
+}
+
+class HomeSavingsGoalWidget extends StatelessWidget {
+  const HomeSavingsGoalWidget(
+      {super.key,
+      required this.goal,
+      required this.targetAmount,
+      required this.currentAmount});
+
+  final String goal;
+  final double targetAmount;
+  final double currentAmount;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+    return Container(
+      width: 156.w,
+      height: 90.h,
+      padding: EdgeInsets.symmetric(
+        vertical: 8.h,
+        horizontal: 12.w,
+      ),
+      decoration: BoxDecoration(
+        color: color.onSurface,
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            goal,
+            style: TextStyle(
+              color: color.onSecondary,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Text(
+            'GHc ${formatAmount(targetAmount)}',
+            style: TextStyle(
+              color: color.onPrimary,
+              fontWeight: FontWeight.w600,
+              fontSize: 16.sp,
+            ),
+          ),
+          const Spacer(),
+          LinearProgressIndicator(
+            backgroundColor: color.surface,
+            color: color.primary,
+            value: currentAmount > 0 ? currentAmount / targetAmount : 0.01,
+            borderRadius: BorderRadius.circular(7.r),
+            minHeight: 7.h,
+          ),
+          SizedBox(
+            height: 15.h,
+          )
+        ],
+      ),
     );
   }
 }

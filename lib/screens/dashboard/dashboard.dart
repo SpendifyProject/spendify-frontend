@@ -11,9 +11,14 @@ import 'package:spendify/widgets/error_dialog.dart';
 import '../../models/user.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key, required this.email});
+  const Dashboard({
+    super.key,
+    required this.email,
+    this.index,
+  });
 
   final String email;
+  final int? index;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -46,7 +51,7 @@ class _DashboardState extends State<Dashboard> {
           User user = userProvider.user;
           final List<Widget> screens = [
             Home(
-            user: user,
+              user: user,
             ),
             Wallet(
               user: user,
