@@ -2,18 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/provider/user_provider.dart';
-import 'package:spendify/screens/dashboard/home.dart';
+import 'package:spendify/screens/dashboard/home/home.dart';
 import 'package:spendify/screens/dashboard/stats.dart';
-import 'package:spendify/screens/dashboard/budget.dart';
+import 'package:spendify/screens/dashboard/budget/budget.dart';
 import 'package:spendify/screens/dashboard/settings/settings.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
 import '../../models/user.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key, required this.email});
+  const Dashboard({
+    super.key,
+    required this.email,
+    this.index,
+  });
 
   final String email;
+  final int? index;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -46,7 +51,7 @@ class _DashboardState extends State<Dashboard> {
           User user = userProvider.user;
           final List<Widget> screens = [
             Home(
-            user: user,
+              user: user,
             ),
             Wallet(
               user: user,

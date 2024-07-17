@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -51,3 +52,30 @@ String formatAmount(double amount) {
 double amountToPercentages(double amount, double totalExpenses){
   return ((amount / totalExpenses) * 100).roundToDouble();
 }
+
+String getTimeLeft(DateTime deadline) {
+  final DateTime now = DateTime.now();
+  final Duration difference = deadline.difference(now);
+
+  if (difference.inDays >= 365) {
+    final int years = (difference.inDays / 365).round();
+    return years == 1 ? '1 year left' : '$years years left';
+  } else if (difference.inDays >= 30) {
+    final int months = (difference.inDays / 30).round();
+    return months == 1 ? '1 month left' : '$months months left';
+  } else if (difference.inDays > 0) {
+    return difference.inDays == 1 ? '1 day left' : '${difference.inDays} days left';
+  } else {
+    return '0 days left';
+  }
+}
+
+void popAndPushReplacement(BuildContext context, Widget newPage) {
+  Navigator.pop(context);
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => newPage),
+  );
+}
+
+String firebaseEmail = FirebaseAuth.instance.currentUser!.email.toString();

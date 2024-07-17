@@ -5,6 +5,8 @@ import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/transaction_provider.dart';
+import 'package:spendify/screens/animations/done.dart';
+import 'package:spendify/screens/dashboard/dashboard.dart';
 import 'package:spendify/widgets/amount_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
@@ -140,7 +142,10 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                           initialDate: DateTime.now(),
                         ).then((pickedDate) {
                           if (pickedDate == null) {
-                            showCustomSnackbar(context, 'Please select your next payment date',);
+                            showCustomSnackbar(
+                              context,
+                              'Please select your next payment date',
+                            );
                             return;
                           } else {
                             setState(() {
@@ -189,7 +194,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
             height: 30.h,
           ),
           ElevatedButton(
-            onPressed: () async{
+            onPressed: () async {
               try {
                 if (formKey.currentState!.validate()) {}
                 ScheduledTransaction transaction = ScheduledTransaction(
@@ -210,11 +215,21 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                 );
                 n.Notification notification = n.Notification(
                   title: 'Transaction Completed',
-                  body: 'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
+                  body:
+                      'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
                   date: _selectedDate!,
                 );
                 await NotificationService.scheduleNotification(notification);
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return DoneScreen(
+                        nextPage: Dashboard(email: firebaseEmail),
+                      );
+                    },
+                  ),
+                );
               } catch (error) {
                 showErrorDialog(context, '$error');
               }

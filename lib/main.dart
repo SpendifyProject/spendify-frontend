@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spendify/const/dark_theme.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/theme.dart';
+import 'package:spendify/provider/savings_provider.dart';
 import 'package:spendify/provider/theme_provider.dart';
 import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/provider/user_provider.dart';
@@ -81,6 +82,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => TransactionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SavingsProvider(),
         ),
       ],
       child: Consumer<ThemeProvider>(

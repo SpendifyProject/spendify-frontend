@@ -13,6 +13,8 @@ import 'package:spendify/models/notification.dart' as n;
 
 import '../../const/constants.dart';
 import '../../widgets/custom_auth_text_field.dart';
+import '../animations/done.dart';
+import '../dashboard/dashboard.dart';
 
 class RecordTransaction extends StatefulWidget {
   const RecordTransaction({super.key, required this.user});
@@ -53,6 +55,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
+            setState(() {});
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -152,7 +155,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                       size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
-                    labelText: "Sender's Full Name",
+                    labelText: "Sender",
                   ),
                   SizedBox(
                     height: 20.h,
@@ -166,7 +169,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                       size: 30.sp,
                     ),
                     keyboardType: TextInputType.text,
-                    labelText: "Recipient's Full Name",
+                    labelText: "Recipient",
                   ),
                   SizedBox(
                     height: 20.h,
@@ -210,7 +213,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
             height: 40.h,
           ),
           ElevatedButton(
-            onPressed: () async{
+            onPressed: () async {
               try {
                 if (formKey.currentState!.validate()) {}
                 RecordedTransaction transaction = RecordedTransaction(
@@ -230,12 +233,24 @@ class _RecordTransactionState extends State<RecordTransaction> {
                 transactionProvider.recordExternalTransaction(transaction);
                 n.Notification notification = n.Notification(
                   title: 'Recorded Transaction',
-                  body: 'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} ${senderController.text == widget.user.fullName ? 'to ${recipientController.text}' : 'from ${senderController.text}'} has been recorded.',
+                  body:
+                      'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} ${senderController.text == widget.user.fullName ? 'to ${recipientController.text}' : 'from ${senderController.text}'} has been recorded.',
                   date: DateTime.now(),
                 );
                 await NotificationService.showInstantNotification(notification);
                 showCustomSnackbar(
-                    context, 'Transaction recorded successfully',
+                  context,
+                  'Transaction recorded successfully',
+                );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return DoneScreen(
+                        nextPage: Dashboard(email: firebaseEmail),
+                      );
+                    },
+                  ),
                 );
               } catch (error) {
                 showErrorDialog(context, '$error');

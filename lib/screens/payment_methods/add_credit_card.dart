@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/models/credit_card.dart';
@@ -111,11 +112,25 @@ class _AddCardState extends State<AddCard> {
                     suffix: GestureDetector(
                       onTap: () async {
                         await showDatePicker(
-                          context: context,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2040),
-                          initialDate: DateTime.now(),
-                        ).then((pickedDate) {
+                            context: context,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2040),
+                            initialDate: DateTime.now(),
+                            builder: (context, child) {
+                              return Theme(
+                                data: ThemeData.light().copyWith(
+                                  primaryColor: color.primary,
+                                  colorScheme:
+                                      const ColorScheme.light().copyWith(
+                                    primary: color.primary,
+                                    onPrimary: color.onPrimary,
+                                  ),
+                                  dialogBackgroundColor: color.surface,
+                                  textTheme: GoogleFonts.poppinsTextTheme(),
+                                ),
+                                child: child!,
+                              );
+                            }).then((pickedDate) {
                           if (pickedDate == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -221,7 +236,10 @@ class _AddCardState extends State<AddCard> {
                     );
 
                     walletProvider.saveCard(newCard);
-                    showCustomSnackbar(context, 'Credit card saved successfully',);
+                    showCustomSnackbar(
+                      context,
+                      'Credit card saved successfully',
+                    );
                     Navigator.pop(context);
                   } catch (error) {
                     showErrorDialog(context, 'Error: $error');
@@ -231,7 +249,7 @@ class _AddCardState extends State<AddCard> {
                   'Add Card',
                   style: TextStyle(
                     color: color.surface,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
