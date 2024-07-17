@@ -34,6 +34,7 @@ class Onboarding2 extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
+                  color: color.onPrimary,
                 ),
                 textAlign: TextAlign.center,
               ),

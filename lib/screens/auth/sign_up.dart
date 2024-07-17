@@ -10,6 +10,7 @@ import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/user.dart';
+import '../../services/validation_service.dart';
 import '../../widgets/error_dialog.dart';
 
 class SignUp extends StatefulWidget {
@@ -32,6 +33,13 @@ class _SignUpState extends State<SignUp> {
   bool isChecked = false;
   late UserProvider userProvider;
   final formKey = GlobalKey<FormState>();
+  String? nameError;
+  String? numberError;
+  String? emailError;
+  String? incomeError;
+  String? dateError;
+  String? passwordError;
+  bool hasError = false;
 
   @override
   void initState() {
@@ -71,128 +79,168 @@ class _SignUpState extends State<SignUp> {
             ),
             Form(
               key: formKey,
-              child: CustomAuthTextField(
-                controller: nameController,
-                obscureText: false,
-                icon: Icon(
-                  Icons.person_outline,
-                  color: color.secondary,
-                  size: 30.sp,
+              child: SizedBox(
+                height: hasError ? 650.h : 470.h,
+                child: Column(
+                  children: [
+                    CustomAuthTextField(
+                      controller: nameController,
+                      obscureText: false,
+                      errorText: nameError,
+                      validator: (value){
+                        nameError = Validator.validateName(value);
+                        return nameError;
+                      },
+                      icon: Icon(
+                        Icons.person_outline,
+                        color: color.secondary,
+                        size: 30.sp,
+                      ),
+                      keyboardType: TextInputType.text,
+                      labelText: 'Full Name',
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    CustomAuthTextField(
+                      controller: numberController,
+                      obscureText: false,
+                      errorText: numberError,
+                      validator: (value){
+                        numberError = Validator.validatePhoneNumber(value);
+                        return numberError;
+                      },
+                      icon: Icon(
+                        Icons.phone_outlined,
+                        color: color.secondary,
+                        size: 30.sp,
+                      ),
+                      keyboardType: TextInputType.number,
+                      labelText: 'Number',
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    CustomAuthTextField(
+                      controller: emailController,
+                      obscureText: false,
+                      icon: Icon(
+                        Icons.email_outlined,
+                        color: color.secondary,
+                        size: 30.sp,
+                      ),
+                      validator: (value){
+                        emailError = Validator.validateEmail(value);
+                        return emailError;
+                      },
+                      errorText: emailError,
+                      keyboardType: TextInputType.emailAddress,
+                      labelText: 'Email Address',
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    CustomAuthTextField(
+                      controller: passwordController,
+                      obscureText: isHidden,
+                      errorText: passwordError,
+                      validator: (value) {
+                        passwordError = Validator.validatePassword(value);
+                        return passwordError;
+                      },
+                      icon: Icon(
+                        Icons.lock_outline,
+                        color: color.secondary,
+                        size: 30.sp,
+                      ),
+                      suffix: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isHidden = !isHidden;
+                          });
+                        },
+                        child: Icon(
+                          isHidden
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: color.secondary,
+                          size: 30.sp,
+                        ),
+                      ),
+                      keyboardType: TextInputType.text,
+                      labelText: 'Password',
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    CustomAuthTextField(
+                      controller: incomeController,
+                      obscureText: false,
+                      icon: Icon(
+                        Icons.monetization_on_outlined,
+                        color: color.secondary,
+                        size: 30.sp,
+                      ),
+                      errorText: incomeError,
+                      validator: (value){
+                        incomeError = Validator.validateAmount(value);
+                        return incomeError;
+                      },
+                      keyboardType: TextInputType.number,
+                      labelText: 'Monthly Income',
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    CustomAuthTextField(
+                      controller: dateController,
+                      obscureText: false,
+                      errorText: dateError,
+                      validator: (value){
+                        if(_selectedDate == null){
+                          dateError = 'Please select your date of birth';
+                          return dateError;
+                        }
+                        return null;
+                      },
+                      icon: Icon(
+                        Icons.date_range_outlined,
+                        color: color.secondary,
+                        size: 30.sp,
+                      ),
+                      suffix: GestureDetector(
+                        onTap: () async {
+                          await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                            initialDate: DateTime.now(),
+                          ).then((pickedDate) {
+                            if (pickedDate == null) {
+                              showCustomSnackbar(context, 'Please select your date of birth');
+                              return;
+                            } else {
+                              setState(() {
+                                _selectedDate = pickedDate;
+                                dateController.text =
+                                '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
+                              });
+                            }
+                          });
+                        },
+                        child: Icon(
+                          Icons.edit_outlined,
+                          color: color.secondary,
+                          size: 30.sp,
+                        ),
+                      ),
+                      keyboardType: TextInputType.text,
+                      labelText: 'Date of Birth',
+                      readOnly: true,
+                    ),
+                  ],
                 ),
-                keyboardType: TextInputType.text,
-                labelText: 'Full Name',
               ),
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            CustomAuthTextField(
-              controller: numberController,
-              obscureText: false,
-              icon: Icon(
-                Icons.phone_outlined,
-                color: color.secondary,
-                size: 30.sp,
-              ),
-              keyboardType: TextInputType.number,
-              labelText: 'Number',
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            CustomAuthTextField(
-              controller: emailController,
-              obscureText: false,
-              icon: Icon(
-                Icons.email_outlined,
-                color: color.secondary,
-                size: 30.sp,
-              ),
-              keyboardType: TextInputType.emailAddress,
-              labelText: 'Email Address',
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            CustomAuthTextField(
-              controller: passwordController,
-              obscureText: isHidden,
-              icon: Icon(
-                Icons.lock_outline,
-                color: color.secondary,
-                size: 30.sp,
-              ),
-              suffix: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isHidden = !isHidden;
-                  });
-                },
-                child: Icon(
-                  isHidden
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
-                  color: color.secondary,
-                  size: 30.sp,
-                ),
-              ),
-              keyboardType: TextInputType.text,
-              labelText: 'Password',
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            CustomAuthTextField(
-              controller: incomeController,
-              obscureText: false,
-              icon: Icon(
-                Icons.monetization_on_outlined,
-                color: color.secondary,
-                size: 30.sp,
-              ),
-              keyboardType: TextInputType.number,
-              labelText: 'Monthly Income',
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            CustomAuthTextField(
-              controller: dateController,
-              obscureText: false,
-              icon: Icon(
-                Icons.date_range_outlined,
-                color: color.secondary,
-                size: 30.sp,
-              ),
-              suffix: GestureDetector(
-                onTap: () async {
-                  await showDatePicker(
-                    context: context,
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                    initialDate: DateTime.now(),
-                  ).then((pickedDate) {
-                    if (pickedDate == null) {
-                      showCustomSnackbar(context, 'Please select your date of birth');
-                      return;
-                    } else {
-                      setState(() {
-                        _selectedDate = pickedDate;
-                        dateController.text =
-                            '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
-                      });
-                    }
-                  });
-                },
-                child: Icon(
-                  Icons.edit_outlined,
-                  color: color.secondary,
-                  size: 30.sp,
-                ),
-              ),
-              keyboardType: TextInputType.text,
-              labelText: 'Date of Birth',
-              readOnly: true,
             ),
             SizedBox(
               height: 30.h,
@@ -202,25 +250,42 @@ class _SignUpState extends State<SignUp> {
                 onPressed: () async {
                   try {
                     final form = formKey.currentState!;
-                    if (form.validate()) {}
-                    Uuid uid = const Uuid();
-                    User user = User(
-                      fullName: nameController.text,
-                      email: emailController.text,
-                      phoneNumber: numberController.text,
-                      dateOfBirth: _selectedDate ?? DateTime.now(),
-                      monthlyIncome: double.parse(incomeController.text),
-                      uid: uid.v4(),
-                      imagePath:
-                          'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
-                    );
-                    await signUp(
-                      context,
-                      user,
-                      passwordController.text,
-                      userProvider,
-                      isChecked,
-                    );
+                    if (form.validate()) {
+                      setState(() {
+                        hasError = false;
+                      });
+                      Uuid uid = const Uuid();
+                      User user = User(
+                        fullName: nameController.text,
+                        email: emailController.text,
+                        phoneNumber: numberController.text,
+                        dateOfBirth: _selectedDate ?? DateTime.now(),
+                        monthlyIncome: double.parse(incomeController.text),
+                        uid: uid.v4(),
+                        imagePath:
+                        'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
+                      );
+                      await signUp(
+                        context,
+                        user,
+                        passwordController.text,
+                        userProvider,
+                        isChecked,
+                      );
+                      setState(() {
+                        emailError = null;
+                        numberError = null;
+                        incomeError = null;
+                        nameError = null;
+                        passwordError = null;
+                        dateError = null;
+                      });
+                    }
+                    else{
+                      setState(() {
+                        hasError = true;
+                      });
+                    }
                   } on auth.FirebaseAuthException catch (e) {
                     if (e.code == 'weak-password') {
                       showErrorDialog(context,
@@ -243,7 +308,6 @@ class _SignUpState extends State<SignUp> {
                 child: Text(
                   'Sign Up',
                   style: TextStyle(
-                    color: color.surface,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -277,9 +341,9 @@ class _SignUpState extends State<SignUp> {
                   child: Text(
                     'Sign In',
                     style: TextStyle(
-                      color: color.primary,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
+                      color: color.primary,
                     ),
                   ),
                 ),

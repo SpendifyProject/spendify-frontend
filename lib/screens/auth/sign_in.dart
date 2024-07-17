@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spendify/const/auth.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
+import 'package:spendify/services/validation_service.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
 import '../../widgets/error_dialog.dart';
@@ -20,6 +21,8 @@ class _SignInState extends State<SignIn> {
   late TextEditingController passwordController;
   bool isHidden = true;
   bool isChecked = false;
+  String? errorText;
+  String? passwordError;
 
   @override
   void initState() {
@@ -53,45 +56,62 @@ class _SignInState extends State<SignIn> {
             ),
             Form(
               key: formKey,
-              child: CustomAuthTextField(
-                controller: emailController,
-                obscureText: false,
-                icon: Icon(
-                  Icons.email_outlined,
-                  color: color.secondary,
-                  size: 30.sp,
+              child: SizedBox(
+                height: 200.h,
+                child: Column(
+                  children: [
+                    CustomAuthTextField(
+                      controller: emailController,
+                      obscureText: false,
+                      icon: Icon(
+                        Icons.email_outlined,
+                        color: color.secondary,
+                        size: 30.sp,
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      labelText: 'Email Address',
+                      errorText: errorText,
+                      validator: (email) {
+                        errorText = Validator.validateEmail(email);
+                        return errorText;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    CustomAuthTextField(
+                      controller: passwordController,
+                      obscureText: isHidden,
+                      errorText: passwordError,
+                      validator: (value) {
+                        passwordError = Validator.validatePassword(value);
+                        return passwordError;
+                      },
+                      icon: Icon(
+                        Icons.lock_outline,
+                        color: color.secondary,
+                        size: 30.sp,
+                      ),
+                      suffix: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isHidden = !isHidden;
+                          });
+                        },
+                        child: Icon(
+                          isHidden
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: color.secondary,
+                          size: 30.sp,
+                        ),
+                      ),
+                      keyboardType: TextInputType.text,
+                      labelText: 'Password',
+                    ),
+                  ],
                 ),
-                keyboardType: TextInputType.emailAddress,
-                labelText: 'Email Address',
               ),
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            CustomAuthTextField(
-              controller: passwordController,
-              obscureText: isHidden,
-              icon: Icon(
-                Icons.lock_outline,
-                color: color.secondary,
-                size: 30.sp,
-              ),
-              suffix: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isHidden = !isHidden;
-                  });
-                },
-                child: Icon(
-                  isHidden
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
-                  color: color.secondary,
-                  size: 30.sp,
-                ),
-              ),
-              keyboardType: TextInputType.text,
-              labelText: 'Password',
             ),
             SizedBox(
               height: 30.h,
@@ -101,13 +121,17 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async {
                   try {
                     final form = formKey.currentState!;
-                    if (form.validate()) {}
-                    await signIn(
-                      context,
-                      emailController.text,
-                      passwordController.text,
-                      isChecked,
-                    );
+                    if (form.validate()) {
+                      await signIn(
+                        context,
+                        emailController.text,
+                        passwordController.text,
+                        isChecked,
+                      );
+                      setState(() {
+                        errorText = null;
+                      });
+                    }
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
                       showErrorDialog(context, 'User not found');
@@ -126,7 +150,6 @@ class _SignInState extends State<SignIn> {
                 child: Text(
                   'Sign In',
                   style: TextStyle(
-                    color: color.onSurface,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
