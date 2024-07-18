@@ -6,6 +6,7 @@ import 'package:spendify/models/savings_goal.dart';
 import 'package:spendify/provider/savings_provider.dart';
 import 'package:spendify/screens/animations/empty.dart';
 import 'package:spendify/screens/dashboard/dashboard.dart';
+import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
 import '../../../models/user.dart';
@@ -111,6 +112,8 @@ class SavingsGoalWidget extends StatefulWidget {
 
 class _SavingsGoalWidgetState extends State<SavingsGoalWidget> {
   TextEditingController amountController = TextEditingController();
+  String? amountError;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +130,9 @@ class _SavingsGoalWidgetState extends State<SavingsGoalWidget> {
               horizontal: 20.w,
             ),
             decoration: BoxDecoration(
-                color: const Color.fromRGBO(55, 124, 200, 1),
-                borderRadius: BorderRadius.circular(10.r)),
+              color: const Color.fromRGBO(55, 124, 200, 1),
+              borderRadius: BorderRadius.circular(10.r),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -242,43 +246,58 @@ class _SavingsGoalWidgetState extends State<SavingsGoalWidget> {
                               horizontal: 20.w,
                               vertical: 10.h,
                             ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'How much have you added to the savings?',
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    color: color.secondary,
+                            child: Form(
+                              key: formKey,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'How much have you added to the savings?',
+                                    style: TextStyle(
+                                      fontSize: 15.sp,
+                                      color: color.secondary,
+                                    ),
                                   ),
-                                ),
-                                CustomAuthTextField(
-                                  controller: amountController,
-                                  obscureText: false,
-                                  icon: Icon(
-                                    Icons.monetization_on_outlined,
-                                    size: 30.sp,
-                                    color: color.secondary,
+                                  CustomAuthTextField(
+                                    controller: amountController,
+                                    obscureText: false,
+                                    errorText: amountError,
+                                    validator: (value) {
+                                      amountError =
+                                          Validator.validateAmount(value);
+                                      return amountError;
+                                    },
+                                    icon: Icon(
+                                      Icons.monetization_on_outlined,
+                                      size: 30.sp,
+                                      color: color.secondary,
+                                    ),
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(),
+                                    labelText: '',
                                   ),
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(),
-                                  labelText: '',
-                                ),
-                                const Spacer(),
-                                TextButton(
-                                  onPressed: () {
-                                    widget.savingsProvider.updateCurrentAmount(
-                                      widget.savingsGoal.id,
-                                      widget.savingsGoal.currentAmount,
-                                      double.parse(amountController.text),
-                                    );
-                                    popAndPushReplacement(
-                                      context,
-                                      AllSavingsGoals(user: widget.user),
-                                    );
-                                  },
-                                  child: const Text('Save'),
-                                ),
-                              ],
+                                  const Spacer(),
+                                  TextButton(
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        widget.savingsProvider
+                                            .updateCurrentAmount(
+                                          widget.savingsGoal.id,
+                                          widget.savingsGoal.currentAmount,
+                                          double.parse(amountController.text),
+                                        );
+                                        setState(() {
+                                          amountError = null;
+                                        });
+                                        popAndPushReplacement(
+                                          context,
+                                          AllSavingsGoals(user: widget.user),
+                                        );
+                                      }
+                                    },
+                                    child: const Text('Save'),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

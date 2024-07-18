@@ -45,12 +45,12 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getUserDataWithId(String uid) async{
+  Future<void> getUserDataWithId(String uid) async {
     try {
       final userRef = FirebaseFirestore.instance.collection('users').where(
-        'uid',
-        isEqualTo: uid,
-      );
+            'uid',
+            isEqualTo: uid,
+          );
       final userSnapshot = await userRef.get();
       for (final doc in userSnapshot.docs) {
         User user = User(
@@ -85,6 +85,23 @@ class UserProvider with ChangeNotifier {
         'uid': newUser.uid,
         'imagePath': newUser.imagePath
       });
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
+    }
+  }
+
+  Future<void> updateUser(String uid, User updatedUser) async {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        'fullName': updatedUser.fullName,
+        'email': updatedUser.email.toLowerCase(),
+        'phoneNumber': updatedUser.phoneNumber,
+        'dateOfBirth': updatedUser.dateOfBirth,
+        'monthlyIncome': updatedUser.monthlyIncome,
+        'imagePath': updatedUser.imagePath,
+      });
+      notifyListeners();
     } catch (error) {
       log('Error: $error');
       rethrow;

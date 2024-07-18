@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/models/credit_card.dart';
@@ -8,7 +7,9 @@ import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/models/wallet.dart';
 import 'package:spendify/provider/wallet_provider.dart';
+import 'package:spendify/screens/animations/empty.dart';
 import 'package:spendify/screens/transactions/payment_webview.dart';
+import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/credit_card_widget.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
@@ -17,7 +18,6 @@ import 'package:uuid/uuid.dart';
 
 import '../../const/constants.dart';
 import '../../widgets/amount_text_field.dart';
-import '../payment_methods/add_momo_account.dart';
 
 class SendMoney extends StatefulWidget {
   const SendMoney({super.key, required this.user});
@@ -35,10 +35,9 @@ class _SendMoneyState extends State<SendMoney> {
   late TextEditingController referenceController;
   String? radioValue = 'momo';
   int? selectedCard = 0;
-
   String? selectedCategory;
   final formKey = GlobalKey<FormState>();
-  String paystackApi = dotenv.env['PAYSTACK_KEY'] ?? 'NO_API_KEY_FOUND';
+  String? errorText;
 
   @override
   void initState() {
@@ -81,52 +80,9 @@ class _SendMoneyState extends State<SendMoney> {
               ),
             ),
             body: momoAccounts.isEmpty && cards.isEmpty
-                ? Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return AddMomo(uid: widget.user.uid);
-                            },
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: 300.w,
-                        height: 300.h,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: color.onSurface,
-                            border: Border.all(color: color.onPrimary)),
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                'assets/images/momo.jpeg',
-                                fit: BoxFit.fill,
-                                width: double.infinity,
-                                height: 200.h,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Text(
-                              'Add your mobile money account to ensure a seamless payment experience',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: color.onPrimary,
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                ? const Empty(
+                    text:
+                        'Add a mobile money account or credit card to send money',
                   )
                 : ListView(
                     padding: EdgeInsets.symmetric(
@@ -140,7 +96,14 @@ class _SendMoneyState extends State<SendMoney> {
                           height: 310.h,
                           child: Column(
                             children: [
-                              AmountTextField(controller: amountController),
+                              AmountTextField(
+                                controller: amountController,
+                                errorText: errorText,
+                                validator: (value){
+                                  errorText = Validator.validateAmount(value);
+                                  return errorText;
+                                },
+                              ),
                               SizedBox(
                                 height: 20.h,
                               ),
@@ -153,7 +116,7 @@ class _SendMoneyState extends State<SendMoney> {
                                   size: 30.sp,
                                 ),
                                 keyboardType: TextInputType.text,
-                                labelText: "Recipient's Name",
+                                labelText: "Recipient",
                               ),
                               SizedBox(
                                 height: 15.h,
@@ -185,7 +148,9 @@ class _SendMoneyState extends State<SendMoney> {
                               showCheckmark: false,
                               selectedColor: color.primary,
                               disabledColor: color.onSurface,
-                              label: Text(categories[index]),
+                              label: Text(
+                                categories[index],
+                              ),
                               selected: selectedCategory == categories[index],
                               onSelected: (bool selected) {
                                 setState(() {
@@ -296,36 +261,41 @@ class _SendMoneyState extends State<SendMoney> {
                       ElevatedButton(
                         onPressed: () {
                           try {
-                            if (formKey.currentState!.validate()) {}
-                            double amount = double.parse(amountController.text);
-                            String reference = referenceController.text;
-                            String recipient = recipientController.text;
-                            String id = const Uuid().v4();
-                            String paymentMethod = radioValue == 'momo'
-                                ? momoAccounts[selectedCard ?? 0].id
-                                : cards[selectedCard ?? 0].id;
-                            Transaction transaction = Transaction(
-                              id: id,
-                              uid: widget.user.uid,
-                              recipient: recipient,
-                              reference: reference,
-                              date: DateTime.now(),
-                              amount: amount,
-                              paymentMethod: paymentMethod,
-                              isDebit: true,
-                              currency: 'GHS',
-                              category: selectedCategory!,
-                            );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return PaymentWebView(
-                                    transaction: transaction,
-                                  );
-                                },
-                              ),
-                            );
+                            if (formKey.currentState!.validate()) {
+                              double amount = double.parse(amountController.text);
+                              String reference = referenceController.text;
+                              String recipient = recipientController.text;
+                              String id = const Uuid().v4();
+                              String paymentMethod = radioValue == 'momo'
+                                  ? momoAccounts[selectedCard ?? 0].id
+                                  : cards[selectedCard ?? 0].id;
+                              Transaction transaction = Transaction(
+                                id: id,
+                                uid: widget.user.uid,
+                                recipient: recipient,
+                                reference: reference,
+                                date: DateTime.now(),
+                                amount: amount,
+                                paymentMethod: paymentMethod,
+                                isDebit: true,
+                                currency: 'GHS',
+                                category: selectedCategory!,
+                              );
+                              setState(() {
+                                errorText = null;
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return PaymentWebView(
+                                      transaction: transaction,
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+
                           } catch (error) {
                             showErrorDialog(context, 'Error: $error}');
                           }

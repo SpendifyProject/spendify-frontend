@@ -20,7 +20,7 @@ class Onboarding3 extends StatelessWidget {
             child: Image.asset(
               'assets/images/onboarding_3.png',
               width: 335.w,
-              height: 140.53.h,
+              height: 248.53.h,
             ),
           ),
           Padding(
@@ -34,6 +34,7 @@ class Onboarding3 extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
+                  color: color.onPrimary,
                 ),
                 textAlign: TextAlign.center,
               ),

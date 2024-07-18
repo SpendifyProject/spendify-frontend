@@ -48,16 +48,6 @@ class _StatisticsState extends State<Statistics> {
             fontSize: 18.sp,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: null,
-            icon: Icon(
-              Icons.notifications_none,
-              color: color.onPrimary,
-              size: 20,
-            ),
-          ),
-        ],
       ),
       body: FutureBuilder(
         future: _walletProvider.fetchWallet(widget.user, context),
@@ -219,6 +209,7 @@ class CategoryLineChart extends StatelessWidget {
                 return LineChart(
                   LineChartData(
                     gridData: const FlGridData(show: true),
+                    backgroundColor: color.surface,
                     titlesData: FlTitlesData(
                       bottomTitles: AxisTitles(
                         sideTitles: SideTitles(
@@ -234,7 +225,7 @@ class CategoryLineChart extends StatelessWidget {
                         ),
                       ),
                     ),
-                    borderData: FlBorderData(show: true),
+                    borderData: FlBorderData(show: false),
                     lineBarsData: [
                       LineChartBarData(
                         spots: getSpots(data[0]),

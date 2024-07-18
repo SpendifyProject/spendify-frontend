@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
+import '../../const/constants.dart';
 import '../../models/user.dart';
 import '../../widgets/custom_auth_text_field.dart';
+import '../animations/done.dart';
+import '../dashboard/dashboard.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -31,6 +36,11 @@ class _EditProfileState extends State<EditProfile> {
   final formKey = GlobalKey<FormState>();
   bool isLoading = true;
   String email = auth.FirebaseAuth.instance.currentUser!.email.toString();
+  String? nameError;
+  String? numberError;
+  String? emailError;
+  String? incomeError;
+  String? dateError;
 
   @override
   void initState() {
@@ -85,140 +95,230 @@ class _EditProfileState extends State<EditProfile> {
             _selectedDate = user.dateOfBirth;
             dateController.text =
                 '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
-            return Padding(
+            return ListView(
               padding: EdgeInsets.symmetric(
                 vertical: 25.h,
                 horizontal: 10.w,
               ),
-              child: ListView(
-                children: [
-                  Center(
-                    child: ClipOval(
-                      child: Image.network(
-                        user.imagePath,
-                        width: 90.w,
-                        height: 90.h,
-                      ),
+              children: [
+                Center(
+                  child: ClipOval(
+                    child: Image.network(
+                      user.imagePath,
+                      width: 90.w,
+                      height: 90.h,
                     ),
                   ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Form(
-                    key: formKey,
-                    child: CustomAuthTextField(
-                      controller: nameController,
-                      obscureText: false,
-                      icon: Icon(
-                        Icons.person_outline,
-                        color: color.secondary,
-                        size: 30.sp,
-                      ),
-                      keyboardType: TextInputType.text,
-                      labelText: 'Full Name',
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  CustomAuthTextField(
-                    controller: numberController,
-                    obscureText: false,
-                    icon: Icon(
-                      Icons.phone_outlined,
-                      color: color.secondary,
-                      size: 30.sp,
-                    ),
-                    keyboardType: TextInputType.number,
-                    labelText: 'Number',
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  CustomAuthTextField(
-                    controller: emailController,
-                    obscureText: false,
-                    icon: Icon(
-                      Icons.email_outlined,
-                      color: color.secondary,
-                      size: 30.sp,
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    labelText: 'Email Address',
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  CustomAuthTextField(
-                    controller: incomeController,
-                    obscureText: false,
-                    icon: Icon(
-                      Icons.monetization_on_outlined,
-                      color: color.secondary,
-                      size: 30.sp,
-                    ),
-                    keyboardType: TextInputType.number,
-                    labelText: 'Monthly Income',
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  CustomAuthTextField(
-                    controller: dateController,
-                    obscureText: false,
-                    icon: Icon(
-                      Icons.date_range_outlined,
-                      color: color.secondary,
-                      size: 30.sp,
-                    ),
-                    suffix: GestureDetector(
-                      onTap: () async {
-                        await showDatePicker(
-                          context: context,
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
-                          initialDate: DateTime.now(),
-                        ).then((pickedDate) {
-                          if (pickedDate == null) {
-                            showCustomSnackbar(context, 'Please select your date of birth',);
-                            return;
-                          } else {
-                            setState(() {
-                              _selectedDate = pickedDate;
-                              dateController.text =
-                                  '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
-                            });
-                          }
-                        });
-                      },
-                      child: Icon(
-                        Icons.edit_outlined,
-                        color: color.secondary,
-                        size: 30.sp,
-                      ),
-                    ),
-                    keyboardType: TextInputType.text,
-                    labelText: 'Date of Birth',
-                    readOnly: true,
-                  ),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: null,
-                      child: Text(
-                        'Save Changes',
-                        style: TextStyle(
-                          color: color.surface,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Form(
+                  key: formKey,
+                  child: SizedBox(
+                    height: 400.h,
+                    child: Column(
+                      children: [
+                        CustomAuthTextField(
+                          controller: nameController,
+                          obscureText: false,
+                          errorText: nameError,
+                          validator: (value) {
+                            nameError = Validator.validateName(value);
+                            return nameError;
+                          },
+                          icon: Icon(
+                            Icons.person_outline,
+                            color: color.secondary,
+                            size: 30.sp,
+                          ),
+                          keyboardType: TextInputType.text,
+                          labelText: 'Full Name',
                         ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        CustomAuthTextField(
+                          controller: numberController,
+                          obscureText: false,
+                          errorText: numberError,
+                          validator: (value) {
+                            numberError = Validator.validatePhoneNumber(value);
+                            return numberError;
+                          },
+                          icon: Icon(
+                            Icons.phone_outlined,
+                            color: color.secondary,
+                            size: 30.sp,
+                          ),
+                          keyboardType: TextInputType.number,
+                          labelText: 'Number',
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        CustomAuthTextField(
+                          controller: emailController,
+                          obscureText: false,
+                          errorText: emailError,
+                          validator: (value) {
+                            emailError = Validator.validateEmail(value);
+                            return emailError;
+                          },
+                          icon: Icon(
+                            Icons.email_outlined,
+                            color: color.secondary,
+                            size: 30.sp,
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          labelText: 'Email Address',
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        CustomAuthTextField(
+                          controller: incomeController,
+                          obscureText: false,
+                          errorText: incomeError,
+                          validator: (value) {
+                            incomeError = Validator.validateAmount(value);
+                            return incomeError;
+                          },
+                          icon: Icon(
+                            Icons.monetization_on_outlined,
+                            color: color.secondary,
+                            size: 30.sp,
+                          ),
+                          keyboardType: TextInputType.number,
+                          labelText: 'Monthly Income',
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        CustomAuthTextField(
+                          controller: dateController,
+                          obscureText: false,
+                          errorText: dateError,
+                          validator: (value) {
+                            if (_selectedDate == null) {
+                              dateError = 'Please select your date of birth';
+                              return dateError;
+                            }
+                            return null;
+                          },
+                          icon: Icon(
+                            Icons.date_range_outlined,
+                            color: color.secondary,
+                            size: 30.sp,
+                          ),
+                          suffix: GestureDetector(
+                            onTap: () async {
+                              await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime.now(),
+                                  initialDate: DateTime.now(),
+                                  barrierDismissible: false,
+                                  builder: (context, child) {
+                                    return Theme(
+                                      data: ThemeData.light().copyWith(
+                                        primaryColor: color.primary,
+                                        colorScheme:
+                                            const ColorScheme.light().copyWith(
+                                          primary: color.primary,
+                                          onPrimary: color.onPrimary,
+                                          surface: color.surface,
+                                        ),
+                                        dialogBackgroundColor: color.surface,
+                                        textTheme:
+                                            GoogleFonts.poppinsTextTheme(),
+                                      ),
+                                      child: child!,
+                                    );
+                                  }).then((pickedDate) {
+                                if (pickedDate == null) {
+                                  showCustomSnackbar(
+                                    context,
+                                    'Please select your date of birth',
+                                  );
+                                  return;
+                                } else {
+                                  setState(() {
+                                    _selectedDate = pickedDate;
+                                    dateController.text =
+                                        '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
+                                  });
+                                }
+                              });
+                            },
+                            child: Icon(
+                              Icons.edit_outlined,
+                              color: color.secondary,
+                              size: 30.sp,
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                          labelText: 'Date of Birth',
+                          readOnly: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30.h,
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      try{
+                        if(formKey.currentState!.validate()){
+                          setState(() {
+                            nameError = null;
+                            numberError = null;
+                            emailError = null;
+                            incomeError = null;
+                            dateError = null;
+                          });
+                          User newUser = User(
+                            uid: user.uid,
+                            imagePath: user.imagePath,
+                            fullName: nameController.text,
+                            phoneNumber: numberController.text,
+                            email: emailController.text,
+                            monthlyIncome: double.parse(incomeController.text),
+                            dateOfBirth: _selectedDate!,
+                          );
+                          await userProvider.updateUser(user.uid, newUser);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return DoneScreen(
+                                  nextPage: Dashboard(
+                                    email: firebaseEmail,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      }
+                      catch(error){
+                        showErrorDialog(context, 'Error: $error');
+                      }
+                    },
+                    child: Text(
+                      'Save Changes',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             );
           }
           return const SizedBox();
