@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
+import 'package:spendify/services/auth_service.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:uuid/uuid.dart';
 
@@ -87,7 +88,7 @@ class _SignUpState extends State<SignUp> {
                       controller: nameController,
                       obscureText: false,
                       errorText: nameError,
-                      validator: (value){
+                      validator: (value) {
                         nameError = Validator.validateName(value);
                         return nameError;
                       },
@@ -106,7 +107,7 @@ class _SignUpState extends State<SignUp> {
                       controller: numberController,
                       obscureText: false,
                       errorText: numberError,
-                      validator: (value){
+                      validator: (value) {
                         numberError = Validator.validatePhoneNumber(value);
                         return numberError;
                       },
@@ -129,7 +130,7 @@ class _SignUpState extends State<SignUp> {
                         color: color.secondary,
                         size: 30.sp,
                       ),
-                      validator: (value){
+                      validator: (value) {
                         emailError = Validator.validateEmail(value);
                         return emailError;
                       },
@@ -182,7 +183,7 @@ class _SignUpState extends State<SignUp> {
                         size: 30.sp,
                       ),
                       errorText: incomeError,
-                      validator: (value){
+                      validator: (value) {
                         incomeError = Validator.validateAmount(value);
                         return incomeError;
                       },
@@ -196,8 +197,8 @@ class _SignUpState extends State<SignUp> {
                       controller: dateController,
                       obscureText: false,
                       errorText: dateError,
-                      validator: (value){
-                        if(_selectedDate == null){
+                      validator: (value) {
+                        if (_selectedDate == null) {
                           dateError = 'Please select your date of birth';
                           return dateError;
                         }
@@ -211,19 +212,35 @@ class _SignUpState extends State<SignUp> {
                       suffix: GestureDetector(
                         onTap: () async {
                           await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now(),
-                            initialDate: DateTime.now(),
-                          ).then((pickedDate) {
+                              context: context,
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now(),
+                              initialDate: DateTime.now(),
+                              barrierDismissible: false,
+                              builder: (context, child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    primaryColor: color.primary,
+                                    colorScheme:
+                                        const ColorScheme.light().copyWith(
+                                      primary: color.primary,
+                                      onPrimary: color.onPrimary,
+                                    ),
+                                    dialogBackgroundColor: color.surface,
+                                    textTheme: GoogleFonts.poppinsTextTheme(),
+                                  ),
+                                  child: child!,
+                                );
+                              }).then((pickedDate) {
                             if (pickedDate == null) {
-                              showCustomSnackbar(context, 'Please select your date of birth');
+                              showCustomSnackbar(
+                                  context, 'Please select your date of birth');
                               return;
                             } else {
                               setState(() {
                                 _selectedDate = pickedDate;
                                 dateController.text =
-                                '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
+                                    '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
                               });
                             }
                           });
@@ -263,9 +280,9 @@ class _SignUpState extends State<SignUp> {
                         monthlyIncome: double.parse(incomeController.text),
                         uid: uid.v4(),
                         imagePath:
-                        'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
+                            'https://th.bing.com/th/id/R.e62421c9ba5aeb764163aaccd64a9583?rik=DzXjlnhTgV5CvA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_210318.png&ehk=952QCsChZS0znBch2iju8Vc%2fS2aIXvqX%2f0zrwkjJ3GA%3d&risl=&pid=ImgRaw&r=0',
                       );
-                      await signUp(
+                      await AuthService.signUp(
                         context,
                         user,
                         passwordController.text,
@@ -280,8 +297,7 @@ class _SignUpState extends State<SignUp> {
                         passwordError = null;
                         dateError = null;
                       });
-                    }
-                    else{
+                    } else {
                       setState(() {
                         hasError = true;
                       });

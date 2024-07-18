@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AmountTextField extends StatelessWidget {
-  const AmountTextField({super.key, required this.controller});
+  const AmountTextField({
+    super.key,
+    required this.controller,
+    this.errorText,
+    required this.validator,
+  });
 
   final TextEditingController controller;
+  final String? errorText;
+  final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +50,7 @@ class AmountTextField extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(155, 178, 212, 1),
+                  color: const Color.fromRGBO(155, 178, 212, 1),
                 ),
               ),
               SizedBox(
@@ -51,16 +58,22 @@ class AmountTextField extends StatelessWidget {
               ),
               SizedBox(
                 width: 200.w,
-                child: TextField(
+                child: TextFormField(
                   controller: controller,
                   keyboardType: TextInputType.number,
+                  validator: validator,
                   style: TextStyle(
                     color: color.onPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
                   ),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: InputBorder.none,
+                    errorText: errorText,
+                    errorMaxLines: 2,
+                    errorStyle: TextStyle(
+                      color: color.tertiary,
+                    ),
                   ),
                 ),
               ),

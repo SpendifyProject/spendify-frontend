@@ -10,9 +10,11 @@ import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:spendify/screens/animations/empty.dart';
 import 'package:spendify/screens/dashboard/budget/new_savings_goal.dart';
+import 'package:spendify/screens/dashboard/dashboard.dart';
 import 'package:spendify/screens/payment_methods/add_credit_card.dart';
 import 'package:spendify/screens/payment_methods/add_momo_account.dart';
 import 'package:spendify/services/gemini_service.dart';
+import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
@@ -36,6 +38,8 @@ class _WalletState extends State<Wallet> {
   final TextEditingController limitController = TextEditingController();
   late SharedPreferences _prefs;
   w.Wallet? wallet;
+  String? limitError;
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -184,47 +188,71 @@ class _WalletState extends State<Wallet> {
                                                 horizontal: 20.w,
                                                 vertical: 10.h,
                                               ),
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    'New Spending Limit',
-                                                    style: TextStyle(
-                                                      fontSize: 15.sp,
-                                                      color: color.secondary,
+                                              child: Form(
+                                                key: formKey,
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      'New Spending Limit',
+                                                      style: TextStyle(
+                                                        fontSize: 15.sp,
+                                                        color: color.secondary,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  CustomAuthTextField(
-                                                    controller: limitController,
-                                                    obscureText: false,
-                                                    icon: Icon(
-                                                      Icons.edit,
-                                                      size: 30.sp,
-                                                      color: color.secondary,
+                                                    CustomAuthTextField(
+                                                      controller:
+                                                          limitController,
+                                                      obscureText: false,
+                                                      errorText: limitError,
+                                                      validator: (value) {
+                                                        limitError = Validator
+                                                            .validateAmount(
+                                                                value);
+                                                        return limitError;
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.edit,
+                                                        size: 30.sp,
+                                                        color: color.secondary,
+                                                      ),
+                                                      keyboardType:
+                                                          const TextInputType
+                                                              .numberWithOptions(),
+                                                      labelText: '',
                                                     ),
-                                                    keyboardType:
-                                                        const TextInputType
-                                                            .numberWithOptions(),
-                                                    labelText: '',
-                                                  ),
-                                                  const Spacer(),
-                                                  TextButton(
-                                                    onPressed: () async {
-                                                      await _prefs.setDouble(
-                                                        'spendingLimit',
-                                                        double.parse(
-                                                            limitController
-                                                                .text),
-                                                      );
-                                                      Navigator.pop(context);
-                                                      setState(() {
-                                                        limit = double.parse(
-                                                            limitController
-                                                                .text);
-                                                      });
-                                                    },
-                                                    child: const Text('Save'),
-                                                  ),
-                                                ],
+                                                    const Spacer(),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        if (formKey
+                                                            .currentState!
+                                                            .validate()) {
+                                                          await _prefs
+                                                              .setDouble(
+                                                            'spendingLimit',
+                                                            double.parse(
+                                                                limitController
+                                                                    .text),
+                                                          );
+                                                          setState(() {
+                                                            limitError = null;
+                                                          });
+                                                          popAndPushReplacement(
+                                                            context,
+                                                            Dashboard(
+                                                                email:
+                                                                    firebaseEmail),
+                                                          );
+                                                          setState(() {
+                                                            limit = double.parse(
+                                                                limitController
+                                                                    .text);
+                                                          });
+                                                        }
+                                                      },
+                                                      child: const Text('Save'),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),

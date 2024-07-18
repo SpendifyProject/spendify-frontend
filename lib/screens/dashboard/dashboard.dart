@@ -38,31 +38,33 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return Scaffold(
-      body: FutureBuilder(
-        future: userProvider.getUserData(widget.email),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            showErrorDialog(context, '${snapshot.error}');
-          }
-          User user = userProvider.user;
-          final List<Widget> screens = [
-            Home(
-              user: user,
-            ),
-            Wallet(
-              user: user,
-            ),
-            Statistics(
-              user: user,
-            ),
-            const SettingsScreen(),
-          ];
-          return screens[currentIndex];
-        },
+      body: GestureDetector(
+        child: FutureBuilder(
+          future: userProvider.getUserData(widget.email),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              showErrorDialog(context, '${snapshot.error}');
+            }
+            User user = userProvider.user;
+            final List<Widget> screens = [
+              Home(
+                user: user,
+              ),
+              Wallet(
+                user: user,
+              ),
+              Statistics(
+                user: user,
+              ),
+              const SettingsScreen(),
+            ];
+            return screens[currentIndex];
+          },
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

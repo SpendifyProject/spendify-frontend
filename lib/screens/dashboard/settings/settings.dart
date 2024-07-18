@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/auth.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/provider/theme_provider.dart';
+import 'package:spendify/services/auth_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -37,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              signOut(context);
+              AuthService.signOut(context);
             },
             icon: Icon(
               Icons.logout,

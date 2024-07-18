@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:spendify/const/auth.dart';
 import 'package:spendify/screens/auth/sign_up.dart';
+import 'package:spendify/services/auth_service.dart';
 import 'package:spendify/services/validation_service.dart';
 
 import '../../widgets/custom_auth_text_field.dart';
@@ -122,7 +122,7 @@ class _SignInState extends State<SignIn> {
                   try {
                     final form = formKey.currentState!;
                     if (form.validate()) {
-                      await signIn(
+                      await AuthService.signIn(
                         context,
                         emailController.text,
                         passwordController.text,

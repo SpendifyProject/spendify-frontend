@@ -66,4 +66,38 @@ class Validator{
     }
     return null;
   }
+
+  static String? validateCardNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your card number';
+    }
+
+    final RegExp visaRegex = RegExp(r'^4[0-9]{15}$');
+    final RegExp masterCardRegex = RegExp(r'^(5[1-5][0-9]{14}|2(2[2-9][0-9]{12}|[3-6][0-9]{13}|7([01][0-9]{12}|20[0-9]{10})))$');
+
+    if (!visaRegex.hasMatch(value) && !masterCardRegex.hasMatch(value)) {
+      return 'Please enter a valid Visa or MasterCard number';
+    }
+    if (!_luhnCheck(value)) {
+      return 'Invalid card number';
+    }
+    return null;
+  }
+
+  static bool _luhnCheck(String cardNumber) {
+    int sum = 0;
+    bool alternate = false;
+    for (int i = cardNumber.length - 1; i >= 0; i--) {
+      int n = int.parse(cardNumber[i]);
+      if (alternate) {
+        n *= 2;
+        if (n > 9) {
+          n -= 9;
+        }
+      }
+      sum += n;
+      alternate = !alternate;
+    }
+    return sum % 10 == 0;
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 List<String> categories = [
   'Entertainment',
@@ -49,7 +50,7 @@ String formatAmount(double amount) {
   return formatter.format(amount);
 }
 
-double amountToPercentages(double amount, double totalExpenses){
+double amountToPercentages(double amount, double totalExpenses) {
   return ((amount / totalExpenses) * 100).roundToDouble();
 }
 
@@ -64,7 +65,9 @@ String getTimeLeft(DateTime deadline) {
     final int months = (difference.inDays / 30).round();
     return months == 1 ? '1 month left' : '$months months left';
   } else if (difference.inDays > 0) {
-    return difference.inDays == 1 ? '1 day left' : '${difference.inDays} days left';
+    return difference.inDays == 1
+        ? '1 day left'
+        : '${difference.inDays} days left';
   } else {
     return '0 days left';
   }
@@ -79,3 +82,31 @@ void popAndPushReplacement(BuildContext context, Widget newPage) {
 }
 
 String firebaseEmail = FirebaseAuth.instance.currentUser!.email.toString();
+
+Future<void> sendEmail({
+  required String toEmail,
+  required String subject,
+  required String body,
+}) async {
+  final Uri emailUri = Uri(
+    scheme: 'mailto',
+    path: toEmail,
+    query: _encodeQueryParameters(<String, String>{
+      'subject': subject,
+      'body': body,
+    }),
+  );
+
+  if (await canLaunchUrl(emailUri)) {
+    await launchUrl(emailUri);
+  } else {
+    throw 'Could not launch $emailUri';
+  }
+}
+
+String? _encodeQueryParameters(Map<String, String> params) {
+  return params.entries
+      .map((MapEntry<String, String> e) =>
+          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+      .join('&');
+}

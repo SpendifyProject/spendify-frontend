@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/models/savings_goal.dart';
 import 'package:spendify/provider/savings_provider.dart';
+import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
@@ -29,6 +30,9 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
   late TextEditingController deadlineController;
   DateTime? _selectedDate;
   late SavingsProvider savingsProvider;
+  String? goalError;
+  String? targetError;
+  String? deadlineError;
 
   @override
   void initState() {
@@ -84,6 +88,14 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
                 CustomAuthTextField(
                   controller: goalController,
                   obscureText: false,
+                  errorText: goalError,
+                  validator: (value){
+                    if(value == null){
+                      goalError = 'Please enter your goal';
+                      return goalError;
+                    }
+                    return null;
+                  },
                   icon: Icon(
                     Icons.description_outlined,
                     color: color.secondary,
@@ -98,6 +110,11 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
                 CustomAuthTextField(
                   controller: targetController,
                   obscureText: false,
+                  errorText: targetError,
+                  validator: (value){
+                    targetError = Validator.validateAmount(value);
+                    return targetError;
+                  },
                   icon: Icon(
                     Icons.attach_money,
                     color: color.secondary,
@@ -112,6 +129,14 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
                 CustomAuthTextField(
                   controller: deadlineController,
                   obscureText: false,
+                  errorText: deadlineError,
+                  validator: (value){
+                    if(_selectedDate == null){
+                      deadlineError = 'Please select the deadline for your goal';
+                      return deadlineError;
+                    }
+                    return null;
+                  },
                   icon: Icon(
                     Icons.date_range_outlined,
                     color: color.secondary,
@@ -173,31 +198,35 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
                     onPressed: () {
                       try {
                         final form = formKey.currentState!;
-                        if (form.validate()) {}
-
-                        SavingsGoal goal = SavingsGoal(
-                          id: const Uuid().v4(),
-                          uid: widget.uid,
-                          goal: goalController.text,
-                          targetAmount: double.parse(targetController.text),
-                          deadline: _selectedDate!,
-                          currentAmount: 0,
-                        );
-
-                        savingsProvider.createGoal(goal);
-                        showCustomSnackbar(context, 'New savings goal created');
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return DoneScreen(
-                                nextPage: Dashboard(
-                                  email: firebaseEmail,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        if (form.validate()) {
+                          SavingsGoal goal = SavingsGoal(
+                            id: const Uuid().v4(),
+                            uid: widget.uid,
+                            goal: goalController.text,
+                            targetAmount: double.parse(targetController.text),
+                            deadline: _selectedDate!,
+                            currentAmount: 0,
+                          );
+                          savingsProvider.createGoal(goal);
+                          setState(() {
+                            goalError = null;
+                            targetError = null;
+                            deadlineError = null;
+                          });
+                          showCustomSnackbar(context, 'New savings goal created');
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return DoneScreen(
+                                  nextPage: Dashboard(
+                                    email: firebaseEmail,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
                       } catch (error) {
                         showErrorDialog(context, 'Error: $error');
                       }
@@ -205,7 +234,7 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
                     child: Text(
                       'Create',
                       style: TextStyle(
-                        color: color.surface,
+                        color: Colors.white,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                       ),

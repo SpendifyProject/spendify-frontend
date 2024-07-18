@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/models/transaction.dart';
@@ -7,6 +8,7 @@ import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/screens/animations/done.dart';
 import 'package:spendify/screens/dashboard/dashboard.dart';
+import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/amount_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
@@ -34,6 +36,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
   DateTime? _selectedDate;
   String? selectedCategory;
   final formKey = GlobalKey<FormState>();
+  String? errorText;
 
   @override
   void initState() {
@@ -93,6 +96,11 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                 children: [
                   AmountTextField(
                     controller: amountController,
+                    errorText: errorText,
+                    validator: (value) {
+                      errorText = Validator.validateAmount(value);
+                      return errorText;
+                    },
                   ),
                   SizedBox(
                     height: 20.h,
@@ -136,11 +144,26 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                     suffix: GestureDetector(
                       onTap: () async {
                         await showDatePicker(
-                          context: context,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2026),
-                          initialDate: DateTime.now(),
-                        ).then((pickedDate) {
+                            context: context,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2026),
+                            initialDate: DateTime.now(),
+                            barrierDismissible: false,
+                            builder: (context, child) {
+                              return Theme(
+                                data: ThemeData.light().copyWith(
+                                  primaryColor: color.primary,
+                                  colorScheme:
+                                      const ColorScheme.light().copyWith(
+                                    primary: color.primary,
+                                    onPrimary: color.onPrimary,
+                                  ),
+                                  dialogBackgroundColor: color.surface,
+                                  textTheme: GoogleFonts.poppinsTextTheme(),
+                                ),
+                                child: child!,
+                              );
+                            }).then((pickedDate) {
                           if (pickedDate == null) {
                             showCustomSnackbar(
                               context,
@@ -196,40 +219,44 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
           ElevatedButton(
             onPressed: () async {
               try {
-                if (formKey.currentState!.validate()) {}
-                ScheduledTransaction transaction = ScheduledTransaction(
-                  id: const Uuid().v4(),
-                  uid: widget.user.uid,
-                  reference: referenceController.text,
-                  recipient: recipientController.text,
-                  amount: double.parse(amountController.text),
-                  scheduledDate: _selectedDate!,
-                  category: selectedCategory!,
-                  isDebit: true,
-                  currency: 'GHS',
-                );
-                transactionProvider.scheduleTransaction(transaction);
-                showCustomSnackbar(
-                  context,
-                  'Transaction scheduled for ${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year} successfully',
-                );
-                n.Notification notification = n.Notification(
-                  title: 'Transaction Completed',
-                  body:
-                      'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
-                  date: _selectedDate!,
-                );
-                await NotificationService.scheduleNotification(notification);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return DoneScreen(
-                        nextPage: Dashboard(email: firebaseEmail),
-                      );
-                    },
-                  ),
-                );
+                if (formKey.currentState!.validate()) {
+                  setState(() {
+                    errorText = null;
+                  });
+                  ScheduledTransaction transaction = ScheduledTransaction(
+                    id: const Uuid().v4(),
+                    uid: widget.user.uid,
+                    reference: referenceController.text,
+                    recipient: recipientController.text,
+                    amount: double.parse(amountController.text),
+                    scheduledDate: _selectedDate!,
+                    category: selectedCategory!,
+                    isDebit: true,
+                    currency: 'GHS',
+                  );
+                  transactionProvider.scheduleTransaction(transaction);
+                  showCustomSnackbar(
+                    context,
+                    'Transaction scheduled for ${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year} successfully',
+                  );
+                  n.Notification notification = n.Notification(
+                    title: 'Transaction Completed',
+                    body:
+                        'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
+                    date: _selectedDate!,
+                  );
+                  await NotificationService.scheduleNotification(notification);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return DoneScreen(
+                          nextPage: Dashboard(email: firebaseEmail),
+                        );
+                      },
+                    ),
+                  );
+                }
               } catch (error) {
                 showErrorDialog(context, '$error');
               }

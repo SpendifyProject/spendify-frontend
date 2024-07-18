@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spendify/const/constants.dart';
+import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
+import 'package:spendify/widgets/error_dialog.dart';
 
 class Contact extends StatefulWidget {
   const Contact({super.key});
@@ -12,6 +15,9 @@ class Contact extends StatefulWidget {
 class _ContactState extends State<Contact> {
   late TextEditingController titleController;
   late TextEditingController contentController;
+  final formKey = GlobalKey<FormState>();
+  String? titleError;
+  String? contentError;
 
   @override
   void initState() {
@@ -52,43 +58,94 @@ class _ContactState extends State<Contact> {
         ),
         child: ListView(
           children: [
-            CustomAuthTextField(
-              controller: titleController,
-              obscureText: false,
-              icon: Icon(
-                Icons.topic_outlined,
-                color: color.secondary,
-                size: 30.sp,
+            Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomAuthTextField(
+                    controller: titleController,
+                    obscureText: false,
+                    errorText: titleError,
+                    validator: (value) {
+                      if (value == null) {
+                        titleError = 'Please enter the title of your message';
+                        return titleError;
+                      }
+                      return null;
+                    },
+                    icon: Icon(
+                      Icons.topic_outlined,
+                      color: color.secondary,
+                      size: 30.sp,
+                    ),
+                    keyboardType: TextInputType.text,
+                    labelText: 'Title',
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Text(
+                    'Content',
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: color.secondary,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: contentController,
+                    maxLines: 10,
+                    maxLength: 800,
+                    validator: (value) {
+                      if (value == null) {
+                        contentError =
+                            'Please enter the content of your message';
+                        return contentError;
+                      }
+                      return null;
+                    },
+                    style: TextStyle(
+                      color: color.onPrimary,
+                      fontSize: 14,
+                    ),
+                    decoration: InputDecoration(
+                      errorText: contentError,
+                      errorMaxLines: 2,
+                      errorStyle: TextStyle(
+                        color: color.tertiary,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              keyboardType: TextInputType.text,
-              labelText: 'Title',
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Text(
-              'Content',
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: color.secondary,
-              ),
-            ),
-            TextField(
-              controller: contentController,
-              maxLines: 10,
-              maxLength: 800,
-              style: TextStyle(color: color.onPrimary, fontSize: 14),
             ),
             SizedBox(
               height: 20.h,
             ),
             Center(
               child: ElevatedButton(
-                onPressed: null,
+                onPressed: () async {
+                  try {
+                    if (formKey.currentState!.validate()) {
+                      setState(() {
+                        titleError = null;
+                        contentError = null;
+                      });
+                      await sendEmail(
+                        toEmail: 'emmanueldokeii@gmail.com',
+                        subject: titleController.text,
+                        body: contentController.text,
+                      );
+                      showCustomSnackbar(context, 'Email sent successfully');
+                    }
+                  } catch (error) {
+                    showErrorDialog(context, 'Error: $error');
+                  }
+                },
                 child: Text(
                   'Send Message',
                   style: TextStyle(
-                    color: color.surface,
+                    color: Colors.white,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),

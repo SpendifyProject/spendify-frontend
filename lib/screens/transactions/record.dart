@@ -6,6 +6,7 @@ import 'package:spendify/models/transaction.dart';
 import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/services/notification_service.dart';
+import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/amount_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 import 'package:uuid/uuid.dart';
@@ -34,6 +35,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
   final formKey = GlobalKey<FormState>();
   String? radioValue;
   String? selectedCategory;
+  String? errorText;
 
   @override
   void initState() {
@@ -86,6 +88,11 @@ class _RecordTransactionState extends State<RecordTransaction> {
                 children: [
                   AmountTextField(
                     controller: amountController,
+                    errorText: errorText,
+                    validator: (value){
+                      errorText = Validator.validateAmount(value);
+                      return errorText;
+                    },
                   ),
                   SizedBox(
                     height: 20.h,
@@ -215,43 +222,47 @@ class _RecordTransactionState extends State<RecordTransaction> {
           ElevatedButton(
             onPressed: () async {
               try {
-                if (formKey.currentState!.validate()) {}
-                RecordedTransaction transaction = RecordedTransaction(
-                  id: const Uuid().v4(),
-                  uid: widget.user.uid,
-                  amount: double.parse(amountController.text),
-                  sender: senderController.text,
-                  recipient: recipientController.text == widget.user.fullName
-                      ? 'Cash In'
-                      : recipientController.text,
-                  reference: referenceController.text,
-                  category: selectedCategory!,
-                  date: DateTime.now(),
-                  isDebit: senderController.text == widget.user.fullName,
-                  currency: 'GHS',
-                );
-                transactionProvider.recordExternalTransaction(transaction);
-                n.Notification notification = n.Notification(
-                  title: 'Recorded Transaction',
-                  body:
-                      'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} ${senderController.text == widget.user.fullName ? 'to ${recipientController.text}' : 'from ${senderController.text}'} has been recorded.',
-                  date: DateTime.now(),
-                );
-                await NotificationService.showInstantNotification(notification);
-                showCustomSnackbar(
-                  context,
-                  'Transaction recorded successfully',
-                );
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return DoneScreen(
-                        nextPage: Dashboard(email: firebaseEmail),
-                      );
-                    },
-                  ),
-                );
+                if (formKey.currentState!.validate()) {
+                  RecordedTransaction transaction = RecordedTransaction(
+                    id: const Uuid().v4(),
+                    uid: widget.user.uid,
+                    amount: double.parse(amountController.text),
+                    sender: senderController.text,
+                    recipient: recipientController.text == widget.user.fullName
+                        ? 'Cash In'
+                        : recipientController.text,
+                    reference: referenceController.text,
+                    category: selectedCategory!,
+                    date: DateTime.now(),
+                    isDebit: senderController.text == widget.user.fullName,
+                    currency: 'GHS',
+                  );
+                  transactionProvider.recordExternalTransaction(transaction);
+                  n.Notification notification = n.Notification(
+                    title: 'Recorded Transaction',
+                    body:
+                    'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} ${senderController.text == widget.user.fullName ? 'to ${recipientController.text}' : 'from ${senderController.text}'} has been recorded.',
+                    date: DateTime.now(),
+                  );
+                  setState(() {
+                    errorText = null;
+                  });
+                  await NotificationService.showInstantNotification(notification);
+                  showCustomSnackbar(
+                    context,
+                    'Transaction recorded successfully',
+                  );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return DoneScreen(
+                          nextPage: Dashboard(email: firebaseEmail),
+                        );
+                      },
+                    ),
+                  );
+                }
               } catch (error) {
                 showErrorDialog(context, '$error');
               }
