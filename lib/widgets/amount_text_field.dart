@@ -57,7 +57,7 @@ class AmountTextField extends StatelessWidget {
                 width: 15.w,
               ),
               SizedBox(
-                width: 200.w,
+                width: 150.w,
                 child: TextFormField(
                   controller: controller,
                   keyboardType: TextInputType.number,

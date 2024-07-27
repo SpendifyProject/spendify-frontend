@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -50,16 +49,6 @@ class _TransactionsState extends State<Transactions> {
             size: 20.sp,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: null,
-            icon: Icon(
-              CupertinoIcons.search,
-              color: color.onPrimary,
-              size: 20.sp,
-            ),
-          ),
-        ],
       ),
       body: FutureBuilder(
         future: transactionProvider.fetchTransactions(widget.user),

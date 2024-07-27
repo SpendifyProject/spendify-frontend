@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/constants.dart';
 import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:spendify/screens/auth/sign_in.dart';
@@ -239,8 +240,7 @@ class _SignUpState extends State<SignUp> {
                             } else {
                               setState(() {
                                 _selectedDate = pickedDate;
-                                dateController.text =
-                                    '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
+                                dateController.text = formatDate(_selectedDate!);
                               });
                             }
                           });

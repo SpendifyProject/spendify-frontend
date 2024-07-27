@@ -7,6 +7,8 @@ import 'package:spendify/models/user.dart';
 import 'package:spendify/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:spendify/screens/payment_methods/all_accounts.dart';
+import 'package:spendify/screens/profile/info.dart';
+import 'package:spendify/screens/profile/notifications.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
 class Profile extends StatefulWidget {
@@ -101,6 +103,16 @@ class _ProfileState extends State<Profile> {
                       height: 10.h,
                     ),
                     ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PersonalInfo(user: user);
+                            },
+                          ),
+                        );
+                      },
                       contentPadding: EdgeInsets.zero,
                       leading: Icon(
                         Icons.person_outline,
@@ -123,29 +135,29 @@ class _ProfileState extends State<Profile> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: Icon(
-                        CupertinoIcons.money_dollar_circle,
-                        color: color.secondary,
-                        size: 20.sp,
-                      ),
-                      title: Text(
-                        'Payment Preferences',
-                        style: TextStyle(
-                          color: color.onPrimary,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: color.secondary,
-                        size: 20.sp,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+                    // ListTile(
+                    //   contentPadding: EdgeInsets.zero,
+                    //   leading: Icon(
+                    //     CupertinoIcons.money_dollar_circle,
+                    //     color: color.secondary,
+                    //     size: 20.sp,
+                    //   ),
+                    //   title: Text(
+                    //     'Payment Preferences',
+                    //     style: TextStyle(
+                    //       color: color.onPrimary,
+                    //       fontSize: 14.sp,
+                    //     ),
+                    //   ),
+                    //   trailing: Icon(
+                    //     Icons.arrow_forward_ios,
+                    //     color: color.secondary,
+                    //     size: 20.sp,
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: 10.h,
+                    // ),
                     ListTile(
                       onTap: () {
                         Navigator.push(
@@ -183,6 +195,16 @@ class _ProfileState extends State<Profile> {
                     ),
                     ListTile(
                       contentPadding: EdgeInsets.zero,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return Notifications(user: user);
+                            },
+                          ),
+                        );
+                      },
                       leading: Icon(
                         Icons.notifications_none,
                         color: color.secondary,
@@ -195,9 +217,10 @@ class _ProfileState extends State<Profile> {
                           fontSize: 14.sp,
                         ),
                       ),
-                      trailing: Badge(
-                        backgroundColor: color.tertiary,
-                        label: const Text('2'),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        color: color.secondary,
+                        size: 20.sp,
                       ),
                     ),
                   ],

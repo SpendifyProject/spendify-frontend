@@ -110,3 +110,43 @@ String? _encodeQueryParameters(Map<String, String> params) {
           '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
       .join('&');
 }
+
+String formatDate(DateTime date) {
+  String daySuffix(int day) {
+    if (day >= 11 && day <= 13) {
+      return 'th';
+    }
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  List<String> months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+
+  String day = date.day.toString();
+  String suffix = daySuffix(date.day);
+  String month = months[date.month - 1];
+  String year = date.year.toString();
+
+  return '$day$suffix $month, $year';
+}

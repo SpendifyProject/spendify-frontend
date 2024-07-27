@@ -101,14 +101,7 @@ class _AllCardsState extends State<AllCards> {
                 } else if (snapshot.hasError) {
                   showErrorDialog(context, 'Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
-                  Wallet wallet = snapshot.data ??
-                      Wallet(
-                        uid: 'WALLET_UNAVAILABLE',
-                        monthlyIncome: 0,
-                        monthlyExpenses: 0,
-                        creditCards: [],
-                        momoAccounts: [],
-                      );
+                  Wallet wallet = walletProvider.wallet;
                   List<CreditCard> cards = wallet.creditCards;
                   List<MomoAccount> momoAccounts = wallet.momoAccounts;
                   if(cards.isEmpty && momoAccounts.isEmpty){

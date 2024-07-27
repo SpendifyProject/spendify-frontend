@@ -5,15 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:spendify/const/constants.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:spendify/screens/animations/empty.dart';
-import 'package:spendify/widgets/double_header.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
-import '../../models/transaction.dart';
 import '../../models/user.dart';
 import '../../models/wallet.dart';
 import '../../provider/transaction_provider.dart';
-import '../../widgets/transaction_widget.dart';
-import '../transactions/transaction_history.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({super.key, required this.user});
@@ -59,17 +55,15 @@ class _StatisticsState extends State<Statistics> {
           } else if (snapshot.hasError) {
             showErrorDialog(context, '${snapshot.error}');
           }
-          Wallet wallet = snapshot.data ??
-              Wallet(
-                uid: 'WALLET_UNAVAILABLE',
-                creditCards: [],
-                momoAccounts: [],
-                monthlyExpenses: 0,
-                monthlyIncome: 0,
-              );
-          if (transactionProvider.transactions.isEmpty) {
+          Wallet wallet = _walletProvider.wallet;
+          if(transactionProvider.transactions.isEmpty){
             return const Empty(
               text: 'Make some transactions to view this screen',
+            );
+          }
+          else if (wallet.monthlyExpenses == 0) {
+            return const Empty(
+              text: 'This page will be accessible when your expenses increase',
             );
           } else {
             return ListView(
@@ -120,60 +114,6 @@ class _StatisticsState extends State<Statistics> {
                 ),
                 SizedBox(
                   height: 20.h,
-                ),
-                FutureBuilder(
-                  future: transactionProvider.fetchTransactions(widget.user),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      showErrorDialog(context, '${snapshot.error}');
-                    }
-                    List<Transaction> transactions =
-                        transactionProvider.transactions;
-                    if (transactions.isNotEmpty) {
-                      return Column(
-                        children: [
-                          DoubleHeader(
-                            leading: 'Recent Transactions',
-                            trailing: 'See All',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Transactions(user: widget.user);
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            height: 400.h,
-                            child: ListView.builder(
-                              itemCount: transactions.length <= 5
-                                  ? transactions.length
-                                  : 5,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                Transaction transaction = transactions[index];
-                                return TransactionWidget(
-                                  name: transaction.recipient,
-                                  category: transaction.category,
-                                  isDebit: transaction.isDebit,
-                                  amount: transaction.amount,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
                 ),
               ],
             );
@@ -385,9 +325,7 @@ class CategoryPieChart extends StatelessWidget {
                 final data = snapshot.data as List<Map<String, double>>;
                 return Row(
                   children: [
-                    Expanded(
-                      child: buildPieChart(data[1], 'Current Month'),
-                    ),
+                    buildPieChart(data[1], 'Current Month'),
                   ],
                 );
               }

@@ -107,4 +107,16 @@ class UserProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> updateDate(String uid, DateTime date) async{
+    try{
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        'dateOfBirth': date,
+      });
+      notifyListeners();
+    } catch(error){
+      log('Error: $error');
+      rethrow;
+    }
+  }
 }

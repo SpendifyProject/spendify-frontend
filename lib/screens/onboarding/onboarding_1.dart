@@ -21,13 +21,13 @@ class Onboarding1 extends StatelessWidget {
             child: Image.asset(
               'assets/images/onboarding_1.png',
               width: 335.w,
-              height: 248.53.h,
+              height: 150.h,
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: 20.h,
-              horizontal: 47.w,
+              horizontal: 40.w,
             ),
             child: Center(
               child: Text(

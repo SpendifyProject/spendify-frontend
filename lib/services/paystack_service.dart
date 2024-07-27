@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
 import '../models/paystack_response.dart';
@@ -45,28 +46,35 @@ class PaystackService {
       final authRes = await createTransaction(transaction);
       return authRes.authorizationUrl;
     } catch (e) {
-      rethrow;
+      if(context.mounted){
+        showCustomSnackbar(context, "It appears you previously used this reference. Reference Field cannot be a duplicate. Enter a new unique Reference",);
+      }
+      //rethrow;
+      return null;
     }
   }
 
-  Future<bool> verifyTransaction(
-      Transaction transaction, BuildContext context) async {
-    String reference = transaction.reference;
-    String url = "https://api.paystack.co/transaction/verify/$reference";
-    final res = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $_secretKey',
-      },
-    );
-    final resData = jsonDecode(res.body);
-    if (resData != null && resData.containsKey('status')) {
+  Future<dynamic> verifyTransaction(Transaction transaction, BuildContext context) async {
+    try {
+      String reference ='${transaction.reference}${transaction.date.microsecondsSinceEpoch}';
+      print(reference);
+      String url =
+          "https://api.paystack.co/transaction/verify/$reference";
+      final res = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $_secretKey',
+        },
+      );
+      final resData = jsonDecode(res.body);
       print(resData);
-      return true;
-    } else {
-      showErrorDialog(context,
-          "Transaction verification failed. Please complete the transaction.");
-      return false;
+      if (resData['data']["status"] == "success") {
+        return true;
+      }
+      return showErrorDialog(context, "Complete Transaction before tapping this button");
+      // return (resData["status"]);
+    } catch (e) {
+      showErrorDialog(context, "Error verifying Transaction: $e");
     }
   }
 }

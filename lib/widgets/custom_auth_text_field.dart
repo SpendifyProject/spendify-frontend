@@ -49,7 +49,7 @@ class CustomAuthTextField extends StatelessWidget {
             icon: icon,
             suffixIcon: suffix,
             errorText: errorText,
-            errorMaxLines: 2,
+            errorMaxLines: 3,
             errorStyle: TextStyle(
               color: color.tertiary,
             ),

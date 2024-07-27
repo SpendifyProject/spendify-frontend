@@ -174,8 +174,7 @@ class _NewSavingsGoalState extends State<NewSavingsGoal> {
                         } else {
                           setState(() {
                             _selectedDate = pickedDate;
-                            deadlineController.text =
-                                '${_selectedDate?.month}/${_selectedDate?.year}';
+                            deadlineController.text = formatDate(_selectedDate!);
                           });
                         }
                       });
