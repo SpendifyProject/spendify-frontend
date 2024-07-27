@@ -136,7 +136,7 @@ class _AddMomoState extends State<AddMomo> {
                         networkController.text = _selectedNetwork;
                       });
                     },
-                    color: color.onPrimary,
+                    color: color.surface,
                     icon: Icon(
                       Icons.edit_outlined,
                       color: color.secondary,

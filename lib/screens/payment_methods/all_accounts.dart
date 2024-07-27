@@ -157,7 +157,7 @@ class _AllCardsState extends State<AllCards> {
                 child: Text(
                   selected == 'cards' ? 'Add Card' : 'Add Momo Account',
                   style: TextStyle(
-                    color: color.surface,
+                    color: Colors.white,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
