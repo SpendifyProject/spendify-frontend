@@ -36,7 +36,6 @@ class _AllCardsState extends State<AllCards> {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -100,52 +99,44 @@ class _AllCardsState extends State<AllCards> {
                   );
                 } else if (snapshot.hasError) {
                   showErrorDialog(context, 'Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
-                  Wallet wallet = walletProvider.wallet;
-                  List<CreditCard> cards = wallet.creditCards;
-                  List<MomoAccount> momoAccounts = wallet.momoAccounts;
-                  if(cards.isEmpty && momoAccounts.isEmpty){
-                    return const Empty(
-                      text: 'Add your credit cards and mobile money accounts',
-                    );
-                  }
-                  else{
-                    return SizedBox(
-                      height: 500.h,
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: selected == 'cards'
-                            ? cards.length
-                            : momoAccounts.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              selected == 'cards'
-                                  ? CreditCardWidget(
-                                cardNumber: cards[index].cardNumber,
-                                fullName: cards[index].fullName,
-                                expiryDate:
-                                '${cards[index].expiryDate.month}/${cards[index].expiryDate.year}',
-                                assetName:
-                                '${cards[index].issuer.toLowerCase()}.png',
-                              )
-                                  : MomoWidget(
-                                phoneNumber:
-                                momoAccounts[index].phoneNumber,
-                                fullName: momoAccounts[index].fullName,
-                                network: momoAccounts[index].network,
-                              ),
-                              SizedBox(
-                                height: 20.h,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    );
-                  }
+                  return const SizedBox();
                 }
-                return const SizedBox();
+                Wallet wallet = walletProvider.wallet;
+                List<CreditCard> cards = wallet.creditCards;
+                List<MomoAccount> momoAccounts = wallet.momoAccounts;
+                return cards.isEmpty && momoAccounts.isEmpty
+                    ? const Empty(
+                        text: 'Add your credit cards and mobile money accounts',
+                      )
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height - 360,
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: selected == 'cards'
+                              ? cards.length
+                              : momoAccounts.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 20.h),
+                              child: selected == 'cards'
+                                  ? CreditCardWidget(
+                                      cardNumber: cards[index].cardNumber,
+                                      fullName: cards[index].fullName,
+                                      expiryDate:
+                                          '${cards[index].expiryDate.month}/${cards[index].expiryDate.year}',
+                                      assetName:
+                                          '${cards[index].issuer.toLowerCase()}.png',
+                                    )
+                                  : MomoWidget(
+                                      phoneNumber:
+                                          momoAccounts[index].phoneNumber,
+                                      fullName: momoAccounts[index].fullName,
+                                      network: momoAccounts[index].network,
+                                    ),
+                            );
+                          },
+                        ),
+                      );
               },
             ),
             const Spacer(),
