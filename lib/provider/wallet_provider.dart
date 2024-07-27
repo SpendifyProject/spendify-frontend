@@ -23,7 +23,7 @@ class WalletProvider with ChangeNotifier {
 
   Wallet get wallet => _wallet;
 
-  Future<Wallet> fetchWallet(User user, BuildContext context) async {
+  Future<void> fetchWallet(User user, BuildContext context) async {
     _transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
     await _transactionProvider.fetchTransactions(user);
     List<t.Transaction> monthlyTransactions = await _transactionProvider.getMonthlyTransactions(user);
@@ -49,7 +49,7 @@ class WalletProvider with ChangeNotifier {
       creditCards: _wallet.creditCards,
       momoAccounts: _wallet.momoAccounts,
     );
-    return _wallet;
+    notifyListeners();
   }
 
   Future<void> getCardInfo(String uid) async {

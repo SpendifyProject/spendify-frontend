@@ -9,17 +9,14 @@ import 'package:spendify/models/wallet.dart' as w;
 import 'package:spendify/provider/transaction_provider.dart';
 import 'package:spendify/provider/wallet_provider.dart';
 import 'package:spendify/screens/animations/empty.dart';
-import 'package:spendify/screens/dashboard/budget/new_savings_goal.dart';
 import 'package:spendify/screens/dashboard/dashboard.dart';
-import 'package:spendify/screens/payment_methods/add_credit_card.dart';
-import 'package:spendify/screens/payment_methods/add_momo_account.dart';
 import 'package:spendify/services/gemini_service.dart';
 import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/custom_auth_text_field.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
 import '../../../const/tips.dart';
-import '../home/home.dart';
+import '../../../widgets/quick_actions.dart';
 
 class Wallet extends StatefulWidget {
   const Wallet({super.key, required this.user});
@@ -61,8 +58,9 @@ class _WalletState extends State<Wallet> {
 
   Future<void> fetchWalletData() async {
     try {
-      w.Wallet fetchedWallet =
+
           await walletProvider.fetchWallet(widget.user, context);
+          w.Wallet fetchedWallet = walletProvider.wallet;
       setState(() {
         wallet = fetchedWallet;
       });
@@ -291,63 +289,7 @@ class _WalletState extends State<Wallet> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  SizedBox(
-                    height: 95.h,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: TransactionButton(
-                            iconData: Icons.credit_card,
-                            label: 'Add Card',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return AddCard(uid: widget.user.uid);
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: TransactionButton(
-                            iconData: Icons.monetization_on_outlined,
-                            label: 'Add Momo',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return AddMomo(uid: widget.user.uid);
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: TransactionButton(
-                            iconData: Icons.savings_outlined,
-                            label: 'New Savings Goal',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return NewSavingsGoal(uid: widget.user.uid);
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  BudgetQuickActions(uid: widget.user.uid),
                   SizedBox(
                     height: 20.h,
                   ),

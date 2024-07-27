@@ -173,8 +173,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                           } else {
                             setState(() {
                               _selectedDate = pickedDate;
-                              dateController.text =
-                                  '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
+                              dateController.text = formatDate(_selectedDate!);
                             });
                           }
                         });
@@ -244,6 +243,8 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
                     body:
                         'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
                     date: _selectedDate!,
+                    id: const Uuid().v4(),
+                    uid: widget.user.uid,
                   );
                   await NotificationService.scheduleNotification(notification);
                   Navigator.pushReplacement(

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:spendify/const/snackbar.dart';
 import 'package:spendify/provider/user_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:spendify/services/validation_service.dart';
 import 'package:spendify/widgets/error_dialog.dart';
 
@@ -35,7 +33,7 @@ class _EditProfileState extends State<EditProfile> {
   bool isChecked = false;
   final formKey = GlobalKey<FormState>();
   bool isLoading = true;
-  String email = auth.FirebaseAuth.instance.currentUser!.email.toString();
+  String email = firebaseEmail;
   String? nameError;
   String? numberError;
   String? emailError;
@@ -93,8 +91,7 @@ class _EditProfileState extends State<EditProfile> {
             emailController.text = user.email;
             incomeController.text = user.monthlyIncome.toString();
             _selectedDate = user.dateOfBirth;
-            dateController.text =
-                '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
+            dateController.text = formatDate(_selectedDate!);
             return ListView(
               padding: EdgeInsets.symmetric(
                 vertical: 25.h,
@@ -214,40 +211,33 @@ class _EditProfileState extends State<EditProfile> {
                           suffix: GestureDetector(
                             onTap: () async {
                               await showDatePicker(
-                                  context: context,
-                                  firstDate: DateTime(1900),
-                                  lastDate: DateTime.now(),
-                                  initialDate: DateTime.now(),
-                                  barrierDismissible: false,
-                                  builder: (context, child) {
-                                    return Theme(
-                                      data: ThemeData.light().copyWith(
-                                        primaryColor: color.primary,
-                                        colorScheme:
-                                            const ColorScheme.light().copyWith(
-                                          primary: color.primary,
-                                          onPrimary: color.onPrimary,
-                                          surface: color.surface,
-                                        ),
-                                        dialogBackgroundColor: color.surface,
-                                        textTheme:
-                                            GoogleFonts.poppinsTextTheme(),
+                                context: context,
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                                initialDate: _selectedDate ?? DateTime.now(),
+                                builder: (context, child) {
+                                  return Theme(
+                                    data: ThemeData.light().copyWith(
+                                      primaryColor: color.primary,
+                                      colorScheme:
+                                          const ColorScheme.light().copyWith(
+                                        primary: color.primary,
+                                        onPrimary: color.onPrimary,
+                                        surface: color.surface,
                                       ),
-                                      child: child!,
-                                    );
-                                  }).then((pickedDate) {
-                                if (pickedDate == null) {
-                                  showCustomSnackbar(
-                                    context,
-                                    'Please select your date of birth',
+                                      dialogBackgroundColor: color.surface,
+                                      textTheme: GoogleFonts.poppinsTextTheme(),
+                                    ),
+                                    child: child!,
                                   );
-                                  return;
-                                } else {
+                                },
+                              ).then((pickedDate) async{
+                                if (pickedDate != null) {
                                   setState(() {
                                     _selectedDate = pickedDate;
-                                    dateController.text =
-                                        '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}';
+                                    dateController.text = formatDate(_selectedDate!);
                                   });
+                                  await userProvider.updateDate(user.uid, _selectedDate!);
                                 }
                               });
                             },
@@ -270,9 +260,9 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () async{
-                      try{
-                        if(formKey.currentState!.validate()){
+                    onPressed: () async {
+                      try {
+                        if (formKey.currentState!.validate()) {
                           setState(() {
                             nameError = null;
                             numberError = null;
@@ -296,15 +286,14 @@ class _EditProfileState extends State<EditProfile> {
                               builder: (context) {
                                 return DoneScreen(
                                   nextPage: Dashboard(
-                                    email: firebaseEmail,
+                                    email: email,
                                   ),
                                 );
                               },
                             ),
                           );
                         }
-                      }
-                      catch(error){
+                      } catch (error) {
                         showErrorDialog(context, 'Error: $error');
                       }
                     },

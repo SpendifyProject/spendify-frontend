@@ -243,6 +243,8 @@ class _RecordTransactionState extends State<RecordTransaction> {
                     body:
                     'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} ${senderController.text == widget.user.fullName ? 'to ${recipientController.text}' : 'from ${senderController.text}'} has been recorded.',
                     date: DateTime.now(),
+                    id: const Uuid().v4(),
+                    uid: widget.user.uid,
                   );
                   setState(() {
                     errorText = null;

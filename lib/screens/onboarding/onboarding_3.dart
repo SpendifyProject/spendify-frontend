@@ -20,7 +20,7 @@ class Onboarding3 extends StatelessWidget {
             child: Image.asset(
               'assets/images/onboarding_3.png',
               width: 335.w,
-              height: 248.53.h,
+              height: 150.h,
             ),
           ),
           Padding(
@@ -30,7 +30,7 @@ class Onboarding3 extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                'Personalized Financial Advice and Account Health Tracking',
+                'Personalized Financial Advice',
                 style: TextStyle(
                   fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
