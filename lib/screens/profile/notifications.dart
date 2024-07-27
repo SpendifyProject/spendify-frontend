@@ -46,7 +46,9 @@ class Notifications extends StatelessWidget {
           }
           else if(snapshot.hasData){
             List<n.Notification> notifications = snapshot.data ?? [];
-            return ListView.builder(
+            return notifications.isEmpty
+            ? const SizedBox()
+            : ListView.builder(
               itemCount: notifications.length,
               padding: EdgeInsets.symmetric(
               vertical: 20.h,
