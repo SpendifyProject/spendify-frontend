@@ -30,7 +30,6 @@ class _HomeState extends State<Home> {
   late TransactionProvider transactionProvider;
   late SavingsProvider savingsProvider;
   bool isLoading = true;
-  final controller = PageController(viewportFraction: 0.8, keepPage: true);
 
   @override
   void initState() {
@@ -118,7 +117,15 @@ class _HomeState extends State<Home> {
                         },
                       ),
                       SizedBox(
-                        height: length >= 5 ? 340.h : length == 4 ? 280.h : length == 3 ? 220.h : length == 2 ? 160.h : 100.h,
+                        height: length >= 5
+                            ? 380.h
+                            : length == 4
+                                ? 350.h
+                                : length == 3
+                                    ? 300.h
+                                    : length == 2
+                                        ? 240.h
+                                        : 180.h,
                         child: ListView.builder(
                           itemCount: transactions.length <= 5
                               ? transactions.length

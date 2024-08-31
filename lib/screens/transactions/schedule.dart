@@ -15,6 +15,8 @@ import 'package:uuid/uuid.dart';
 
 import '../../const/constants.dart';
 import '../../models/notification.dart' as n;
+import '../../provider/biometric_provider.dart';
+import '../../services/biometric_service.dart';
 import '../../services/notification_service.dart';
 import '../../widgets/custom_auth_text_field.dart';
 
@@ -57,6 +59,68 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
     referenceController.dispose();
     dateController.dispose();
     recipientController.dispose();
+  }
+
+  void _scheduleTransaction() async{
+    try {
+      if (formKey.currentState!.validate()) {
+        setState(() {
+          errorText = null;
+        });
+        ScheduledTransaction transaction = ScheduledTransaction(
+          id: const Uuid().v4(),
+          uid: widget.user.uid,
+          reference: referenceController.text,
+          recipient: recipientController.text,
+          amount: double.parse(amountController.text),
+          scheduledDate: _selectedDate!,
+          category: selectedCategory!,
+          isDebit: true,
+          currency: 'GHS',
+        );
+        transactionProvider.scheduleTransaction(transaction);
+        showCustomSnackbar(
+          context,
+          'Transaction scheduled for ${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year} successfully',
+        );
+        n.Notification notification = n.Notification(
+          title: 'Transaction Completed',
+          body:
+          'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
+          date: _selectedDate!,
+          id: const Uuid().v4(),
+          uid: widget.user.uid,
+        );
+        await NotificationService.scheduleNotification(notification);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return DoneScreen(
+                nextPage: Dashboard(email: firebaseEmail),
+              );
+            },
+          ),
+        );
+      }
+    } catch (error) {
+      showErrorDialog(context, '$error');
+    }
+  }
+
+  Future<void> _authenticateAndSchedule() async{
+    final BiometricProvider biometricProvider = Provider.of<BiometricProvider>(context, listen: false);
+
+    if (biometricProvider.isBiometricEnabled) {
+      try {
+        await BiometricService.authenticate(context);
+        _scheduleTransaction();
+      } catch (e) {
+        showErrorDialog(context, 'Authentication failed. Please try again.');
+      }
+    } else {
+      _scheduleTransaction();
+    }
   }
 
   @override
@@ -216,52 +280,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
             height: 30.h,
           ),
           ElevatedButton(
-            onPressed: () async {
-              try {
-                if (formKey.currentState!.validate()) {
-                  setState(() {
-                    errorText = null;
-                  });
-                  ScheduledTransaction transaction = ScheduledTransaction(
-                    id: const Uuid().v4(),
-                    uid: widget.user.uid,
-                    reference: referenceController.text,
-                    recipient: recipientController.text,
-                    amount: double.parse(amountController.text),
-                    scheduledDate: _selectedDate!,
-                    category: selectedCategory!,
-                    isDebit: true,
-                    currency: 'GHS',
-                  );
-                  transactionProvider.scheduleTransaction(transaction);
-                  showCustomSnackbar(
-                    context,
-                    'Transaction scheduled for ${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year} successfully',
-                  );
-                  n.Notification notification = n.Notification(
-                    title: 'Transaction Completed',
-                    body:
-                        'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
-                    date: _selectedDate!,
-                    id: const Uuid().v4(),
-                    uid: widget.user.uid,
-                  );
-                  await NotificationService.scheduleNotification(notification);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return DoneScreen(
-                          nextPage: Dashboard(email: firebaseEmail),
-                        );
-                      },
-                    ),
-                  );
-                }
-              } catch (error) {
-                showErrorDialog(context, '$error');
-              }
-            },
+            onPressed: _authenticateAndSchedule,
             child: Text(
               'Save',
               style: TextStyle(

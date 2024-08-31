@@ -17,7 +17,7 @@ class MomoWidget extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
     return Container(
       width: 300.w,
-      height: 180.h,
+      height: 190.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: const Color.fromRGBO(30, 30, 45, 1),

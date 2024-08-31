@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spendify/const/constants.dart';
 
 class Transaction with ChangeNotifier {
   final String id;
@@ -58,7 +59,7 @@ class Transaction with ChangeNotifier {
   Map<String, dynamic> toPaystackJson(String email) {
     return {
       'amount': (amount * 100).toInt(),
-      'reference': '$reference${date.microsecondsSinceEpoch}',
+      'reference': '${completeTrim(reference)}${date.millisecondsSinceEpoch}',
       'currency': currency,
       'email': email,
     };
