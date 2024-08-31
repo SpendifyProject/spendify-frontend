@@ -66,5 +66,9 @@
             <string>http</string>
             <string>https</string>
         </array>
+        <key>NSFaceIDUsageDescription</key>
+        <string>We need to use Face ID for authentication</string>
+        <key>NSBiometricUsageDescription</key>
+        <string>We need to use biometric authentication for secure access</string>
 	</dict>
 </plist>

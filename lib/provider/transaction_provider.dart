@@ -79,7 +79,7 @@ class TransactionProvider with ChangeNotifier {
       });
       notifyListeners();
     } catch (error) {
-      log('Error: error');
+      log('Error: $error');
       rethrow;
     }
   }

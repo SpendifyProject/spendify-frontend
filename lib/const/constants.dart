@@ -150,3 +150,9 @@ String formatDate(DateTime date) {
 
   return '$day$suffix $month, $year';
 }
+
+String completeTrim(String text){
+  String stringWithoutSpaces = text.replaceAll(RegExp(r'\s+'), '');
+  return stringWithoutSpaces;
+}
+

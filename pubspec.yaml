@@ -39,6 +39,7 @@ dependencies:
   dotenv: ^4.2.0
   shared_preferences: ^2.2.3
   timezone: ^0.9.4
+  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -51,7 +52,6 @@ flutter:
 
   assets:
    - assets/images/
-   - assets/icons/
    - assets/animations/
    - .env
 

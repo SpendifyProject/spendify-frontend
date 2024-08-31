@@ -150,7 +150,6 @@ class _PaymentWebViewState extends State<PaymentWebView> {
                     Uri.parse(url!),
                   ),
               );
-              // verifyTransactionAfterCompletion();
             }
             return const SizedBox();
           },

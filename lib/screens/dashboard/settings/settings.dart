@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:spendify/const/routes.dart';
+import 'package:spendify/const/snackbar.dart';
+import 'package:spendify/provider/biometric_provider.dart';
 import 'package:spendify/provider/theme_provider.dart';
 import 'package:spendify/services/auth_service.dart';
 
@@ -14,12 +19,14 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late ThemeProvider themeProvider;
-  bool isBiometricEnabled = false;
+  late BiometricProvider biometricProvider;
 
   @override
   void initState() {
     super.initState();
     themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    biometricProvider = Provider.of<BiometricProvider>(context, listen: false);
+    log(biometricProvider.biometricEnabled.toString());
   }
 
   @override
@@ -199,25 +206,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SizedBox(
               height: 10.h,
             ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              value: isBiometricEnabled,
-              onChanged: (value) {
-                setState(() {
-                  isBiometricEnabled = !isBiometricEnabled;
-                });
+            FutureBuilder(
+              future: biometricProvider.loadBiometrics(),
+              builder: (context, snapshot){
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return const SizedBox();
+                }
+                else if(snapshot.hasData){
+                  return SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    value: biometricProvider.isBiometricEnabled,
+                    onChanged: (value) async{
+                      bool isSupported = await LocalAuthentication().isDeviceSupported();
+                      if(isSupported){
+                        setState(() {
+                          biometricProvider.switchBiometricPrefs();
+                        });
+                      }
+                      else{
+                        showCustomSnackbar(context, 'This device does not support biometric authentication');
+                      }
+                    },
+                    inactiveThumbColor: color.onPrimary,
+                    inactiveTrackColor: color.onSurface,
+                    activeColor: color.primary,
+                    title: Text(
+                      'Biometrics',
+                      style: TextStyle(
+                        color: color.onPrimary,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  );
+                }
+                else if(snapshot.hasError){
+                  log('Error: ${snapshot.error}');
+                  return const SizedBox();
+                }
+                else{
+                  return const SizedBox();
+                }
               },
-              inactiveThumbColor: color.onPrimary,
-              inactiveTrackColor: color.onSurface,
-              activeColor: color.primary,
-              title: Text(
-                'Biometrics',
-                style: TextStyle(
-                  color: color.onPrimary,
-                  fontSize: 14.sp,
-                ),
-              ),
-            ),
+            )
           ],
         ),
       ),

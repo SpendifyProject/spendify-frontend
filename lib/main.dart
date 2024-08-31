@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:spendify/const/dark_theme.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/theme.dart';
+import 'package:spendify/provider/biometric_provider.dart';
 import 'package:spendify/provider/savings_provider.dart';
 import 'package:spendify/provider/theme_provider.dart';
 import 'package:spendify/provider/transaction_provider.dart';
@@ -31,7 +31,6 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  //Initialize dot env
   await dotenv.load(fileName: ".env");
 
   //Initialize flutter native splash screen
@@ -39,21 +38,18 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   //Initialize local notifications
-  WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
   await NotificationService.init();
 
-  //Initialize firebase
+  //Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     ScreenUtilInit(
       designSize: const Size(375, 812),
-      builder: (_, child) => DevicePreview(
-        enabled: false,
-        builder: (context) => const MyApp(),
-      ),
+      builder: (_, child) => const MyApp(),
     ),
   );
   FlutterNativeSplash.remove();
@@ -66,26 +62,17 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => UserProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => WalletProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => TransactionProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => SavingsProvider(),
-        ),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => WalletProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => TransactionProvider()),
+        ChangeNotifierProvider(create: (context) => SavingsProvider()),
+        ChangeNotifierProvider(create: (context) => BiometricProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
