@@ -51,24 +51,23 @@ class _RecordTransactionState extends State<RecordTransaction> {
         Provider.of<TransactionProvider>(context, listen: false);
   }
 
-  Future<void> _authenticateAndRecord() async{
-    final BiometricProvider biometricProvider = Provider.of<BiometricProvider>(context, listen: false);
+  Future<void> _authenticateAndRecord() async {
+    final BiometricProvider biometricProvider =
+        Provider.of<BiometricProvider>(context, listen: false);
 
-    if(biometricProvider.isBiometricEnabled){
-      try{
+    if (biometricProvider.isBiometricEnabled) {
+      try {
         await BiometricService.authenticate(context);
         _recordTransaction();
-      }
-      catch(error){
+      } catch (error) {
         showErrorDialog(context, 'Authentication failed. Please try again');
       }
-    }
-    else{
+    } else {
       _recordTransaction();
     }
   }
 
-  void _recordTransaction() async{
+  void _recordTransaction() async {
     try {
       if (formKey.currentState!.validate()) {
         RecordedTransaction transaction = RecordedTransaction(
@@ -89,7 +88,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
         n.Notification notification = n.Notification(
           title: 'Recorded Transaction',
           body:
-          'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} ${senderController.text == widget.user.fullName ? 'to ${recipientController.text}' : 'from ${senderController.text}'} has been recorded.',
+              'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} ${senderController.text == widget.user.fullName ? 'to ${recipientController.text}' : 'from ${senderController.text}'} has been recorded.',
           date: DateTime.now(),
           id: const Uuid().v4(),
           uid: widget.user.uid,
@@ -158,7 +157,7 @@ class _RecordTransactionState extends State<RecordTransaction> {
                   AmountTextField(
                     controller: amountController,
                     errorText: errorText,
-                    validator: (value){
+                    validator: (value) {
                       errorText = Validator.validateAmount(value);
                       return errorText;
                     },

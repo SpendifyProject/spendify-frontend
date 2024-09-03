@@ -59,7 +59,8 @@ class PaystackService {
       Transaction transaction, BuildContext context) async {
     try {
       String reference =
-          '${completeTrim(transaction.reference)}${transaction.date.millisecondsSinceEpoch}';
+          '${completeTrim(transaction.reference)}'
+          '${transaction.date.millisecondsSinceEpoch}';
       String url = "https://api.paystack.co/transaction/verify/$reference";
       final res = await http.get(
         Uri.parse(url),

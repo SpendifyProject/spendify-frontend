@@ -126,7 +126,6 @@ class _SignInState extends State<SignIn> {
                         context,
                         emailController.text,
                         passwordController.text,
-                        isChecked,
                       );
                       setState(() {
                         errorText = null;

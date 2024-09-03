@@ -58,7 +58,6 @@ class _WalletState extends State<Wallet> {
 
   Future<void> fetchWalletData() async {
     try {
-
           await walletProvider.fetchWallet(widget.user, context);
           w.Wallet fetchedWallet = walletProvider.wallet;
       setState(() {

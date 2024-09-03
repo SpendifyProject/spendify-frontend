@@ -182,17 +182,16 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
-  Future<List<Transaction>> getMonthlyTransactions(User user) async{
+  Future<List<Transaction>> getMonthlyTransactions(User user) async {
     await fetchTransactions(user);
     List<Transaction> allTransactions = transactions;
     List<Transaction> monthlyTransactions = [];
     DateTime now = DateTime.now();
-    for(Transaction transaction in allTransactions){
-      if (transaction.date.month == now.month){
-        if(monthlyTransactions.contains(transaction)){
+    for (Transaction transaction in allTransactions) {
+      if (transaction.date.month == now.month) {
+        if (monthlyTransactions.contains(transaction)) {
           continue;
-        }
-        else{
+        } else {
           monthlyTransactions.add(transaction);
         }
       }
@@ -201,16 +200,16 @@ class TransactionProvider with ChangeNotifier {
     return monthlyTransactions;
   }
 
-  Future<List<Transaction>> getTransactionsSortedByCategory(User user, String category) async{
+  Future<List<Transaction>> getTransactionsSortedByCategory(
+      User user, String category) async {
     await fetchTransactions(user);
     List<Transaction> allTransactions = transactions;
     List<Transaction> sortedTransactions = [];
-    for(Transaction transaction in allTransactions){
-      if (transaction.category == category){
-        if(sortedTransactions.contains(transaction)){
+    for (Transaction transaction in allTransactions) {
+      if (transaction.category == category) {
+        if (sortedTransactions.contains(transaction)) {
           continue;
-        }
-        else{
+        } else {
           sortedTransactions.add(transaction);
         }
       }
@@ -235,7 +234,8 @@ class TransactionProvider with ChangeNotifier {
 
     for (Transaction transaction in allTransactions) {
       if (transaction.date.month == month && transaction.isDebit) {
-        expenses[transaction.category] = (expenses[transaction.category] ?? 0.0) + transaction.amount;
+        expenses[transaction.category] =
+            (expenses[transaction.category] ?? 0.0) + transaction.amount;
       }
     }
 

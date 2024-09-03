@@ -12,7 +12,6 @@ class AuthService {
     BuildContext context,
     String email,
     String password,
-    bool keepMeSignedIn,
   ) async {
     try {
 // await FirebaseAuth.instance.setPersistence(
@@ -44,7 +43,6 @@ class AuthService {
     u.User user,
     String password,
     UserProvider userProvider,
-    bool keepMeSignedIn,
   ) async {
     try {
 // await FirebaseAuth.instance.setPersistence(

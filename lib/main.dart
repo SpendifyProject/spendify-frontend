@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:spendify/const/constants.dart';
 import 'package:spendify/const/dark_theme.dart';
 import 'package:spendify/const/routes.dart';
 import 'package:spendify/const/theme.dart';
@@ -31,11 +31,10 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName: ".env");
+  WidgetsFlutterBinding.ensureInitialized();
 
-  //Initialize flutter native splash screen
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  //Initialize the environment file
+  await dotenv.load(fileName: ".env");
 
   //Initialize local notifications
   tz.initializeTimeZones();
@@ -52,7 +51,6 @@ Future<void> main() async {
       builder: (_, child) => const MyApp(),
     ),
   );
-  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatefulWidget {
@@ -96,7 +94,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             home: FirebaseAuth.instance.currentUser == null
                 ? const Onboarding1()
                 : Dashboard(
-                    email: FirebaseAuth.instance.currentUser!.email.toString(),
+                    email: firebaseEmail,
                   ),
           );
         },

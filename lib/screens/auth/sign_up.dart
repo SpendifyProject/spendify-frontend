@@ -287,7 +287,6 @@ class _SignUpState extends State<SignUp> {
                         user,
                         passwordController.text,
                         userProvider,
-                        isChecked,
                       );
                       setState(() {
                         emailError = null;

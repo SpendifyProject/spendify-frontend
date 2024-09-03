@@ -61,7 +61,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
     recipientController.dispose();
   }
 
-  void _scheduleTransaction() async{
+  void _scheduleTransaction() async {
     try {
       if (formKey.currentState!.validate()) {
         setState(() {
@@ -86,7 +86,7 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
         n.Notification notification = n.Notification(
           title: 'Transaction Completed',
           body:
-          'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
+              'Your transaction of GHc ${formatAmount(double.parse(amountController.text))} to ${recipientController.text} has been processed successfully',
           date: _selectedDate!,
           id: const Uuid().v4(),
           uid: widget.user.uid,
@@ -108,8 +108,9 @@ class _ScheduleTransactionState extends State<ScheduleTransaction> {
     }
   }
 
-  Future<void> _authenticateAndSchedule() async{
-    final BiometricProvider biometricProvider = Provider.of<BiometricProvider>(context, listen: false);
+  Future<void> _authenticateAndSchedule() async {
+    final BiometricProvider biometricProvider =
+        Provider.of<BiometricProvider>(context, listen: false);
 
     if (biometricProvider.isBiometricEnabled) {
       try {
