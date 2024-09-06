@@ -342,7 +342,7 @@ class _WalletState extends State<Wallet> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Specialised financial tip',
+                        'Personalised financial tip',
                         style: TextStyle(
                           fontSize: 15.sp,
                           color: color.onPrimary,
